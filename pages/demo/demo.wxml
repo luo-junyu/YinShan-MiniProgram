@@ -1,0 +1,9 @@
+<view class="container">
+<view class="demo" bindtap="handleTap">音频播放测试</view>
+<circl class="burn-charts1" id="done-charts1" draw='done-charts1' total = "{{total1}}" current ='{{current1}}' ratio="{{ratio1}}" r = '115' type="num" cs='#16B297' ce='#16B297'/>
+<circl class="burn-charts2" id="done-charts2" draw='done-charts2' total = "{{total2}}" current ='{{current2}}' ratio="{{ratio2}}" r = '115' type="time" cs='#16B297' ce='#16B297'/>
+<view class="bar {{startLoading?'loaded':'empty'}}"  bindtransitionend="handleTransEnd"></view>
+<view class="demo" bindtap="handleTapStop">音频停止测试</view>
+<!-- <video id="main-video" src="{{sVideoUrl}}"  autoplay="{{false}}"  	 loop="{{true}}" show-center-play-btn="{{false}}" object-fit="cover" class=""></video> -->
+
+</view>

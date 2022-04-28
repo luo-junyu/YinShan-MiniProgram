@@ -1,0 +1,39 @@
+<!--index.wxml-->
+<view class="container">
+  <text class="text-title">姿势评估</text>
+  <text class="text-content">请选一个温暖舒适的场所，找一面白墙或干净的背景，仿照示例图片，请家人或朋友帮您拍摄后方和侧方照片。为了对您的体态做出准确的评估，相关部位需要暴露皮肤，请女士穿普通内衣和内裤，男士赤裸上身、穿内裤。拍摄前可以闭上眼睛、原地踏步来让身体放松，拍摄时保持身体放松，双臂自然下垂。</text>
+  <view class="step">
+    <text class="step-title">拍摄后方照片</text>
+    <text class="step-content">请仿照如下示例图片拍摄后方照片，从头到臀部下方都要入镜。</text>
+    <view class="step-image-container">
+      <image class="step-image" src="../../assets/check.png"></image>
+      <image class="step-image" src="../../assets/check.png"></image>
+    </view>
+    <button class="step-btn" bindtap="handleTap" data-type="font">{{bFontUping ? '照片正在上传...' : '拍摄或选择后方照片'}}</button>
+  </view>
+  <view class="step">
+    <text class="step-title">拍摄侧方照片</text>
+    <text class="step-content">请仿照如下示例图片拍摄侧方照片，从头到脚都要入镜，露出耳朵。</text>
+    <view class="step-image-container">
+      <image class="step-image" src="../../assets/check.png"></image>
+      <image class="step-image" src="../../assets/check.png"></image>
+    </view>
+    <button class="step-btn" bindtap="handleTap" data-type="side">{{bSideUping ? '照片正在上传...' : '拍摄或选择后方照片'}}</button>
+  </view>
+  <text class="text-title">姿势评估的作用</text>
+  <text class="text-content">进行姿势评估可在较短的时间对您的体态拥有基本的整体认识，辅助判断身体不适可能的原因，为后续治疗提供基准作为衡量训练效果的指标之一。</text>
+  <text class="text-content">康复师和智能评估系统，将根据后方和侧方骨骼序列、体表标志、皮肤褶皱，分析您与标准姿势间的差异，判断下背部是否存在外伤史、脊柱侧弯、骨盆前倾、骨盆侧倾、骨盆旋转等异常体态，推测您可能存在的肌肉失衡，为下阶段治疗提供指导。</text>
+  <text class="text-title">姿势评估的注意事项</text>
+  <text class="text-content">1. 着装要求</text>
+  <text class="text-content">男生建议【赤裸上身】，下身穿着【内裤】或【较为贴身的短裤】</text>
+  <text class="text-content">女生建议穿着【普通内衣】，运动内衣会遮盖背后的肩胛骨和脊柱，增加观察的难度，下身穿着【内裤】或【较为贴身的短裤】</text>
+  <text class="text-content">若头发会遮盖耳朵、颈部等骨性标志点，请【扎起头发】，若一定要给照片打码时，侧面尽量【不要遮住耳朵】。</text>
+  <text class="text-content">2. 站姿要求</text>
+  <text class="text-content">双手自然下垂，身体放松，站立在水平的平面上，拍摄后方、侧方照片。</text>
+  <text class="text-content">可以在房间来回走动，或闭上眼睛原地踏步，帮助身体放松，这样有助于康复师观察到您的真实体态。</text>
+  <text class="text-content">3. 拍摄要求</text>
+  <text class="text-content">选择好正确的摄像高度、角度进行拍摄，拍摄者端平手机。背景不要杂乱，最好是在白墙前拍摄。拍摄背面照片时，平行面对白墙。</text>
+
+  <auth id='auth'></auth>
+  <toast id='toast'></toast>
+</view>

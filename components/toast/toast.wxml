@@ -1,0 +1,1 @@
+<view class="toast-out {{bShowToast ? 'show-toast' : 'hide-toast'}}">{{sText}}</view>

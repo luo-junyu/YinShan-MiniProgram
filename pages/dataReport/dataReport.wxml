@@ -1,0 +1,48 @@
+<!--index.wxml-->
+<view class="container">
+  <view class="report-header text-overflow"><text class="btn-back" bindtap="goBack">{{'<'}}</text>康复训练报告</view>
+  <view class="people-area">
+    <image class="people-image default-pic" src="{{user.clientAvatarUrl}}"></image>
+    <view class="people-info">
+      <view class="people-name">{{user.clientName}}</view>
+      <view class="people-time">{{sessionStartTime}}-{{sessionFinishTime}}</view>
+    </view>
+  </view>
+  <view class="data-area common-wrap">
+    <view class="data-date">{{qSessionTime}}</view>
+    <view class="data-title text-overflow">{{sessionName}}</view>
+    <view class="data-list">
+      <view class="data-li">
+        <view class="data-li-value">{{sessionTime}}</view>
+        <view class="data-li-label">训练时长(min)</view>
+      </view>
+      <view class="data-li">
+        <view class="data-li-value">{{actionNum}}</view>
+        <view class="data-li-label">动作个数</view>
+      </view>
+      <view class="data-li">
+        <view class="data-li-value">{{sessionScore}}</view>
+        <view class="data-li-label">质量得分</view>
+      </view>
+    </view>
+  </view>
+  <view class="action-area common-wrap">
+    <view class="action-title">
+      <view class="action-label">动作名称</view>
+      <view class="action-point">质量得分</view>
+    </view>
+    <view class="action-list">
+          <block wx:for="{{actionList}}" wx:for-index="key"  wx:for-item="item" wx:key="actionName">
+              <view-item class="action-li {{item.actionScore == highest ? 'highest' : ''}} {{(item.actionScore == lowest && item.actionScore != highest) ? 'lowest' : ''}}">
+                <image src="../../assets/highest.png" class="highest-image" wx:if="{{item.actionScore == highest}}"></image>
+                <image src="../../assets/lowest.png" class="lowest-image" wx:if="{{item.actionScore == lowest}}"></image>
+                <view class="action-li-label ">{{item.actionName}}</view>
+                <view class="action-li-point">{{item.actionScore ? item.actionScore : '跳过'}}</view>
+              </view-item>
+          </block>
+    </view>
+  </view>
+  <button class="btn-share"  open-type="share">分享成就</button>
+  <auth id='auth'></auth>
+  <toast id='toast'></toast>
+</view>

@@ -1,0 +1,18 @@
+.login {
+    position: fixed;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    margin:auto;
+    z-index:300;
+    width:700rpx;
+    height:400rpx;
+    box-sizing:border-box;
+    padding-top:100rpx;
+    background: #fff;
+    text-align: center;
+    box-shadow:0px 16rpx 33rpx 2rpx rgba(32,22,81,0.4);
+}
+.login .btn-area{position:absolute;width:100%;display:flex;align-items: center; bottom:30rpx;}
+.login .btn-area .button{width:250rpx;}

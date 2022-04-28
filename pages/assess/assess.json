@@ -1,0 +1,6 @@
+{
+  "usingComponents": {
+    "toast": "/components/toast/toast",
+    "auth": "/components/auth/auth"
+  }
+}

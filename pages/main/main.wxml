@@ -1,0 +1,91 @@
+<!--index.wxml-->
+<import src="../../components/auth/auth.wxml" />
+<!-- 功能说明 -->
+<view class="explain-container" style="visibility :{{sStep==='test-explain'? 'visible':'hidden'}}">
+  <button class="btn-pass" bindtap="skipExplain" >跳过</button>
+</view>
+<view class="test-container" style="visibility :{{Utils.qIndexOf(sStep,'test') !== -1 ? 'visible':'hidden'}}">
+  <view class="fish-dialog" style="visibility :{{bShowFishDialog ?   'visible':'hidden'}}">
+    
+  </view>
+  <!-- 检测 -->
+</view>
+<view class="ing-container" style="visibility :{{Utils.qIndexOf(sStep,'ing') !== -1 ?  'visible':'hidden'}}">
+  <!--加载信息 采用start接口返回的信息 -->
+  <view class="ing-loading" style="visibility :{{sStep === 'ing-loading'? 'visible':'hidden'}}">
+    <view class="loading-title">第{{nAction+1}}个动作</view>
+    <view class="loading-name">{{aAction[nAction].actionName}}</view>
+    <view class="loading-detail">{{aAction[nAction].actionScript}}</view>
+    <view class="loading-bar {{startLoading ? 'loaded-bar' : 'empty-bar'}}" bindtransitionend="handleTransEnd"></view>
+  </view>
+  <!-- 左上角课程简略信息 采用start接口返回的信息-->
+    <view class="class-info">
+      <view class="class-title">{{aAction[nAction].actionName}}</view>
+      <view class="class-detail">{{(nAction +1)+ '/' + aAction.length}}</view>
+    </view>
+    <view class="btn-area">
+      <button class="btn-explain" bindtap="explainAction">动作讲解</button>
+      <button class="btn-pause" bindtap="pauseAction">暂停</button>
+    </view>
+    <view class="process-area" style="display:{{showCircle ? 'block' : 'none'}}">
+      <circle id="counttime" type="time" draw='counttime'  r = '115' cs='#F08742' ce='#F08742' style="visibility:{{aAction[nAction].actionType ? 'hidden' : 'visible'}}" current="{{oExeing.cur_duration}}" total="{{oExeing.all_duration}}" ratio="{{oExeing.cur_duration_ratio}}"></circle>
+      <circle id="countnum" type="num"  draw='countnum'  r = '115' cs='#16B297' ce='#16B297' current="{{oExeing.finish_count}}" total="{{oExeing.all_count}}"  ratio="{{oExeing.cur_finish_ratio}}"></circle>
+    </view>
+    <image class="pkjx-good pkjx-image" wx:if="{{sEncourage === 'excellent'}}" src="../../assets/good.png"></image>
+    <image class="pkjx-warning pkjx-image" wx:if="{{sEncourage === 'well'}}" src="../../assets/warning.png"></image>
+    <image class="pkjx-error pkjx-image" wx:if="{{sEncourage === 'fair'}}" src="../../assets/error.png"></image>
+  <!-- 训练中 -->
+</view>
+<live-pusher style="visibility:{{bShowLivePusher?'visible':'hidden'}}"
+                    class="pusher {{bSmallPusher ? 'small' : ''}}"
+                    url="{{pusher.url}}"
+                    mode="{{pusher.mode}}"
+                    autopush="{{pusher.autopush}}"
+                    enable-camera="{{pusher.enableCamera}}"
+                    enable-mic="{{pusher.enableMic}}"
+                    muted="{{!pusher.enableMic}}"
+                    enable-agc="{{pusher.enableAgc}}"
+                    enable-ans="{{pusher.enableAns}}"
+                    enable-ear-monitor="{{pusher.enableEarMonitor}}"
+                    auto-focus="{{pusher.enableAutoFocus}}"
+                    zoom="{{pusher.enableZoom}}"
+                    min-bitrate="{{pusher.minBitrate}}"
+                    max-bitrate="{{pusher.maxBitrate}}"
+                    video-width="{{pusher.videoWidth}}"
+                    video-height="{{pusher.videoHeight}}"
+                    beauty="{{pusher.beautyLevel}}"
+                    whiteness="{{pusher.whitenessLevel}}"
+                    orientation="{{pusher.videoOrientation}}"
+                    aspect="{{pusher.videoAspect}}"
+                    device-position="{{pusher.frontCamera}}"
+                    remote-mirror="{{pusher.enableRemoteMirror}}"
+                    local-mirror="{{pusher.localMirror}}"
+                    background-mute="{{pusher.enableBackgroundMute}}"
+                    audio-quality="{{pusher.audioQuality}}"
+                    audio-volume-type="{{pusher.audioVolumeType}}"
+                    audio-reverb-type="{{pusher.audioReverbType}}"
+                    waiting-image="{{pusher.waitingImage}}"
+                    debug="{{debug}}"
+                    beauty-style="{{pusher.beautyStyle}}"
+                    filter="{{pusher.filter}}"
+                    bindstatechange="_pusherStateChangeHandler"
+                    bindnetstatus="_pusherNetStatusHandler"
+                    binderror="_pusherErrorHandler"
+                    bindbgmstart="_pusherBGMStartHandler"
+                    bindbgmprogress="_pusherBGMProgressHandler"
+                    bindbgmcomplete="_pusherBGMCompleteHandler"
+                    bindaudiovolumenotify="_pusherAudioVolumeNotify"
+            />
+<canvas id='debug-canvas' type="2d" class="debug-canvas small" style="visibility:{{bShowDebug? 'visible':'hidden'}}"></canvas>
+<video id="main-video" src="{{sVideoUrl}}"  autoplay="{{false}}" style="display:{{bShowVideo?'block':'none'}}" 	bindended="handleVideoEnded" loop="{{true}}" show-center-play-btn="{{false}}" object-fit="cover" controls="{{bShowVideoControl}}" class=""></video>
+<!-- <audio id="main-audio" src="{{sAudioUrl}}" /> -->
+<toast id='toast'></toast>
+<pause id='pause' bindresume="resumeAction" bindend="endClass" bindnext="nextAction"></pause>
+<wxs module="Utils">
+    var qIndexOf = function(str,val){
+      return str.indexOf(val)
+    }
+    module.exports = {
+      qIndexOf : qIndexOf
+    }
+  </wxs>

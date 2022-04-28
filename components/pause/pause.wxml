@@ -1,0 +1,26 @@
+     <view class="pause-cover {{bShowPause ? 'show-pause' : 'hide-pause'}}" >
+          <view class="btn-common btn-end" bindtap="gotoEnd">
+               <view class="image-area"><image src="../../assets/stop.png" class="btn-image"></image></view>
+               <view class="pause-title">结束</view>
+          </view>
+          <view class="btn-common btn-exe" bindtap="resumeAction">
+               <view class="image-area"><image src="../../assets/goon.png" class="btn-image"></image></view>
+               <view class="pause-title">继续训练</view>
+          </view>
+          <view class="btn-common btn-next" bindtap="nextClass" style="visibility:{{showNext?'visible':'hidden'}}">
+               <view class="image-area"><image src="../../assets/next.png" class="btn-image"></image></view>
+               <view class="pause-title">下一个动作</view>
+          </view>
+     </view>
+     <view class="end-dialog" wx:if="{{bShowEndDialog}}">
+          <image class="dialog-top" src="../../assets/end-dialog.png" />
+          <view class="dialog-content">
+               <view class="dialog-text">
+                    训练完整的运动处方，才会有良好的疗效，再坚持一会吧。提前结束将不会保存训练记录。
+               </view>
+               <view class="dialog-btn-area">
+                    <view bindtap="endClass">结束训练</view>
+                    <view bindtap="resumeAction">我要坚持</view>
+               </view>
+          </view>
+     </view>

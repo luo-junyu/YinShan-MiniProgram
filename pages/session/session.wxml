@@ -1,0 +1,39 @@
+<!--index.wxml-->
+<view class="container">
+  <view class="class-header text-overflow"><text class="btn-back" bindtap="goBack">{{'<'}}</text>{{sessionName}}</view>
+  <view class="equip-area common-area">
+    <view class="common-title equip-title">所需器材</view>
+    <view class="equip-wrap common-wrap">
+      <scroll-view class="equip-container common-container" scroll-x="true">
+        <view class="equip-list">
+          <block wx:for="{{sessionToolList}}" wx:for-index="key"  wx:for-item="item" wx:key="name">
+              <view-item class="equip-li">
+                <image class="equip-image default-image" src="{{item.excToolPirUrl}}"></image>
+                <text class="equip-name text-overflow">{{item.excToolName}}</text>
+              </view-item>
+          </block>
+        </view>
+      </scroll-view>
+    </view>
+  </view>
+  <view class="class-area common-area">
+    <view class="common-title class-title">康复训练</view>
+    <view class="class-list common-wrap">
+          <block wx:for="{{sessionActionList}}" wx:for-index="key"  wx:for-item="item" wx:key="name">
+              <view-item class="class-li">
+                <view class="class-content">
+                  <view class="class-name text-overflow">{{item.actionName}}</view>
+                  <view class="class-count text-overflow">{{item.actionScript || ''}}</view>
+                </view>
+                
+                <image class="class-image default-image" src="{{item.actionPicUrl}}"></image>
+              </view-item>
+          </block>
+    </view>
+  </view>
+  <view class="btn-area">
+    <button class="btn-share" bindtap="startExe">开始康复训练</button>
+  </view>
+  <auth id='auth'></auth>
+  <toast id='toast'></toast>
+</view>

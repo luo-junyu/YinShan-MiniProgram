@@ -1,0 +1,22 @@
+{
+  "pages":[
+    "pages/login/login",
+    "pages/overview/overview",
+    "pages/dataReport/dataReport",
+    "pages/main/main",
+    "pages/demopic/demopic",
+    "pages/demo/demo",
+    "pages/end/end",
+    "pages/mine/mine",
+    "pages/session/session",
+    "pages/course/course",
+    "pages/fillname/fillname",
+    "pages/assess/assess"
+  ],
+  "window":{
+    "backgroundTextStyle":"light",
+    "navigationStyle": "custom"
+  },
+  "style": "v2",
+  "sitemapLocation": "sitemap.json"
+}

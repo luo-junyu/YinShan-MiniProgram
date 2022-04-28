@@ -1,0 +1,59 @@
+.container{height:initial; padding-top:219rpx;padding-bottom:179rpx;background:linear-gradient(180deg, #E3FBF7, #F5F5F5);}
+.common-label{color:#2c2c6e;font-weight:600;font-siez:34rpx;line-height:1;}
+.common-area{width:706rpx;margin:29rpx auto 0;background:#fff;border:1px solid #fff;padding:30rpx 28rpx;border-radius:20rpx;}
+.session-title{margin-top:0;padding-left:50rpx;padding-right:50rpx;line-height:1;font-size:50rpx;font-weight:600;}
+.session-calendar{display:flex;padding-left:50rpx;margin-top:21rpx;}
+.session-calendar .calendar-label{font-size:32rpx;line-height:48rpx;color:#505050;}
+.session-calendar .calendar-image{width:50rpx;height:50rpx;margin-left:20rpx;}
+.coach-area .coach-container{display:flex;margin-top:30rpx;}
+.coach-container .coach-image{width:120rpx;height:120rpx;flex-shrink:0;border-radius:20rpx;}
+.coach-container .coach-content{width:530rpx;margin-left:27rpx;}
+.coach-content .coach-name{font-size:32rpx;color:#172321;line-height:1;font-weight:bold;}
+.coach-content .coach-detail{margin-top:30rpx;font-size:26rpx;color:#252829;line-height:1;}
+.mate-area{
+    .total-num{margin-left:30rpx;font-size:28rpx;
+        .num{font-size:32rpx;}
+    }
+    .mate-container{width:100%;box-sizing: border-box;margin-top:30rpx;}
+}
+.mate-container .mate-list{display:flex;width: 100%;flex-wrap: nowrap;}
+.mate-list .mate-li{margin-right:20rpx;}
+.mate-list .mate-li:last-child{margin-left:0rpx;}
+.mate-list .mate-image{width:70rpx;height:70rpx;border-radius:10rpx;}
+.mate-list .mate-name{display:block;width:72rpx;text-align: center;font-size:24rpx;line-height:1;margin-top:12rpx;}
+.class-area{
+    .class-container{}
+    .class-week{margin-top:28rpx;font-size:26rpx;color:#151718;line-height:1;}
+    .class-list{
+        .class-li{
+            .class-li-list{
+                .class-li-li{
+                    display:flex;margin-top:20rpx;background:#f5f5f5;padding:20rpx;
+                    &.class-active{
+                        background:#E4FBF7;
+                    }
+                    .class-image{width:170rpx;height:170rpx;border-radius:10rpx;}
+                    .class-content{margin-left:20rpx;margin-top:25rpx;
+                        .class-nums{margin-top:20rpx;line-height:1;color:#505050;font-size:26rpx;}
+                        .class-operate{margin-top:30rpx;
+                            .goto-report{color:#16b297;}
+                            .class-start-btn{width:148rpx;height:52rpx;line-height:52rpx;padding:0;text-align: center;font-size:24rpx;color:#fff;background:#16b297;}
+                        }
+                        .class-time{font-size:26rpx;color:#2b2b2b;font-weight:bold;}
+                    }
+                    &.is-locked{background:#f5f5f5;}
+                }
+            }
+        }
+    }
+}
+
+.footer{position:fixed;bottom:0;height:149rpx;width:100%;z-index:100;background:#fff;
+    display:flex;align-items: center;justify-content: center;
+}
+.footer .exe{margin-right:230rpx;text-align: center;}
+.footer .mine{text-align: center;}
+.footer .exe .footer-image{width:47rpx;height:25rpx;}
+.footer .mine .footer-image{width:34rpx;height:34rpx;}
+.footer .footer-text{margin-top:14rpx;font-size:20rpx;color:#13a58b;line-height:1;}
+.footer .footer-text.locked{color:#2c2c6e;}

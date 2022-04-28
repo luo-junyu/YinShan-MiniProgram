@@ -1,0 +1,15 @@
+/**index.wxss**/
+.container{height:inherit;padding-bottom:30rpx;background:#fff;position:relative;
+  .common-wrap{width:706rpx;margin:29rpx auto 0;background:#fff;border:1px solid #fff;padding:40rpx 28rpx;border-radius:20rpx;}
+  .fillname-header{height:245rpx;padding:101rpx 20rpx 0; font-size:42rpx;line-height:1;color:#2b2b2b;font-weight: bold;text-align: center;}
+  .text-label{display:block;padding-left:47rpx;font-size:32rpx;line-height:50rpx;color:#2b2b2b;}
+  .weui-input{width:646rpx;height:86rpx;line-height:86rpx;margin:49rpx auto 0;padding-left:30rpx;box-sizing: border-box;font-size:32rpx;
+    border-radius:10rpx;color:#505050;
+    border:1rpx solid #9d9d9d;}
+    .check-btn{width:706rpx;margin:150rpx auto 0;text-align: center;font-weight:bold;font-size:36rpx;color:#fff;background:#16b297;border-radius:10rpx;}
+    .avatar-area{display:flex;flex-direction:row;align-items: center;justify-content: space-between; margin-top:50rpx;padding:0 50rpx;
+      .avatar-image{width:200rpx;height:200rpx;}
+      .check-btn{width:400rpx;margin:0;}
+    }
+    .q-canvas{width:200rpx;height:200rpx;}
+}

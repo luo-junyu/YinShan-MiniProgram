@@ -1,0 +1,86 @@
+<!--index.wxml-->
+<header></header>
+<view class="container">
+  <text class="session-title text-overflow">康复训练数据</text>
+  <view class="coach-area common-area">
+      <image class="coach-image default-pic" src="{{coachDto.avatarPath}}"></image>
+      <view class="coach-content">
+        <text class="coach-name">{{userName}}</text>
+      </view>
+  </view>
+  <view class="total-list">
+    <view class="total-li">
+      <view>15天</view>
+      <view>训练天数</view>
+    </view>
+    <view class="total-li">
+      <view>345分钟</view>
+      <view>训练时长</view>
+    </view>
+    <view class="total-li">
+      <view>32个</view>
+      <view>康复动作</view>
+    </view>
+  </view>
+  <view class="class-area common-area">
+    <view class="class-container class-list" scroll-x="true">
+        <block wx:for="{{aSession}}" wx:for-index="key"  wx:for-item="item" wx:key="id" data-id="{{item.id}}">
+            <view-item class="class-li">
+              <!-- 以周为颗粒度的列表 -->
+              <view class="class-week">第{{item.nWeek}}周</view>
+              <view class="class-li-list">
+                <!-- 以课为颗粒度的列表 -->
+                <view class="class-li-li {{citem.sessionAvailable ? 'class-active' : '' }}" data-week="{{item.nWeek}}" data-no="{{key}}" data-sessionid="{{citem.sessionId}}" data-sessionname="{{citem.sessionName}}" data-active="{{citem.sessionAvailable}}" wx:for="{{item.aSession}}" wx:for-index="key"  wx:for-item="citem" wx:key="id" bindtap="handleTapClass">
+                  <view class="class-content">
+                    <view class="class-name common-label">{{citem.sessionName}}</view>
+                    <view class="class-nums">{{citem.sessionActionCount}}个康复动作</view>
+                    <view class="class-operate">
+                      <text class="class-time" wx:if="{{!citem.sessionAvailable && Utils.ifPassLine(citem.sessionStartTime)}}">{{Utils.transTime(citem.sessionStartTime)}}解锁</text>
+                      <text class="class-time" wx:if="{{!citem.sessionAvailable && !Utils.ifPassLine(citem.sessionStartTime)}}">未解锁</text>
+                      <text class="goto-report" bindtap="gotoReport" wx:if="{{citem.sessionAvailable && citem.sessionCompleted}}" data-week="{{item.nWeek}}" data-no="{{key}}" data-sessionid="{{citem.sessionId}}" data-sessionname="{{citem.sessionName}}" >查看训练报告 -></text>
+                      <button class="class-start-btn"  wx:if="{{citem.sessionAvailable && !citem.sessionCompleted}}" catchtap="startClass" data-week="{{item.nWeek}}" data-no="{{key}}" data-sessionid="{{citem.sessionId}}" data-sessionname="{{citem.sessionName}}">开始训练</button>
+                    </view>
+                  </view>
+                </view>
+              </view>
+            </view-item>
+        </block>
+      </view>
+  </view>
+  <auth id='auth'></auth>
+  <toast id='toast'></toast>
+</view>
+<view class="footer">
+  <view class="exe"  bindtap="gotoExe">
+    <image class="footer-image" src="../../assets/exe.png"></image>
+    <view class="footer-text">康复训练</view>
+  </view>
+  <view class="mine"  bindtap="gotoMine">
+    <image class="footer-image" src="../../assets/mine.png"></image>
+    <view class="footer-text">我的</view>
+  </view>
+  <wxs module="Utils">
+    var transTime = function(sDate){
+      if(sDate){
+        sDate = sDate.replace(getRegExp('T|\+.*$','g'),' ');
+        var date = getDate(sDate);
+        return (date.getMonth()+1) + '月' + date.getDate() + '日 ' + date.getHours() + ':' + date.getMinutes();
+      }else{
+        return ''
+      }
+    }
+    var ifPassLine = function(sDate){
+      if(sDate){
+        sDate = sDate.replace(getRegExp('T|\+.*$','g'),' ');
+        var date = getDate(sDate).getTime();
+        var now = getDate().getTime();
+        return now < date;
+      }else{
+        return ''
+      }
+    }
+    module.exports = {
+      transTime: transTime
+    }
+  </wxs>
+</view>

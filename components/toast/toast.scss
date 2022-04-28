@@ -1,0 +1,28 @@
+@function tovmin($rpx){
+    @return #{$rpx * 100/750}vmin;
+}
+.toast-out {
+    position: fixed;
+    bottom:tovmin(250);
+    left: 50%;
+    transform:translate(-50%,0);
+    min-width: 100rpx;
+    padding:20rpx 30rpx;
+    z-index:9999;
+    transition:all 1s;
+    text-align: center;
+    color: white;
+    border-radius: 10rpx;
+    font-size:24rpx;
+    letter-spacing: 5rpx;
+    background: rgba(0,0,0,.7);
+    word-break: break-all;
+  }
+.show-toast{
+    display:block;
+    opacity:1;
+}
+.hide-toast{
+    display:none;
+    opacity:0
+}

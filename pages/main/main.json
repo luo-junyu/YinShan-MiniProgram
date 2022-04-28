@@ -1,0 +1,8 @@
+{
+  "usingComponents": {
+    "circle": "/components/circl/circl",
+    "toast": "/components/toast/toast",
+    "pause": "/components/pause/pause"
+  },
+  "pageOrientation": "landscape"
+}

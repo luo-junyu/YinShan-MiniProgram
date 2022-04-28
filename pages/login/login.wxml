@@ -1,0 +1,55 @@
+<!--index.wxml-->
+<view class="container">
+  <view class="logo-area">
+    <image class="logo-img" src="../../assets/logo.png"></image>
+    <!-- <view class="logo-text">银杉健康</view> -->
+  </view>
+  <view class="btn-area">
+    <button class="check-btn" bindtap="handleCoverTap" wx:if="{{!checked}}">
+      {{sLoged === 'loged' ? '进入课程' : '微信登录'}}
+    </button>
+    <button class="check-btn" bindtap="handleTap" wx:if="{{checked && sLoged === 'loged'}}">进入课程</button>
+    <button class="check-btn" open-type="getPhoneNumber" bindgetphonenumber="handleTap" wx:if="{{checked && sLoged === 'unloged'}}">微信登录</button>
+    <view class="contract">
+      <view bindtap="handleChange"><radio value="111" checked="{{checked}}"/></view><view class="contract-content">我已阅读并同意<view class="content" bindtap="showUserContract">《用户协议》</view>和<view class="content" bindtap="showSecretContract">《隐私协议》</view></view>
+    </view>
+  </view>
+  <auth id='auth' callback="{{callback}}"></auth>
+  <toast id='toast'></toast>
+  <modalView show="{{bUserModal}}" bindcancel="modalCancel" bindconfirm='modalConfirm' single='{{single}}'>
+
+    <view class='modal-content'>
+
+      <scroll-view scroll-y class='main-content'>
+
+      <view class="modal-title">用户协议</view>
+      <view class="modal-inner">用户协议的内容用户协议的内容用户协议的内容用户协议的内容用户协议的内容用户协议的内容用户协议的内容用户协议的内容用户协议的内容用户协议的内容用户协议的内容用户协议的内容用户协议的内容用户协议的内容用户协议的内容用户协议的内容用户协议的内容</view>
+      <view class="modal-inner">用户协议的内容用户协议的内容用户协议的内容用户协议的内容用户协议的内容用户协议的内容用户协议的内容用户协议的内容用户协议的内容用户协议的内容用户协议的内容用户协议的内容用户协议的内容用户协议的内容用户协议的内容用户协议的内容用户协议的内容</view>
+
+
+
+      </scroll-view>
+
+    </view>
+
+  </modalView>
+  <modalView show="{{bSecretModal}}" bindcancel="modalCancel" bindconfirm='modalConfirm' single='{{single}}'>
+
+    <view class='modal-content'>
+
+      <scroll-view scroll-y class='main-content'>
+
+      <view class="modal-title">隐私协议</view>
+
+      <view class="modal-inner">隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议</view>
+      <view class="modal-inner">隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议</view>
+      <view class="modal-inner">隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议</view>
+      <view class="modal-inner">隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议</view>
+      <view class="modal-inner">隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议隐私协议</view>
+
+      </scroll-view>
+
+    </view>
+
+  </modalView>
+</view>

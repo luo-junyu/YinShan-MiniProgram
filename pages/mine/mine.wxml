@@ -1,0 +1,34 @@
+<!--index.wxml-->
+<view class="container">
+  <view class="mine-header text-overflow">我的</view>
+  <view class="people-area">
+    <image class="people-image default-pic" src="{{userPic}}"></image>
+    <view class="people-info">
+      <view class="people-name">{{userName}}</view>
+    </view>
+  </view>
+  <view class="top-area common-wrap">
+      <view class="report common-nav" bindtap="handlePinggu"><text>评估报告</text></view>
+      <view class="scheme common-nav" bindtap="gotoCalendar"><text>我的课表</text></view>
+      <view class="data common-nav" bindtap="gotoExeData"><text>康复训练数据</text></view>
+  </view>
+  <view class="middle-area common-wrap">
+      <view class="fish common-nav"><text>使用鱼眼镜头</text><switch checked="{{true}}"/></view>
+      <view class="music common-nav" bindtap="handleMusic"><text>背景音乐</text></view>
+  </view>
+  <view class="bottom-area common-wrap">
+      <view class="contact common-nav"><text >用户协议</text></view>
+  </view>
+  <auth id='auth'></auth>
+  <toast id='toast'></toast>
+</view>
+<view class="footer">
+    <view class="exe"  bindtap="gotoExe">
+      <image class="footer-image" src="../../assets/exe.png"></image>
+      <view class="footer-text">康复训练</view>
+    </view>
+    <view class="mine" >
+      <image class="footer-image" src="../../assets/mine-locked.png"></image>
+      <view class="footer-text locked">我的</view>
+    </view>
+  </view>

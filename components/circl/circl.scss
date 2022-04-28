@@ -1,0 +1,40 @@
+@function tovmin($rpx){
+  @return #{$rpx * 100/750}vmin;
+}
+$circle:tovmin(230);
+$halfCircle:tovmin(115);
+$border: tovmin(15);
+.num{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  background: transparent;
+  border-radius: 50%;
+  width: tovmin(180); 
+  height: tovmin(180);
+  transform: translate(-50%, -50%);
+  text-align: center;
+  line-height: tovmin(180);
+  font-size: tovmin(56);
+  font-weight: 400;
+  color:#fff;
+}
+.circle_box,.circle_draw{ position: relative; }
+.circle_bg{position: absolute;}
+.circle_box{
+  display: flex;
+  flex-direction: row;
+  margin: 0 auto;
+  justify-content: center;
+  align-items: center;
+}
+.circle_txt{
+  position: absolute;
+  font-size: 28rpx;
+}
+.hide-text{display: none;}
+.txt-area{position:absolute;color:rgba(200,200,200,.8);text-align: center;}
+.circle_txt_up{font-size:30rpx;font-weight:bold;}
+.circle_txt_top,.circle_txt_down{display:flex;align-items: center;font-size:18rpx;font-weight:bold;}
+.circle_txt_top{color:rgba(155,155,155,.8)}
+/* .txt-total{font-size:30rpx;} */

@@ -1,0 +1,16 @@
+@function tovmin($rpx){
+    @return #{$rpx * 100/750}vmin;
+  }
+.container{background:#000;}
+.demo{width:20rpx;height:20rpx;background:#f60;margin: 0 auto;}
+.burn-charts{width:tovmin(230);height:tovmin(230);}
+.bar{width:300rpx;height:20rpx;position:relative;background:grey;
+&:after{position:absolute;content:'';height:20rpx;background:#03cd8a;}
+}
+#circle{position: absolute;left:50rpx;width:tovmin(230);height:tovmin(230)}
+.loaded{
+    &:after{width:100%;transition: width linear 5000ms;}
+}
+.empty{
+    &:after{width:0;}
+}
