@@ -41,7 +41,7 @@ Page({
   bPlayingCountTime: false,//正在播放计时器音效
   bEnded: false,//最小化后置true
   nNowActionId:'',//当前动作的id
-  skeleton:[[15,13],[13,11],[16,14],[14,12],[11,12],[5,11],[6,12],[5,6],[5,7],[6,8],[7,9],[8,10],[1,2],[0,1],[0,2],[1,3],[2,4],[3,5],[4,6]],
+  skeleton:[[22, 20], [20, 18], [18, 16], [21, 19], [19, 17], [17, 15], [15, 16], [15, 14], [16, 14], [14, 13], [13, 12], [12, 4], [12, 5], [4, 5], [11, 9], [9, 7], [7, 5], [10, 8], [8, 6], [6, 4], [4, 1], [1, 2], [1, 3], [2, 0], [3, 0], [4, 15], [5, 16]], // [15,13],[13,11],[16,14],[14,12],[11,12],[5,11],[6,12],[5,6],[5,7],[6,8],[7,9],[8,10],[1,2],[0,1],[0,2],[1,3],[2,4],[3,5],[4,6]
   TRTC:null,
   oOptions: {},
   aiServerUrl:'',
@@ -117,6 +117,7 @@ Page({
   initMedia(){
     //初始化音频、视频
     this.oVideo = wx.createVideoContext("main-video");
+    this.oVideo.play();
     this.initShortAudio();
     this.initCountAudio();
   },
@@ -274,7 +275,7 @@ Page({
         console.log('收到激励语音',data);
         if(data['autio_type'] === 'encourage'){
           this.sStatus = data.name;
-          this.oShortAudio.src= this.oShortAudioUrl[this.sStatus]
+          this.oShortAudio.src = this.oShortAudioUrl[this.sStatus]
           this.oShortAudio.play();
           this.setData({sEncourage:this.sStatus},()=>{
             setTimeout(()=>{
@@ -282,8 +283,9 @@ Page({
               this.setData({sEncourage:this.sStatus})
             },2000)
           })
+        } else {
+          this.inputAudio(data);
         }
-        this.inputAudio(data);
         this.playAudioList();
       }else if(data.type === 'finish_class_confirm'){
         console.log('收到结束课程确认消息')
@@ -569,7 +571,7 @@ Page({
   handleEnterIngLoading(){
     console.log('进入ing-loading');
     this.setData({sStep:'ing-loading',bShowVideo:true,bShowLivePusher:true,bSmallPusher:true,sVideoUrl:this.data.aAction[this.data.nAction].actionAnimeUrl}, () => {
-      debugger;
+      // debugger;
       this.setData({startLoading: true},()=>{
         this.data.aAudioUrl = [];
         app.globalData.oAudio.src = app.globalData.sCountAudioUrl;
@@ -598,9 +600,9 @@ Page({
       app.globalData.oWs.send({
         data:JSON.stringify({
           type: 'change_action',
-          action_name: tempAction.actionName,
+          // action_name: tempAction.actionName,
           // action_name: 'tunqiao',//qtemp
-          // action_id : tempAction.actionId
+          action_id : tempAction.actionId,
         })
       })
     });

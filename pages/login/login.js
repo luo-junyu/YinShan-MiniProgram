@@ -10,7 +10,7 @@ Page({
     checked:false,
     bUserModal: false, // 显示modal弹窗
     bSecretModal: false, // 显示modal弹窗
-    single: false // false 只显示一个按钮，如果想显示两个改为true即可
+    single: true // false 只显示一个按钮，如果想显示两个改为true即可
   },
   phoneCode: '',
   oAuth: null,
@@ -60,7 +60,7 @@ Page({
   },
   fnLogin(){
     wx.login().then(res => {
-      debugger;
+      // debugger;
       if (res.code) {
         // wx.redirectTo({
         //   url: '/pages/fillname/fillname'

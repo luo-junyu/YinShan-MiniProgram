@@ -44,7 +44,7 @@ Page({
     let nWeek;
     if(data != null){
       for(let i = 0;i<data.length;i++){
-        debugger;
+        // debugger;
         nWeek = findWeek(data[i].sessionStartTime,createTime);
         if(i === 0){
           //第一节课
@@ -116,7 +116,7 @@ Page({
     })
   },
   startClass(e){
-    debugger;
+    // debugger;
     app.globalData.sessionId = e.currentTarget.dataset.sessionid;
     app.globalData.sessionname = e.currentTarget.dataset.sessionname;
     app.globalData.sessionWeek = e.currentTarget.dataset.week;

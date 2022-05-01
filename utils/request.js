@@ -30,7 +30,7 @@ _this.request = ({ url, data = {}, method,header = 'application/json', callback 
           reject(res)
         },
         complete: res => {
-          debugger;
+          // debugger;
           if (callback) return callback(res.data);
           let statusCode = res.statusCode;
           if (statusCode == 404) {
