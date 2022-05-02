@@ -60,6 +60,18 @@ Page({
     well: 'https://downsc.chinaz.net/Files/DownLoad/sound1/202102/13954.mp3',
     fair: 'https://downsc.chinaz.net/Files/DownLoad/sound1/202006/13010.mp3'
   },
+  idxAudioUrl: [
+    'https://kangfu-action-video-1258481652.cos.ap-beijing.myqcloud.com/audio/xuhao/diyigedongzuo.m4a',
+    'https://kangfu-action-video-1258481652.cos.ap-beijing.myqcloud.com/audio/xuhao/diergedongzuo.m4a',
+    'https://kangfu-action-video-1258481652.cos.ap-beijing.myqcloud.com/audio/xuhao/disangedongzuo.m4a',
+    'https://kangfu-action-video-1258481652.cos.ap-beijing.myqcloud.com/audio/xuhao/disigedongzuo.m4a',
+    'https://kangfu-action-video-1258481652.cos.ap-beijing.myqcloud.com/audio/xuhao/diwugedongzuo.m4a',
+    'https://kangfu-action-video-1258481652.cos.ap-beijing.myqcloud.com/audio/xuhao/diliugedongzuo.m4a',
+    'https://kangfu-action-video-1258481652.cos.ap-beijing.myqcloud.com/audio/xuhao/diqigedongzuo.m4a',
+    'https://kangfu-action-video-1258481652.cos.ap-beijing.myqcloud.com/audio/xuhao/dibagedongzuo.m4a',
+    'https://kangfu-action-video-1258481652.cos.ap-beijing.myqcloud.com/audio/xuhao/dijiugedongzuo.m4a',
+    'https://kangfu-action-video-1258481652.cos.ap-beijing.myqcloud.com/audio/xuhao/dishigedongzuo.m4a',
+  ],
   sStatus:'init',//当前状态，对比用
   /* 通用变量 start*/
   /* 通用函数 start*/
@@ -117,7 +129,7 @@ Page({
   initMedia(){
     //初始化音频、视频
     this.oVideo = wx.createVideoContext("main-video");
-    this.oVideo.play();
+    // this.oVideo.play();
     this.initShortAudio();
     this.initCountAudio();
   },
@@ -215,7 +227,8 @@ Page({
     // pusher 初始化参数
     const pusherConfig = {
       beautyLevel: 0,
-      localMirror: 'disable',
+      localMirror: 'auto',
+      enableRemoteMirror: true,
       audioVolumeType: 'media',
       videoWidth:288,
       videoHeight:368,
@@ -574,8 +587,14 @@ Page({
       // debugger;
       this.setData({startLoading: true},()=>{
         this.data.aAudioUrl = [];
-        app.globalData.oAudio.src = app.globalData.sCountAudioUrl;
+        app.globalData.oAudio.src = this.idxAudioUrl[this.data.nAction];
         app.globalData.oAudio.play();
+        let tempAction = this.data.aAction[this.data.nAction] || {};
+        console.log('准备开始',tempAction);
+        setTimeout(()=>{
+          app.globalData.oAudio.src = tempAction.actionAudioUrl;
+          app.globalData.oAudio.play();
+        },2000)
       })
       //播放加载倒计时
     })
