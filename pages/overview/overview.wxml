@@ -69,13 +69,13 @@
         return ''
       }
     }
-    var ifPassLine = function(sDate){
-      if(sDate){
-        sDate = sDate.replace(getRegExp('T|\+.*$','g'),' ');
-        var date = getDate(sDate).getTime();
-        var now = getDate().getTime();
-        return now < date;
-      }else{
+    var ifPassLine = function(sDate) {
+      if (sDate) {
+        sDate = sDate.replace(getRegExp('T|\+.*$','g'),' ')
+        var date = getDate(sDate).getTime()
+        var now = getDate().getTime()
+        return (now < date)
+      } else{
         return ''
       }
     }

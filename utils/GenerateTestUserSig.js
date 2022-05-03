@@ -8,7 +8,6 @@ import LibGenerateTestUserSig from './lib-generate-test-usersig-es.min.js'
  */
 const SDKAPPID = 1400602604
 
-
 /**
  * 签名过期时间，建议不要设置的过短
  * <p>
@@ -16,7 +15,6 @@ const SDKAPPID = 1400602604
  * 默认时间：7 x 24 x 60 x 60 = 604800 = 7 天
  */
 const EXPIRETIME = 604800
-
 
 /**
  * 计算签名用的加密密钥，获取步骤如下：
@@ -47,16 +45,16 @@ const SECRETKEY = 'a366eb83061e28fe10c3250b7f0ebfac90764e6fdf151a5ea84a03e6daa29
  *
  * Reference：https://cloud.tencent.com/document/product/647/17275#Server
  */
-function genTestUserSig(userID) {
+function genTestUserSig (userID) {
   const generator = new LibGenerateTestUserSig(SDKAPPID, SECRETKEY, EXPIRETIME)
   const userSig = generator.genTestUserSig(userID)
 
   return {
     sdkAppID: SDKAPPID,
-    userSig: userSig,
+    userSig
   }
 }
 
 module.exports = {
-  genTestUserSig,
+  genTestUserSig
 }

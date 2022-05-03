@@ -31,4 +31,4 @@
       <image class="footer-image" src="../../assets/mine-locked.png"></image>
       <view class="footer-text locked">我的</view>
     </view>
-  </view>
+</view>

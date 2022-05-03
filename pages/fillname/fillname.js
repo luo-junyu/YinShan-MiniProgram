@@ -1,32 +1,30 @@
-///index.js
-import {uSignUp} from '../../utils/api/api.js'
-//获取应用实例
+/// index.js
+import { uSignUp } from '../../utils/api/api.js'
+// 获取应用实例
 const app = getApp()
 Page({
   data: {
     inputValue: '',
     avatarImg: ''
   },
-  phone:'',
+  phone: '',
   oAuth: null,
   oToast: null,
-  avatarbase64:'',
-  scaledBase64:'',
-  onShow(){
-    let that=this;
+  avatarbase64: '',
+  scaledBase64: '',
+  onShow () {
   },
-  bindKeyInput(e){
-    this.setData({inputValue: e.detail.value});
+  bindKeyInput (e) {
+    this.setData({ inputValue: e.detail.value })
   },
-  handleAvatar(e){
-    let originPath = e.detail.avatarUrl;
-    debugger;
-    if(!/jpg|png|jpeg/g.test(originPath)){
-      this.oToast.showToast('仅支持jpg、png、jpeg格式图片，建议选择微信头像');
-      return;
+  handleAvatar (e) {
+    const originPath = e.detail.avatarUrl
+    if (!/jpg|png|jpeg/g.test(originPath)) {
+      this.oToast.showToast('仅支持jpg、png、jpeg格式图片，建议选择微信头像')
+      return
     }
-    let ctx = wx.createCanvasContext('qcanvas');
-    this.setData({avatarImg:originPath})
+    // const ctx = wx.createCanvasContext('qcanvas')
+    this.setData({ avatarImg: originPath })
 
     // //生成主图
     // wx.getImageInfo({
@@ -50,33 +48,33 @@ Page({
     //     console.log(setWidth, setHeight)
     //     ctx.drawImage(res.path, 0, 0, setWidth, setHeight, 20, 50, 280, 220);
     //     ctx.draw(true);
-        
+
     //   }
     // });
     // this.getImageBase64_readFile(originPath,'avatarbase64',true);
-    this.getImageBase64_readFile(originPath);
+    this.getImageBase64_readFile(originPath)
   },
-  async getImageBase64_readFile(tempFilePath) {
+  async getImageBase64_readFile (tempFilePath) {
     const base64 = await new Promise(resolve => {
-      //获取全局唯一的文件管理器 
-      wx.getFileSystemManager().readFile({ //读取本地文件内容
+      // 获取全局唯一的文件管理器
+      wx.getFileSystemManager().readFile({ // 读取本地文件内容
         filePath: tempFilePath, // 文件路径
         encoding: 'base64', // 返回格式
         success: ({
           data
         }) => {
-          if(data.length > 1048576){
-            this.oToast.showToast('图片过大，建议选择微信头像');
-            return;
+          if (data.length > 1048576) {
+            this.oToast.showToast('图片过大，建议选择微信头像')
+            return
           }
-          this.avatarbase64 = 'data:image/png;base64,' + data;
+          this.avatarbase64 = 'data:image/png;base64,' + data
         }
       })
     })
   },
   // async getImageBase64_readFile(tempFilePath,sImg,goon) {
   //   const base64 = await new Promise(resolve => {
-  //     //获取全局唯一的文件管理器 
+  //     //获取全局唯一的文件管理器
   //     wx.getFileSystemManager().readFile({ //读取本地文件内容
   //       filePath: tempFilePath, // 文件路径
   //       encoding: 'base64', // 返回格式
@@ -99,7 +97,7 @@ Page({
   //                 let nHeight =  res[0].height;
   //                 let oCtx = wx.createCanvasContext('canvas');
   //                 oCtx.drawImage(this.data.avatarbase64,0,0,nWidth,nHeight)
-  //                 oCtx.draw(false, 
+  //                 oCtx.draw(false,
   //                 //   setTimeout(()=>{
   //                 //   wx.canvasToTempFilePath({
   //                 //       canvas:oCanvas,
@@ -115,26 +113,29 @@ Page({
   //                 //     }
   //                 // })
   //                 // },100)
-  //                 )  
+  //                 )
   //               })
   //       }
   //     });
   //   });
   // },
-  handleTap(){
-    if(!/^[\u4e00-\u9fa5]{2,6}$/.test(this.data.inputValue)){
-      this.oToast.showToast('请输入真实姓名');
-    }else if(!this.data.avatarImg){
-      this.oToast.showToast('请设置头像');
-    }else{
-      app.api.post({url:uSignUp,data:{
-        clientName: this.data.inputValue,
-        phoneNumber: this.phone,
-        avatarBase64: this.avatarbase64
-      }}).then(res => {
-        this.oToast.showToast('保存成功');
-        wx.setStorageSync('user', res.clientInfo);
-        
+  handleTap () {
+    if (!/^[\u4e00-\u9fa5]{2,6}$/.test(this.data.inputValue)) {
+      this.oToast.showToast('请输入真实姓名')
+    } else if (!this.data.avatarImg) {
+      this.oToast.showToast('请设置头像')
+    } else {
+      app.api.post({
+        url: uSignUp,
+        data: {
+          clientName: this.data.inputValue,
+          phoneNumber: this.phone,
+          avatarBase64: this.avatarbase64
+        }
+      }).then(res => {
+        this.oToast.showToast('保存成功')
+        wx.setStorageSync('user', res.clientInfo)
+
         wx.redirectTo({
           url: '/pages/course/course'
         })
@@ -143,17 +144,15 @@ Page({
       })
     }
   },
-  onLoad(options) {
-    let that = this;
-    app.initShare();
-    let user = wx.getStorageSync('user') || {};
-    if(user.clientName){this.setData({inputValue: user.clientName});}
-    if(user.phoneNumber){this.phone = user.phoneNumber;}
-    if(user.clientAvatarUrl){this.setData({avatarImg:user.clientAvatarUrl});}
-    this.oToast = this.selectComponent("#toast"); 
-    this.oAuth = this.selectComponent("#auth");
+  onLoad (options) {
+    app.initShare()
+    const user = wx.getStorageSync('user') || {}
+    if (user.clientName) { this.setData({ inputValue: user.clientName }) }
+    if (user.phoneNumber) { this.phone = user.phoneNumber }
+    if (user.clientAvatarUrl) { this.setData({ avatarImg: user.clientAvatarUrl }) }
+    this.oToast = this.selectComponent('#toast')
+    this.oAuth = this.selectComponent('#auth')
     // this.oAuth.loginASession(this.getCourseInfo)
-  },
-
+  }
 
 })
