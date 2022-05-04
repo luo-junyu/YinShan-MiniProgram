@@ -1,4 +1,4 @@
 <!--index.wxml-->
-<!-- <view class="posterWrap" > -->
-  <canvas canvas-id='posterCanvas' class="myCanvas"></canvas>
-<!-- </view> -->
+  <!-- <view class="posterWrap" > -->
+<canvas canvas-id='posterCanvas' class="myCanvas"></canvas>
+  <!-- </view> -->

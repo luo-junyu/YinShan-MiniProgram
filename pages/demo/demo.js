@@ -58,7 +58,6 @@ Page({
     this.oAudio.stop()
   },
   initSocket () {
-    debugger
     console.log('初始化socket')
     WebsocketHeartbeat({
       miniprogram: wx,
@@ -113,50 +112,50 @@ Page({
       } else if (i === this.data.aAudioUrl.length - 1) {
         this.data.aAudioUrl.push(data)
         break
-      } else {
-        continue
       }
     }
     console.log('数组', this.data.aAudioUrl)
   },
   onLoad (options) {
     console.log('090-1')
-    debugger
     this.inputAudio({ prior: 1 })
     this.inputAudio({ prior: 4 })
     this.inputAudio({ prior: 2 })
     this.inputAudio({ prior: 3 })
-    return
-    this.initSocket()
+    // return
+    // this.initSocket()
     // wx.connectSocket(
     //   {
     //     url:'ws://127.0.0.1:8181',
     //     success:()=>{console.log('连接111成功')}
     //   }
     // )
-    return
+    // return
     // this.oCircle = this.selectComponent("#circle");
     // this.oCircle.init();
-    this.oCircle1 = this.selectComponent('#done-charts1')
-    this.oCircle2 = this.selectComponent('#done-charts2')
+    // this.oCircle1 = this.selectComponent('#done-charts1')
+    // this.oCircle2 = this.selectComponent('#done-charts2')
     // this.oCircle.drawCanvas();
-    setInterval(() => {
-      this.setData({
-        total1: 10,
-        current1: this.data.current1 + 1,
-        ratio1: this.data.ratio1 < 1 ? this.data.ratio1 + 0.1 : 1,
-        total2: 15,
-        current2: this.data.current2 + 1.5,
-        ratio2: this.data.ratio2 < 1 ? this.data.ratio2 + 0.2 : 1
-      }, () => { this.oCircle1.drawCanvas(); this.oCircle2.drawCanvas() })
-    }, 2000)
-    this.oVideo = wx.createVideoContext('main-video')
-    this.initAudio()
-    this.setData({ startLoading: true }, () => {
-      this.oAudio.play()
-      this.oVideo.play()
-    })
-    this.initShortAudio()
+    // setInterval(() => {
+    //   this.setData({
+    //     total1: 10,
+    //     current1: this.data.current1 + 1,
+    //     ratio1: this.data.ratio1 < 1 ? this.data.ratio1 + 0.1 : 1,
+    //     total2: 15,
+    //     current2: this.data.current2 + 1.5,
+    //     ratio2: this.data.ratio2 < 1 ? this.data.ratio2 + 0.2 : 1
+    //   }, () => {
+    //     this.oCircle1.drawCanvas()
+    //     this.oCircle2.drawCanvas()
+    //   })
+    // }, 2000)
+    // this.oVideo = wx.createVideoContext('main-video')
+    // this.initAudio()
+    // this.setData({ startLoading: true }, () => {
+    //   this.oAudio.play()
+    //   this.oVideo.play()
+    // })
+    // this.initShortAudio()
   },
 
   initShortAudio () {

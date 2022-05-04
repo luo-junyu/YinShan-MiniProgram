@@ -15,8 +15,29 @@
   ],
   "window":{
     "backgroundTextStyle":"light",
-    "navigationStyle": "custom"
+    "navigationStyle": "custom",
+    "navigationBarTextStyle": "black"
   },
   "style": "v2",
-  "sitemapLocation": "sitemap.json"
+  "sitemapLocation": "sitemap.json",
+  "tabBar": {
+    "color": "#505050",
+    "selectedColor": "#13A58B",
+    "backgroundColor": "#FFFFFF",
+    "borderStyle": "black",
+    "list": [
+      {
+        "pagePath": "pages/course/course",
+        "text": "康复训练",
+        "iconPath": "assets/tab_icon_0.png",
+        "selectedIconPath": "assets/tab_icon_0_s.png"
+      },
+      {
+        "pagePath": "pages/mine/mine",
+        "text": "我的",
+        "iconPath": "assets/tab_icon_1.png",
+        "selectedIconPath": "assets/tab_icon_1_s.png"
+      }
+    ]
+  }
 }

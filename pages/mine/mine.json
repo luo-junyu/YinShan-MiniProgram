@@ -2,6 +2,7 @@
   "usingComponents": {
     "header": "/components/header/header",
     "toast": "/components/toast/toast",
-    "auth": "/components/auth/auth"
+    "auth": "/components/auth/auth",
+    "header": "/components/header/header"
   }
 }

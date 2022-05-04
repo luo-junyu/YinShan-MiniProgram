@@ -10,6 +10,7 @@
   "license": "ISC",
   "dependencies": {
     "miniprogram-api-promise": "^1.0.4",
+    "miniprogram-computed": "^4.3.8",
     "miniprogram-datepicker": "^0.5.1"
   },
   "devDependencies": {

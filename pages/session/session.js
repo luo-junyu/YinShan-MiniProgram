@@ -32,13 +32,11 @@ Page({
     app.initShare()
     this.oToast = this.selectComponent('#toast')
     this.oAuth = this.selectComponent('#auth')
-    app.api.post({ url: uGetSession, data: { courseId: app.globalData.courseId, sessionId: app.globalData.sessionId } }).then(res => {
+    app.api.post({
+      url: uGetSession,
+      data: { courseId: app.globalData.courseId, sessionId: app.globalData.sessionId }
+    }).then(res => {
       this.setData(res)
-    })
-  },
-  goBack () {
-    wx.redirectTo({
-      url: '/pages/course/course'
     })
   },
   startExe () {

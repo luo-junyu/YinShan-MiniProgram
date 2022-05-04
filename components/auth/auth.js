@@ -9,17 +9,17 @@ Component({
     }
   },
   /**
-     * 私有数据,组件的初始数据
-     * 可用于模版渲染
-     */
+   * 私有数据,组件的初始数据
+   * 可用于模版渲染
+   */
   data: { // 弹窗显示控制
 
   },
   /**
-     * 组件的方法列表
-     */
+   * 组件的方法列表
+   */
   methods: {
-    showFailToast () {
+    showFailToast() {
       this.selectComponent('#toastInAuth').showToast('操作失败，请关闭重试')
     },
     // 获取session
@@ -42,7 +42,7 @@ Component({
     //   })
     // },
     // 检查授权情况
-    checkAuth (aScope = []) {
+    checkAuth(aScope = []) {
       wx.getSetting().then(res => {
         let bPassAuth = true
         for (const sScope of aScope) {
@@ -62,7 +62,7 @@ Component({
       })
     },
     // 授权登陆
-    cfmAuth (e) {
+    cfmAuth(e) {
       debugger
       const that = this
       if (e && e.detail) {
@@ -92,11 +92,11 @@ Component({
         }
       }
     },
-    showAuthModel () {
-      this.setData({ bShowLogin: true })
+    showAuthModel() {
+      this.setData({bShowLogin: true})
     },
-    hideAuthModel () {
-      this.setData({ bShowLogin: false })
+    hideAuthModel() {
+      this.setData({bShowLogin: false})
     }
 
   }

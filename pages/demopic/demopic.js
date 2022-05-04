@@ -1,10 +1,8 @@
 // index.js
 // 获取应用实例
-const app = getApp()
 
 Page({
-  data: {
-  },
+  data: {},
   onLoad: function () {
     const self = this
     // let defaultHeadUri = Constants.DefaultData.header;
@@ -38,7 +36,8 @@ Page({
         } else {
           setHeight = h
           setWidth = w
-        };
+        }
+
         console.log(setWidth, setHeight)
         ctx.drawImage(res.path, 0, 0, setWidth, setHeight, 20, 50, 280, 220)
         ctx.draw(true)

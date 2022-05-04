@@ -31,11 +31,6 @@ Page({
   handleCalendar () {
     this.oToast.showToast('我们正在加紧开发中哦~')
   },
-  gotoMine () {
-    wx.redirectTo({
-      url: '/pages/mine/mine'
-    })
-  },
   formatData (data, createTime) {
     const aReturn = []
     let nowWeek
@@ -74,7 +69,7 @@ Page({
     app.globalData.sessionNo = e.currentTarget.dataset.no
 
     if (bActive) {
-      wx.redirectTo({
+      wx.navigateTo({
         url: '/pages/session/session'
       })
     } else {
@@ -104,7 +99,7 @@ Page({
     app.globalData.sessionWeek = e.currentTarget.dataset.week
     app.globalData.sessionNo = e.currentTarget.dataset.no
     app.globalData.cslId = e.currentTarget.dataset.cslid
-    wx.redirectTo({
+    wx.navigateTo({
       url: '/pages/dataReport/dataReport'
     })
   },

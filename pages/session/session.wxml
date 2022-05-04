@@ -1,37 +1,40 @@
 <!--index.wxml-->
 <view class="container">
-  <view class="class-header text-overflow"><text class="btn-back" bindtap="goBack">{{'<'}}</text>{{sessionName}}</view>
-  <view class="equip-area common-area">
-    <view class="common-title equip-title">所需器材</view>
-    <view class="equip-wrap common-wrap">
-      <scroll-view class="equip-container common-container" scroll-x="true">
-        <view class="equip-list">
-          <block wx:for="{{sessionToolList}}" wx:for-index="key"  wx:for-item="item" wx:key="name">
+  <header class="container-nav" backgroundColor="#F5F5F5" title="{{sessionName}}" returnable="{{true}}"
+          titleColor="#2B2B2B"></header>
+  <view class="container-content">
+    <view class="equip-area common-area">
+      <view class="common-title equip-title">所需器材</view>
+      <view class="equip-wrap common-wrap">
+        <scroll-view class="equip-container common-container" scroll-x="true">
+          <view class="equip-list">
+            <block wx:for="{{sessionToolList}}" wx:for-index="key" wx:for-item="item" wx:key="name">
               <view class="equip-li">
                 <image class="equip-image default-image" src="{{item.excToolPirUrl}}"></image>
                 <text class="equip-name text-overflow">{{item.excToolName}}</text>
               </view>
-          </block>
-        </view>
-      </scroll-view>
+            </block>
+          </view>
+        </scroll-view>
+      </view>
     </view>
-  </view>
-  <view class="class-area common-area">
-    <view class="common-title class-title">康复训练</view>
-    <view class="class-list common-wrap">
-          <block wx:for="{{sessionActionList}}" wx:for-index="key"  wx:for-item="item" wx:key="name">
-              <view class="class-li">
-                <view class="class-content">
-                  <view class="class-name text-overflow">{{item.actionName}}</view>
-                  <view class="class-count text-overflow">{{item.actionScript || ''}}</view>
-                </view>
+    <view class="class-area common-area">
+      <view class="common-title class-title">康复训练</view>
+      <view class="class-list common-wrap">
+        <block wx:for="{{sessionActionList}}" wx:for-index="key" wx:for-item="item" wx:key="name">
+          <view class="class-li">
+            <view class="class-content">
+              <view class="class-name text-overflow">{{item.actionName}}</view>
+              <view class="class-count text-overflow">{{item.actionScript || ''}}</view>
+            </view>
 
-                <image class="class-image default-image" src="{{item.actionPicUrl}}"></image>
-              </view>
-          </block>
+            <image class="class-image default-image" src="{{item.actionPicUrl}}"></image>
+          </view>
+        </block>
+      </view>
     </view>
   </view>
-  <view class="btn-area">
+  <view class="btn-area container-bottom">
     <button class="btn-share" bindtap="startExe">开始康复训练</button>
   </view>
   <auth id='auth'></auth>

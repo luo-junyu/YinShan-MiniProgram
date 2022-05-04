@@ -281,6 +281,7 @@ Page({
         console.log('收到结束课程确认消息')
         app.globalData.oWs.close()
         this.exitRoom()
+        // TODO: 不确定改navigateTo的风险，待验证 by GJJ
         wx.redirectTo({
           url: '/pages/end/end'
         })
@@ -300,8 +301,6 @@ Page({
       } else if (i === this.data.aAudioUrl.length - 1) {
         this.data.aAudioUrl.push(data)
         break
-      } else {
-        continue
       }
     }
   },
@@ -521,16 +520,32 @@ Page({
   switchStep (sNew, sOld) {
     // 整个阶段：test-explain(系统说明) -> test(人物检测) -> ing-loading(课程加载) -> ing(课程进行中) ->
     switch (sOld) {
-      case 'test-explain': this.handleLeaveTestExplain(); break
-      case 'test': this.handleLeaveTest(); break
-      case 'ing-loading': this.handleLeaveIngLoading(); break
-      case 'ing': this.handleLeaveIng(); break
+      case 'test-explain':
+        this.handleLeaveTestExplain()
+        break
+      case 'test':
+        this.handleLeaveTest()
+        break
+      case 'ing-loading':
+        this.handleLeaveIngLoading()
+        break
+      case 'ing':
+        this.handleLeaveIng()
+        break
     }
     switch (sNew) {
-      case 'test-explain': this.handleEnterTestExplain(); break
-      case 'test': this.handleEnterTest(); break
-      case 'ing-loading': this.handleEnterIngLoading(); break
-      case 'ing': this.handleEnterIng(); break
+      case 'test-explain':
+        this.handleEnterTestExplain()
+        break
+      case 'test':
+        this.handleEnterTest()
+        break
+      case 'ing-loading':
+        this.handleEnterIngLoading()
+        break
+      case 'ing':
+        this.handleEnterIng()
+        break
     }
   },
   // 进入训练准备中的解释阶段test-explain:播放准备视频，显示播放控制条，
@@ -560,7 +575,13 @@ Page({
   // 进入训练中加载阶段：开始加载动画，加载倒计时音频
   handleEnterIngLoading () {
     console.log('进入ing-loading')
-    this.setData({ sStep: 'ing-loading', bShowVideo: true, bShowLivePusher: true, bSmallPusher: true, sVideoUrl: this.data.aAction[this.data.nAction].actionAnimeUrl }, () => {
+    this.setData({
+      sStep: 'ing-loading',
+      bShowVideo: true,
+      bShowLivePusher: true,
+      bSmallPusher: true,
+      sVideoUrl: this.data.aAction[this.data.nAction].actionAnimeUrl
+    }, () => {
       this.setData({ startLoading: true }, () => {
         this.data.aAudioUrl = []
         app.globalData.oAudio.src = app.globalData.sCountAudioUrl
@@ -648,7 +669,9 @@ Page({
     // ctx.fillStyle="rgba(248, 143, 44, 1.0)";
     ctx.fillStyle = 'rgba(255, 0,0, 1.0)'
     for (let index = 0; index < aBone.length; index++) {
-      if (aBone[index][2] < 0.2) { continue }
+      if (aBone[index][2] < 0.2) {
+        continue
+      }
       ctx.beginPath()
       ctx.arc(aBone[index][0], aBone[index][1], 2, 0, Math.PI * 2, false)
       ctx.fill()

@@ -73,11 +73,6 @@ Page({
       })
     })
   },
-  goBack () {
-    wx.redirectTo({
-      url: '/pages/course/course'
-    })
-  },
   checkCanSend () {
     if (!this.data.checkedCom || !this.data.checkedDiff) {
       // 未选

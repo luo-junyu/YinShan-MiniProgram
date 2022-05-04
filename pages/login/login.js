@@ -16,7 +16,11 @@ Page({
   oToast: null,
   onShow () {
   },
-  shareNormal () { const that = this; that.courseId = app.globalData.courseId; that.coursePic = app.globalData.coursePic },
+  shareNormal () {
+    const that = this
+    that.courseId = app.globalData.courseId
+    that.coursePic = app.globalData.coursePic
+  },
   onLoad (options) {
     app.initShare()
     const user = wx.getStorageSync('user')
@@ -55,7 +59,6 @@ Page({
   },
   fnLogin () {
     wx.login().then(res => {
-      debugger
       if (res.code) {
         // wx.redirectTo({
         //   url: '/pages/fillname/fillname'
@@ -66,7 +69,7 @@ Page({
           data: {
             jsCode: res.code,
             phoneCode: this.phoneCode
-          // openId: 1234576
+            // openId: 1234576
           }
         }).then(res => {
           // 登录成功
@@ -100,7 +103,7 @@ Page({
   // 点击取消按钮的回调函数
 
   modalCancel (e) {
-  // 这里面处理点击取消按钮业务逻辑
+    // 这里面处理点击取消按钮业务逻辑
 
     console.log('点击了取消')
   },
@@ -108,7 +111,7 @@ Page({
   // 点击确定按钮的回调函数
 
   modalConfirm (e) {
-  // 这里面处理点击确定按钮业务逻辑
+    // 这里面处理点击确定按钮业务逻辑
 
     console.log('点击了确定')
   },

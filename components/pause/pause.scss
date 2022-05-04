@@ -1,68 +1,137 @@
-@function tovmin($rpx){
-    @return #{$rpx * 100/750}vmin;
+@function tovmin($rpx) {
+  @return #{$rpx * 100/750}vmin;
 }
-.pause-cover{
-    position:absolute;
-    left:0;
-    top:0;
-    z-index:300;
-    width:100%;
-    height:100%;
+
+.pause-cover {
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 300;
+  width: 100%;
+  height: 100%;
+  align-items: center;
+  justify-content: space-around;
+  padding: 0 tovmin(320);
+  background: rgba(0, 0, 0, .7);
+
+  &.show-pause {
+    display: flex;
+  }
+
+  &.hide-pause {
+    display: none;
+  }
+
+  .btn-common {
+    text-align: center;
+  }
+
+  .image-area {
+    border-radius: 50%;
+    display: flex;
     align-items: center;
-    justify-content:  space-around;
-    padding:0 tovmin(320);
-    background:rgba(0,0,0,.7);
-    &.show-pause{display:flex;}
-    &.hide-pause{display:none;}
-    .btn-common{
-        text-align:center;
-    }
-    .image-area{
-        border-radius: 50%;display:flex;align-items: center;justify-content: center;
-    }
-    .pause-title{
-        font-size:tovmin(38);
-        font-weight: bold;
-        color:#fff;
+    justify-content: center;
+  }
 
+  .pause-title {
+    font-size: tovmin(38);
+    font-weight: bold;
+    color: #fff;
+
+  }
+
+  .btn-end {
+    .image-area {
+      width: tovmin(190);
+      height: tovmin(190);
+      background: rgba(240, 135, 66, 1);
+
+      .btn-image {
+        width: tovmin(62);
+        height: tovmin(62);
+      }
     }
-    .btn-end{
-        .image-area{width:tovmin(190);height: tovmin(190);background:rgba(240,135,66,1);
-            .btn-image{width:tovmin(62);height:tovmin(62);}
-        }
-        .btn-title{}
+
+    .btn-title {
     }
-    .btn-exe{
-        .image-area{width:tovmin(230);height: tovmin(230);background:rgba(22,178,151,1);
-            .btn-image{width:tovmin(68);height:tovmin(84);}
-        }
-        .btn-title{}
+  }
+
+  .btn-exe {
+    .image-area {
+      width: tovmin(230);
+      height: tovmin(230);
+      background: rgba(22, 178, 151, 1);
+
+      .btn-image {
+        width: tovmin(68);
+        height: tovmin(84);
+      }
     }
-    .btn-next{
-        .image-area{width:tovmin(190);height: tovmin(190);background:rgba(255,255,255,.5);
-            .btn-image{width:tovmin(74);height:tovmin(62);}
-        }
-        .btn-title{}
+
+    .btn-title {
     }
+  }
+
+  .btn-next {
+    .image-area {
+      width: tovmin(190);
+      height: tovmin(190);
+      background: rgba(255, 255, 255, .5);
+
+      .btn-image {
+        width: tovmin(74);
+        height: tovmin(62);
+      }
+    }
+
+    .btn-title {
+    }
+  }
 
 }
-.end-dialog{
-    position:absolute;
-    width:tovmin(576);height: tovmin(472);
-    left:50%;top:50%;
-    transform: translate(-50%,-50%);
-    z-index:400;background:#fff;border-radius:tovmin(10);
-    .dialog-top{width:100%;height:tovmin(200);}
-    .dialog-content{
-        padding:tovmin(40) tovmin(40) tovmin(30) tovmin(40);
-        .dialog-text{
-            color:#2b2b2b;line-height:tovmin(40);font-weight: 100;
-            font-size:tovmin(28);
-        }
-        .dialog-btn-area{
-            position:absolute;bottom:0;left:0;width:100%;display: flex;
-            font-size:tovmin(28);font-weight: 400;color:#2b2b2b;line-height: 1;
-            view{width:50%;padding-bottom:tovmin(30);text-align:center;}
-        }
+
+.end-dialog {
+  position: absolute;
+  width: tovmin(576);
+  height: tovmin(472);
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 400;
+  background: #fff;
+  border-radius: tovmin(10);
+
+  .dialog-top {
+    width: 100%;
+    height: tovmin(200);
+  }
+
+  .dialog-content {
+    padding: tovmin(40) tovmin(40) tovmin(30) tovmin(40);
+
+    .dialog-text {
+      color: #2b2b2b;
+      line-height: tovmin(40);
+      font-weight: 100;
+      font-size: tovmin(28);
     }
+
+    .dialog-btn-area {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      display: flex;
+      font-size: tovmin(28);
+      font-weight: 400;
+      color: #2b2b2b;
+      line-height: 1;
+
+      view {
+        width: 50%;
+        padding-bottom: tovmin(30);
+        text-align: center;
+      }
+    }
+  }
 }

@@ -7,9 +7,7 @@ Page({
     userName: '',
     courseScript: '',
     courseCoach: {}, // such as {name: 'x', photo: 'x', abstract: 'xxx',},
-    sessionActionList: [
-
-    ], // such as  [{name: 'XXX', class_id: xx, index: 2, actions: 10, status: 0, time: '2月5日 5:00' , photo: 'x'}, ...] // list of json
+    sessionActionList: [], // such as  [{name: 'XXX', class_id: xx, index: 2, actions: 10, status: 0, time: '2月5日 5:00' , photo: 'x'}, ...] // list of json
     clientList: []
     // 或者可以做分别加载,这个取决于前端的考虑
   },

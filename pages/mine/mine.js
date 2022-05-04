@@ -29,11 +29,6 @@ Page({
   gotoCalendar () {
     this.oToast.showToast('我们正在加紧开发中哦~')
   },
-  gotoExe () {
-    wx.redirectTo({
-      url: '/pages/course/course'
-    })
-  },
   gotoExeData () {
     this.oToast.showToast('我们正在加紧开发中哦~')
   }

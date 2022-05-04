@@ -1,59 +1,74 @@
 <!--index.wxml-->
 <view class="container">
-  <view class="end-header text-overflow"><text class="btn-back" bindtap="goBack">{{'<'}}</text>告诉我们您的感受</view>
-  <image class="end-banner" src="{{bTotalEnded ? '../../assets/totalend-back.png' : '../../assets/halfend-back.png'}}"></image>
-  <view class="diff-area common-area">
-    <view class="common-title diff-title">完成本次康复训练有难度吗？</view>
-    <view class="diff-wrap common-wrap">
-      <view class="common-list diff-list">
-      <view class="common-li  {{checkedDiff === 'simple' ? 'checked' : ''}}" bindtap="handleTapDiff" data-id="simple">
-        <image class="common-li-image" src="{{checkedDiff === 'simple' ? '../../assets/halfend-diff-1.png' : '../../assets/totalend-diff-1.png'}}"></image>
-        <view class="common-li-label common-li-label-1">简单</view>
-      </view>
-      <view class="common-li  {{checkedDiff === 'normal' ? 'checked' : ''}}" bindtap="handleTapDiff" data-id="normal">
-        <image class="common-li-image" src="{{checkedDiff === 'normal' ? '../../assets/halfend-diff-2.png' : '../../assets/totalend-diff-2.png'}}"></image>
-        <view class="common-li-label common-li-label-2">刚刚好</view>
-      </view>
-      <view class="common-li  {{checkedDiff === 'hard' ? 'checked' : ''}}" bindtap="handleTapDiff" data-id="hard">
-        <image class="common-li-image" src="{{checkedDiff === 'hard' ? '../../assets/halfend-diff-3.png' : '../../assets/totalend-diff-3.png'}}"></image>
-        <view class="common-li-label common-li-label-3">较难完成</view>
-      </view>
-      </view>
-    </view>
-  </view> 
-  <view class="comfortable-area common-area">
-    <view class="common-title diff-title">本次康复训练是否感觉不适？</view>
-    <view class="diff-wrap common-wrap">
-      <view class="common-list">
-      <view class="common-li {{checkedCom == 'comfortable' ? 'checked' : ''}}" bindtap="handleTapCom" data-id="comfortable">
-        <image class="common-li-image" src="{{checkedCom == 'comfortable' ? '../../assets/halfend-comfortable-1.png' : '../../assets/totalend-comfortable-1.png'}}"></image>
-        <view class="common-li-label common-li-label-1">很舒适</view>
-      </view>
-      <view class="common-li {{checkedCom === 'compromised' ? 'checked' : ''}}" bindtap="handleTapCom" data-id="compromised">
-        <image class="common-li-image" src="{{checkedCom === 'compromised' ? '../../assets/halfend-comfortable-2.png' : '../../assets/totalend-comfortable-2.png'}}"></image>
-        <view class="common-li-label common-li-label-2">有一点不适</view>
-      </view>
-      <view class="common-li {{checkedCom === 'uncomfortable' ? 'checked' : ''}}" bindtap="handleTapCom" data-id="uncomfortable">
-        <image class="common-li-image" src="{{checkedCom === 'uncomfortable' ? '../../assets/halfend-comfortable-3.png' : '../../assets/totalend-comfortable-3.png'}}"></image>
-        <view class="common-li-label common-li-label-3">非常不适</view>
-      </view>
+  <header class="container-nav" backgroundColor="#E3FBF7" title="告诉我们您的感受" returnable="{{true}}"
+          titleColor="#2B2B2B"></header>
+  <view class="container-content">
+    <image class="end-banner"
+           src="{{bTotalEnded ? '../../assets/totalend-back.png' : '../../assets/halfend-back.png'}}"></image>
+    <view class="diff-area common-area">
+      <view class="common-title diff-title">完成本次康复训练有难度吗？</view>
+      <view class="diff-wrap common-wrap">
+        <view class="common-list diff-list">
+          <view class="common-li  {{checkedDiff === 'simple' ? 'checked' : ''}}" bindtap="handleTapDiff"
+                data-id="simple">
+            <image class="common-li-image"
+                   src="{{checkedDiff === 'simple' ? '../../assets/halfend-diff-1.png' : '../../assets/totalend-diff-1.png'}}"></image>
+            <view class="common-li-label common-li-label-1">简单</view>
+          </view>
+          <view class="common-li  {{checkedDiff === 'normal' ? 'checked' : ''}}" bindtap="handleTapDiff"
+                data-id="normal">
+            <image class="common-li-image"
+                   src="{{checkedDiff === 'normal' ? '../../assets/halfend-diff-2.png' : '../../assets/totalend-diff-2.png'}}"></image>
+            <view class="common-li-label common-li-label-2">刚刚好</view>
+          </view>
+          <view class="common-li  {{checkedDiff === 'hard' ? 'checked' : ''}}" bindtap="handleTapDiff" data-id="hard">
+            <image class="common-li-image"
+                   src="{{checkedDiff === 'hard' ? '../../assets/halfend-diff-3.png' : '../../assets/totalend-diff-3.png'}}"></image>
+            <view class="common-li-label common-li-label-3">较难完成</view>
+          </view>
+        </view>
       </view>
     </view>
-  </view> 
-  <view class="detail-area common-area" wx:if="{{checkedCom === 'compromised' || checkedCom === 'uncomfortable'}}">
-    <view class="common-title detail-title">具体有哪些动作感觉不适？请勾选：</view>
-    <view class="common-wrap">
-          <checkbox-group bindchange="checkboxChange">
-                  <label class="detail-outer" wx:for="{{aQuestions}}" wx:key="{{actionId}}">
-                    <view class="detail-label text-overflow">{{item.actionName}}</view>
-                    <view class="detail-check">
-                      <checkbox value="{{item.actionId}}" color="#53b098" checked="{{item.actionComfort === 1}}"/>
-                    </view>
-                  </label>
-          </checkbox-group>
+    <view class="comfortable-area common-area">
+      <view class="common-title diff-title">本次康复训练是否感觉不适？</view>
+      <view class="diff-wrap common-wrap">
+        <view class="common-list">
+          <view class="common-li {{checkedCom == 'comfortable' ? 'checked' : ''}}" bindtap="handleTapCom"
+                data-id="comfortable">
+            <image class="common-li-image"
+                   src="{{checkedCom == 'comfortable' ? '../../assets/halfend-comfortable-1.png' : '../../assets/totalend-comfortable-1.png'}}"></image>
+            <view class="common-li-label common-li-label-1">很舒适</view>
+          </view>
+          <view class="common-li {{checkedCom === 'compromised' ? 'checked' : ''}}" bindtap="handleTapCom"
+                data-id="compromised">
+            <image class="common-li-image"
+                   src="{{checkedCom === 'compromised' ? '../../assets/halfend-comfortable-2.png' : '../../assets/totalend-comfortable-2.png'}}"></image>
+            <view class="common-li-label common-li-label-2">有一点不适</view>
+          </view>
+          <view class="common-li {{checkedCom === 'uncomfortable' ? 'checked' : ''}}" bindtap="handleTapCom"
+                data-id="uncomfortable">
+            <image class="common-li-image"
+                   src="{{checkedCom === 'uncomfortable' ? '../../assets/halfend-comfortable-3.png' : '../../assets/totalend-comfortable-3.png'}}"></image>
+            <view class="common-li-label common-li-label-3">非常不适</view>
+          </view>
+        </view>
+      </view>
+    </view>
+    <view class="detail-area common-area" wx:if="{{checkedCom === 'compromised' || checkedCom === 'uncomfortable'}}">
+      <view class="common-title detail-title">具体有哪些动作感觉不适？请勾选：</view>
+      <view class="common-wrap">
+        <checkbox-group bindchange="checkboxChange">
+          <label class="detail-outer" wx:for="{{aQuestions}}" wx:key="{{actionId}}">
+            <view class="detail-label text-overflow">{{item.actionName}}</view>
+            <view class="detail-check">
+              <checkbox value="{{item.actionId}}" color="#53b098" checked="{{item.actionComfort === 1}}"/>
+            </view>
+          </label>
+        </checkbox-group>
+      </view>
     </view>
   </view>
-  <view class="btn-area">
+  <view class="btn-area container-bottom">
     <button class="btn-share {{canSend}}" bindtap="sendFeedback">提交反馈</button>
   </view>
   <auth id='auth'></auth>

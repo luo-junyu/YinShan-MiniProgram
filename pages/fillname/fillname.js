@@ -147,9 +147,15 @@ Page({
   onLoad (options) {
     app.initShare()
     const user = wx.getStorageSync('user') || {}
-    if (user.clientName) { this.setData({ inputValue: user.clientName }) }
-    if (user.phoneNumber) { this.phone = user.phoneNumber }
-    if (user.clientAvatarUrl) { this.setData({ avatarImg: user.clientAvatarUrl }) }
+    if (user.clientName) {
+      this.setData({ inputValue: user.clientName })
+    }
+    if (user.phoneNumber) {
+      this.phone = user.phoneNumber
+    }
+    if (user.clientAvatarUrl) {
+      this.setData({ avatarImg: user.clientAvatarUrl })
+    }
     this.oToast = this.selectComponent('#toast')
     this.oAuth = this.selectComponent('#auth')
     // this.oAuth.loginASession(this.getCourseInfo)
