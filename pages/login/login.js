@@ -77,7 +77,7 @@ Page({
           app.globalData.clientId = String(res.clientInfo.clientId)
           wx.setStorageSync('token', res.token)
           if (res.clientInfo.clientName && res.clientInfo.clientAvatarUrl) {
-            wx.redirectTo({
+            wx.switchTab({
               url: '/pages/course/course'
             })
           } else {
@@ -116,7 +116,7 @@ Page({
     console.log('点击了确定')
   },
   gotoNext () {
-    wx.redirectTo({
+    wx.switchTab({
       url: '/pages/course/course'
     })
   }
