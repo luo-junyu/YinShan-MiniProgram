@@ -1,4 +1,8 @@
 {
+  "projectname": "kangfu-miniprogram",
+  "setting": {
+    "compileHotReLoad": true
+  },
   "condition": {
     "miniprogram": {
       "list": [

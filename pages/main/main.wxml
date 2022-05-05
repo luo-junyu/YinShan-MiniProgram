@@ -83,7 +83,7 @@
 <canvas id='debug-canvas' type="2d" class="debug-canvas small"
         style="visibility:{{bShowDebug? 'visible':'hidden'}}"></canvas>
 <video id="main-video" src="{{sVideoUrl}}" autoplay="{{false}}" style="display:{{bShowVideo?'block':'none'}}"
-       bindended="handleVideoEnded" loop="{{true}}" show-center-play-btn="{{false}}" object-fit="cover"
+       bindended="handleVideoEnded" loop="{{true}}" show-center-play-btn="{{false}}" object-fit="cover" muted="{{true}}"
        controls="{{bShowVideoControl}}" class=""></video>
   <!-- <audio id="main-audio" src="{{sAudioUrl}}" /> -->
 <toast id='toast'></toast>

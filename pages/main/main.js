@@ -41,7 +41,7 @@ Page({
   bPlayingCountTime: false, // 正在播放计时器音效
   bEnded: false, // 最小化后置true
   nNowActionId: '', // 当前动作的id
-  skeleton: [[15, 13], [13, 11], [16, 14], [14, 12], [11, 12], [5, 11], [6, 12], [5, 6], [5, 7], [6, 8], [7, 9], [8, 10], [1, 2], [0, 1], [0, 2], [1, 3], [2, 4], [3, 5], [4, 6]],
+  skeleton: [[22, 20], [20, 18], [18, 16], [21, 19], [19, 17], [17, 15], [15, 16], [15, 14], [16, 14], [14, 13], [13, 12], [12, 4], [12, 5], [4, 5], [11, 9], [9, 7], [7, 5], [10, 8], [8, 6], [6, 4], [4, 1], [1, 2], [1, 3], [2, 0], [3, 0], [4, 15], [5, 16]], // [15,13],[13,11],[16,14],[14,12],[11,12],[5,11],[6,12],[5,6],[5,7],[6,8],[7,9],[8,10],[1,2],[0,1],[0,2],[1,3],[2,4],[3,5],[4,6]
   TRTC: null,
   oOptions: {},
   aiServerUrl: '',
@@ -55,15 +55,29 @@ Page({
   oCircleTime: null,
   oShortAudio: null,
   oCountAudio: null,
+  oBackgroundAudio: null,
   oShortAudioUrl: {
-    excellent: 'https://downsc.chinaz.net/Files/DownLoad/sound1/202112/15130.mp3',
-    well: 'https://downsc.chinaz.net/Files/DownLoad/sound1/202102/13954.mp3',
-    fair: 'https://downsc.chinaz.net/Files/DownLoad/sound1/202006/13010.mp3'
+    excellent: 'https://kangfu-action-video-1258481652.cos.ap-beijing.myqcloud.com/audio/sound-effect/excellent.mp3',
+    well: 'https://kangfu-action-video-1258481652.cos.ap-beijing.myqcloud.com/audio/sound-effect/well.mp3',
+    fair: 'https://kangfu-action-video-1258481652.cos.ap-beijing.myqcloud.com/audio/sound-effect/fair.mp3'
   },
-  sStatus: 'init', // 当前状态，对比用
-  /* 通用变量 start */
-  /* 通用函数 start */
-  onShow () {
+  backgroundAudioUrl: 'https://kangfu-action-video-1258481652.cos.ap-beijing.myqcloud.com/audio/background/meihaodeyitian.mp3',
+  idxAudioUrl: [
+    'https://kangfu-action-video-1258481652.cos.ap-beijing.myqcloud.com/audio/xuhao/diyigedongzuo.m4a',
+    'https://kangfu-action-video-1258481652.cos.ap-beijing.myqcloud.com/audio/xuhao/diergedongzuo.m4a',
+    'https://kangfu-action-video-1258481652.cos.ap-beijing.myqcloud.com/audio/xuhao/disangedongzuo.m4a',
+    'https://kangfu-action-video-1258481652.cos.ap-beijing.myqcloud.com/audio/xuhao/disigedongzuo.m4a',
+    'https://kangfu-action-video-1258481652.cos.ap-beijing.myqcloud.com/audio/xuhao/diwugedongzuo.m4a',
+    'https://kangfu-action-video-1258481652.cos.ap-beijing.myqcloud.com/audio/xuhao/diliugedongzuo.m4a',
+    'https://kangfu-action-video-1258481652.cos.ap-beijing.myqcloud.com/audio/xuhao/diqigedongzuo.m4a',
+    'https://kangfu-action-video-1258481652.cos.ap-beijing.myqcloud.com/audio/xuhao/dibagedongzuo.m4a',
+    'https://kangfu-action-video-1258481652.cos.ap-beijing.myqcloud.com/audio/xuhao/dijiugedongzuo.m4a',
+    'https://kangfu-action-video-1258481652.cos.ap-beijing.myqcloud.com/audio/xuhao/dishigedongzuo.m4a',
+  ],
+  sStatus:'init',//当前状态，对比用
+  /* 通用变量 start*/
+  /* 通用函数 start*/
+  onShow(){
     // if(this.bEnded){
     //   return;
     // }
@@ -110,21 +124,33 @@ Page({
     })
   },
 
-  initMedia () {
-    // 初始化音频、视频
-    this.oVideo = wx.createVideoContext('main-video')
+  initMedia(){
+    //初始化音频、视频
+    this.oVideo = wx.createVideoContext("main-video")
     this.initShortAudio()
     this.initCountAudio()
+    this.initBackgroundAudio()
   },
-  initShortAudio () {
+  initShortAudio(){
     this.oShortAudio = wx.createInnerAudioContext({ useWebAudioImplement: true })
     this.oShortAudio.onEnded((event) => {
       console.log('短音频结束')
     })
   },
-  initCountAudio () {
+  initBackgroundAudio(){
+    this.oBackgroundAudio = wx.createInnerAudioContext({ useWebAudioImplement: true })
+    this.oBackgroundAudio.src = this.backgroundAudioUrl
+    this.oBackgroundAudio.loop = true
+    this.oBackgroundAudio.volume = 0.3
+    this.oBackgroundAudio.onEnded((event) => {
+      console.log('短音频结束')
+    })
+    this.oBackgroundAudio.play()
+  },
+  initCountAudio(){
     this.oCountAudio = wx.createInnerAudioContext({ useWebAudioImplement: true })
-    this.oCountAudio.src = 'https://96.f.1ting.com/local_to_cube_202004121813/96kmp3/2021/12/12/12a_nhj/01.mp3'
+    this.oCountAudio.src = "https://kangfu-action-video-1258481652.cos.ap-beijing.myqcloud.com/audio/sound-effect/countdown.mp3"
+    this.oCountAudio.loop = true
     this.oCountAudio.onEnded((event) => {
       console.log('短音频结束')
     })
@@ -209,7 +235,8 @@ Page({
     // pusher 初始化参数
     const pusherConfig = {
       beautyLevel: 0,
-      localMirror: 'disable',
+      localMirror: 'auto',
+      enableRemoteMirror: true,
       audioVolumeType: 'media',
       videoWidth: 288,
       videoHeight: 368
@@ -262,21 +289,22 @@ Page({
             }
           }
         })
-      } else if (data.type === 'audio_encourage') {
-        console.log('收到激励语音', data)
-        if (data.autio_type === 'encourage') {
-          this.sStatus = data.name
+      }else if(data.type === 'audio_encourage'){
+        console.log('收到激励语音',data)
+        if(data['autio_type'] === 'encourage'){
+          this.sStatus = data.name;
           this.oShortAudio.src = this.oShortAudioUrl[this.sStatus]
-          this.oShortAudio.play()
+          this.oShortAudio.play();
           this.setData({ sEncourage: this.sStatus }, () => {
             setTimeout(() => {
               this.sStatus = 'init'
               this.setData({ sEncourage: this.sStatus })
-            }, 2000)
+            },2000)
           })
+        } else {
+          this.inputAudio(data)
         }
-        this.inputAudio(data)
-        this.playAudioList()
+        this.playAudioList();
       } else if (data.type === 'finish_class_confirm') {
         console.log('收到结束课程确认消息')
         app.globalData.oWs.close()
@@ -326,6 +354,7 @@ Page({
     app.globalData.oAudio.pause()
     this.oShortAudio.pause()
     this.oCountAudio.pause()
+    this.oBackgroundAudio.pause()
     this.data.oPause.showPause((this.data.nAction + 1) < this.data.aAction.length)
   },
   // 继续课程
@@ -336,6 +365,7 @@ Page({
       })
     })
     this.oVideo.play()
+    this.oBackgroundAudio.play()
     app.globalData.oAudio.play()
   },
   // 下一个动作
@@ -356,6 +386,7 @@ Page({
     this.oVideo.stop()
     this.oShortAudio.destroy()
     this.oCountAudio.destroy()
+    this.oBackgroundAudio.destroy()
     console.log('退出小程序')
     app.globalData.oWs.send({
       data: JSON.stringify(
@@ -370,6 +401,7 @@ Page({
     this.oVideo.stop()
     this.oShortAudio.destroy()
     this.oCountAudio.destroy()
+    this.oBackgroundAudio.pause()
     app.globalData.oAudio.pause()
     console.log('结束课程')
     app.globalData.oWs.send({
@@ -586,6 +618,12 @@ Page({
         this.data.aAudioUrl = []
         app.globalData.oAudio.src = app.globalData.sCountAudioUrl
         app.globalData.oAudio.play()
+        let tempAction = this.data.aAction[this.data.nAction] || {}
+        console.log('准备开始',tempAction)
+        setTimeout(()=>{
+          app.globalData.oAudio.src = tempAction.actionAudioUrl
+          app.globalData.oAudio.play()
+        },2300)
       })
       // 播放加载倒计时
     })
@@ -605,14 +643,14 @@ Page({
       // app.globalData.oAudio.src = this.data.oAudioUrl.class;
       // app.globalData.oAudio.play();
       this.oVideo.play()
+      this.oBackgroundAudio.play()
       const tempAction = this.data.aAction[this.data.nAction] || {}
       console.log('发送信息', tempAction)
       app.globalData.oWs.send({
         data: JSON.stringify({
           type: 'change_action',
-          action_name: tempAction.actionName
           // action_name: 'tunqiao',//qtemp
-          // action_id : tempAction.actionId
+          action_id : tempAction.actionId,
         })
       })
     })
