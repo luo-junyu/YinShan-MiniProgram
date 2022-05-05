@@ -1,97 +1,102 @@
 <!--index.wxml-->
-<header></header>
 <view class="container">
-  <text class="session-title text-overflow">{{courseName}}</text>
-  <view class="session-calendar">
-    <text class="calendar-label">疗程: {{courseAbstract}}</text>
-    <image class="calendar-image" src="../../assets/calendar.png" bindtap="handleCalendar"></image>
-  </view>
-  <view class="coach-area common-area">
-    <text class="coach-label common-label">康复师</text>
-    <view class="coach-container">
-      <image class="coach-image default-pic" src="{{coachDto.avatarPath}}"></image>
-      <view class="coach-content">
-        <text class="coach-name">{{coachDto.nickName}}</text>
-        <text class="coach-detail text-overflow">{{coachDto.script}}</text>
+  <header class="container-nav" backgroundColor="#E3FBF7" title="银杉健康" returnable="{{false}}"
+          titleColor="#2B2B2B"></header>
+  <view class="container-content">
+    <text class="session-title text-overflow">{{courseName}}</text>
+    <view class="session-calendar">
+      <text class="calendar-label">疗程: {{courseAbstract}}</text>
+      <image class="calendar-image" src="../../assets/calendar.png" bindtap="handleCalendar"></image>
+    </view>
+    <view class="coach-area common-area">
+      <text class="coach-label common-label">康复师</text>
+      <view class="coach-container">
+        <image class="coach-image default-pic" src="{{coachDto.avatarPath}}"></image>
+        <view class="coach-content">
+          <text class="coach-name">{{coachDto.nickName}}</text>
+          <text class="coach-detail text-overflow">{{coachDto.script}}</text>
+        </view>
       </view>
     </view>
-  </view>
-  <view class="mate-area common-area">
-    <text class="mate-label common-label">一起康复<text class="total-num">共<text class="num">{{clientList.length}}</text>人</text></text>
-    <scroll-view class="mate-container" scroll-x="true">
-      <view class="mate-list">
-        <block wx:for="{{clientList}}" wx:for-index="key"  wx:for-item="item" wx:key="id" data-id="{{item.clientId}}">
-            <view-item class="mate-li">
+    <view class="mate-area common-area">
+      <text class="mate-label common-label">一起康复<text class="total-num">共<text class="num">{{clientList.length}}</text>人</text></text>
+      <scroll-view class="mate-container" scroll-x="true">
+        <view class="mate-list">
+          <block wx:for="{{clientList}}" wx:for-index="key" wx:for-item="item" wx:key="id" data-id="{{item.clientId}}">
+            <view class="mate-li">
               <image class="mate-image default-pic" src="{{item.clientAvatarUrl}}"></image>
               <text class="mate-name text-overflow">{{item.clientName}}</text>
-            </view-item>
-        </block>
-      </view>
-    </scroll-view>
-  </view>
-  <view class="class-area common-area">
-    <text class="class-label common-label">运动处方</text>
-    <view class="class-container class-list" scroll-x="true">
-        <block wx:for="{{aSession}}" wx:for-index="key"  wx:for-item="item" wx:key="id" data-id="{{item.id}}">
-            <view-item class="class-li">
-              <!-- 以周为颗粒度的列表 -->
-              <view class="class-week">第{{item.nWeek}}周</view>
-              <view class="class-li-list">
-                <!-- 以课为颗粒度的列表 -->
-                <view class="class-li-li {{citem.sessionAvailable ? 'class-active' : '' }}" data-week="{{item.nWeek}}" data-no="{{key}}" data-sessionid="{{citem.sessionId}}" data-sessionname="{{citem.sessionName}}" data-active="{{citem.sessionAvailable}}" wx:for="{{item.aSession}}" wx:for-index="key"  wx:for-item="citem" wx:key="id" bindtap="handleTapClass">
-                  <image class="class-image default-image" src="{{citem.sessionAvatarUrl}}"></image>
-                  <view class="class-content">
-                    <view class="class-name common-label">{{citem.sessionName}}</view>
-                    <view class="class-nums">{{citem.sessionActionCount}}个康复动作</view>
-                    <view class="class-operate">
-                      <text class="class-time" wx:if="{{!citem.sessionAvailable && Utils.ifPassLine(citem.sessionStartTime)}}">{{Utils.transTime(citem.sessionStartTime)}}解锁</text>
-                      <text class="class-time" wx:if="{{!citem.sessionAvailable && !Utils.ifPassLine(citem.sessionStartTime)}}">未解锁</text>
-                      <text class="goto-report" bindtap="gotoReport" wx:if="{{citem.sessionAvailable && citem.cslId !== 0}}" data-cslid="{{citem.cslId}}" data-week="{{item.nWeek}}" data-no="{{key}}" data-sessionid="{{citem.sessionId}}" data-sessionname="{{citem.sessionName}}" >查看训练报告 -></text>
-                      <button class="class-start-btn"  wx:if="{{citem.sessionAvailable && citem.cslId === 0}}" catchtap="startClass" data-week="{{item.nWeek}}" data-no="{{key}}" data-sessionid="{{citem.sessionId}}" data-sessionname="{{citem.sessionName}}">开始训练</button>
-                    </view>
+            </view>
+          </block>
+        </view>
+      </scroll-view>
+    </view>
+    <view class="class-area common-area">
+      <text class="class-label common-label">运动处方</text>
+      <view class="class-container class-list" scroll-x="true">
+        <block wx:for="{{aSession}}" wx:for-index="key" wx:for-item="item" wx:key="id" data-id="{{item.id}}">
+          <view class="class-li">
+            <!-- 以周为颗粒度的列表 -->
+            <view class="class-week">第{{item.nWeek}}周</view>
+            <view class="class-li-list">
+              <!-- 以课为颗粒度的列表 -->
+              <view class="class-li-li {{citem.sessionAvailable ? 'class-active' : '' }}" data-week="{{item.nWeek}}"
+                    data-no="{{key}}" data-sessionid="{{citem.sessionId}}" data-sessionname="{{citem.sessionName}}"
+                    data-active="{{citem.sessionAvailable}}" wx:for="{{item.aSession}}" wx:for-index="key"
+                    wx:for-item="citem" wx:key="id" bindtap="handleTapClass">
+                <image class="class-image default-image" src="{{citem.sessionAvatarUrl}}"></image>
+                <view class="class-content">
+                  <view class="class-name common-label">{{citem.sessionName}}</view>
+                  <view class="class-nums">{{citem.sessionActionCount}}个康复动作</view>
+                  <view class="class-operate">
+                    <text class="class-time"
+                          wx:if="{{!citem.sessionAvailable && Utils.ifPassLine(citem.sessionStartTime)}}">{{Utils.transTime(citem.sessionStartTime)}}解锁</text>
+                    <text class="class-time"
+                          wx:if="{{!citem.sessionAvailable && !Utils.ifPassLine(citem.sessionStartTime)}}">未解锁</text>
+                    <text class="goto-report" bindtap="gotoReport"
+                          wx:if="{{citem.sessionAvailable && citem.cslId !== 0}}" data-cslid="{{citem.cslId}}"
+                          data-week="{{item.nWeek}}" data-no="{{key}}" data-sessionid="{{citem.sessionId}}"
+                          data-sessionname="{{citem.sessionName}}">查看训练报告 -></text>
+                    <button class="class-start-btn" wx:if="{{citem.sessionAvailable && citem.cslId === 0}}"
+                            catchtap="startClass" data-week="{{item.nWeek}}" data-no="{{key}}"
+                            data-sessionid="{{citem.sessionId}}" data-sessionname="{{citem.sessionName}}">开始训练
+                    </button>
                   </view>
                 </view>
               </view>
-            </view-item>
+            </view>
+          </view>
         </block>
       </view>
+    </view>
   </view>
   <auth id='auth'></auth>
   <toast id='toast'></toast>
 </view>
-<view class="footer">
-  <view class="exe"  >
-    <image class="footer-image" src="../../assets/exe-locked.png"></image>
-    <view class="footer-text locked">康复训练</view>
-  </view>
-  <view class="mine"  bindtap="gotoMine">
-    <image class="footer-image" src="../../assets/mine.png"></image>
-    <view class="footer-text">我的</view>
-  </view>
-</view>
-  <wxs module="Utils">
-    var transTime = function(sDate){
-      if(sDate){
-        sDate = sDate.replace(getRegExp('T|\..*$','g'),' ');
-        sDate = sDate.replace(getRegExp('-','g'),'/');
-        var date = getDate(sDate);
-        return (date.getMonth()+1) + '月' + date.getDate() + '日 ' + date.getHours() + ':' + date.getMinutes();
-      }else{
-        return ''
-      }
+<wxs module="Utils">
+  var transTime = function (sDate) {
+    if (sDate) {
+      sDate = sDate.replace(getRegExp('T|\..*$', 'g'), ' ');
+      sDate = sDate.replace(getRegExp('-', 'g'), '/');
+      var date = getDate(sDate);
+      return (date.getMonth() + 1) + '月' + date.getDate() + '日 ' + date.getHours() + ':' + date.getMinutes();
+    } else {
+      return ''
     }
-    var ifPassLine = function(sDate){
-      if(sDate){
-        sDate = sDate.replace(getRegExp('T|\..*$','g'),' ');
-        sDate = sDate.replace(getRegExp('-','g'),'/');
-        var date = getDate(sDate).getTime();
-        var now = getDate().getTime();
-        return now < date;
-      }else{
-        return ''
-      }
-    }
-    module.exports = {
-      transTime: transTime
-    }
-  </wxs>
+  }
+  var ifPassLine = function (sDate) {
+    if (sDate) {
+      sDate = sDate.replace(getRegExp('T|\..*$', 'g'), ' ');
+      sDate = sDate.replace(getRegExp('-', 'g'), '/');
+      var date = getDate(sDate).getTime();
+      var now = getDate().getTime();
+      return now < date
+  }else
+  {
+    return ''
+  }
+  }
+  module.exports = {
+    transTime: transTime
+  }
+</wxs>

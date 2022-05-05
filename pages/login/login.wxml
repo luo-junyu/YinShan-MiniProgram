@@ -9,9 +9,16 @@
       {{sLoged === 'loged' ? '进入课程' : '微信登录'}}
     </button>
     <button class="check-btn" bindtap="handleTap" wx:if="{{checked && sLoged === 'loged'}}">进入课程</button>
-    <button class="check-btn" open-type="getPhoneNumber" bindgetphonenumber="handleTap" wx:if="{{checked && sLoged === 'unloged'}}">微信登录</button>
+    <button class="check-btn" open-type="getPhoneNumber" bindgetphonenumber="handleTap"
+            wx:if="{{checked && sLoged === 'unloged'}}">微信登录
+    </button>
     <view class="contract">
-      <view bindtap="handleChange"><radio value="111" checked="{{checked}}"/></view><view class="contract-content">我已阅读并同意<view class="content" bindtap="showUserContract">《用户协议》</view>和<view class="content" bindtap="showSecretContract">《隐私协议》</view></view>
+      <view bindtap="handleChange">
+        <radio value="111" checked="{{checked}}"/>
+      </view>
+      <view class="contract-content">我已阅读并同意<view class="content" bindtap="showUserContract">《用户协议》</view>和
+        <view class="content" bindtap="showSecretContract">《隐私协议》</view>
+      </view>
     </view>
   </view>
   <auth id='auth' callback="{{callback}}"></auth>

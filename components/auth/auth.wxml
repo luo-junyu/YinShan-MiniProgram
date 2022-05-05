@@ -1,8 +1,8 @@
 <view class="login" wx:if="{{bShowLogin}}">
-        <text class="login-desc">授权登陆后方可使用功能哦^-^</text>
-        <view class="btn-area">
-            <button bindtap="hideAuthModel" class="button cancel-login">取消</button>
-            <button bindtap="cfmAuth" class="button auth-login">授权登录</button>
-        </view>   
-        <toast id='toastInAuth'></toast> 
-    </view>
+  <text class="login-desc">授权登陆后方可使用功能哦^-^</text>
+  <view class="btn-area">
+    <button bindtap="hideAuthModel" class="button cancel-login">取消</button>
+    <button bindtap="cfmAuth" class="button auth-login">授权登录</button>
+  </view>
+  <toast id='toastInAuth'></toast>
+</view>

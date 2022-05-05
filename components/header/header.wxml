@@ -1,1 +1,15 @@
-{{appName}}
+<view
+  class="navigation"
+  style="height: {{navHeight}}px; background: {{backgroundColor}}"
+>
+  <view class="navigation-status" style="height: {{statusHeight}}px"/>
+  <view
+    class="navigation-wrapper"
+    style="height:{{navHeight - statusHeight}}px"
+  >
+    <view wx:if="{{returnable}}" class="navigation-wrapper-back" bind:tap="navBack">
+      <image class="navigation-wrapper-back-img" src="{{navIcon}}"/>
+    </view>
+    <text class="navigation-wrapper-title" style="color: {{titleColor}}">{{title}}</text>
+  </view>
+</view>

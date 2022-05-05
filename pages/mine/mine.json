@@ -2,7 +2,7 @@
   "usingComponents": {
     "header": "/components/header/header",
     "toast": "/components/toast/toast",
-    "modalView": "/components/modal/modal",
-    "auth": "/components/auth/auth"
+    "auth": "/components/auth/auth",
+    "header": "/components/header/header"
   }
 }

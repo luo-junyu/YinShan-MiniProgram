@@ -1,64 +1,110 @@
 /**index.wxss**/
-.container{
-  position: relative; background:linear-gradient(180deg, rgba(227, 251, 247, 0.8), rgba(255,255,255,.8));
-  .logo-area{
-    position:absolute;
-    top:24.6vh;
-    left:50%;
+.container {
+  position: relative;
+  background: linear-gradient(180deg, rgba(227, 251, 247, 0.8), rgba(255, 255, 255, .8));
+
+  .logo-area {
+    position: absolute;
+    top: 24.6vh;
+    left: 50%;
     transform: translateX(-50%);
-    .logo-img{width:364rpx;height:333rpx;}
-    .logo-text{font-size:78rpx;margin-top:30rpx;line-height:1;color:#464f4c;font-family: SimHei ;font-weight:600;}
+
+    .logo-img {
+      width: 364rpx;
+      height: 333rpx;
+    }
+
+    .logo-text {
+      font-size: 78rpx;
+      margin-top: 30rpx;
+      line-height: 1;
+      color: #464f4c;
+      font-family: SimHei;
+      font-weight: 600;
+    }
   }
-  .text-script{position:absolute;bottom:175rpx;
-    left:50%;
+
+  .text-script {
+    position: absolute;
+    bottom: 175rpx;
+    left: 50%;
     transform: translateX(-50%);
-    font-size:32rpx;line-height: 1;color:#464f4c;font-weight:300;font-family: Simhei;}
-    .btn-area{
-      position:absolute;
-        bottom:19.6vh;
-        left:50%;
-        transform: translateX(-50%);
-        text-align: center;
-      .check-btn{
-        width:646rpx;
-        text-align: center;
-        font-weight:bold;font-size:36rpx;color:#fff;background:#16b297;border-radius:10rpx;
+    font-size: 32rpx;
+    line-height: 1;
+    color: #464f4c;
+    font-weight: 300;
+    font-family: Simhei;
+  }
+
+  .btn-area {
+    position: absolute;
+    bottom: 19.6vh;
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+
+    .check-btn {
+      width: 646rpx;
+      text-align: center;
+      font-weight: bold;
+      font-size: 36rpx;
+      color: #fff;
+      background: #16b297;
+      border-radius: 10rpx;
+    }
+
+    .contract {
+      /* 单选按钮样式*/
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 44rpx;
+      font-size: 22rpx;
+      color: #464f4c;
+      font-weight: 400;
+
+      .content {
+        color: #16b297;
       }
-      .contract{
-        /* 单选按钮样式*/
-        display:flex;
-        align-items: center;
-        justify-content: center;
-        margin-top:44rpx;
-        font-size:22rpx;color:#464f4c;
-        font-weight: 400;
-        .content{color:#16b297;}
-        radio .wx-radio-input {
-          width: 28rpx;
-          height: 28rpx;
-          border: 1rpx solid #848484;/* 外圈边框，默认灰色，即未选中状态*/
-          border-radius: 50%;
-          background: none;
-        }
-        /*单选按钮选中后内部样式*/
-        radio .wx-radio-input.wx-radio-input-checked {
-          border: 1rpx solid #16b297 !important;/* 外圈边框，选中状态颜色*/
-          background-color: white !important;/* 外圈边框与内圈实心圆间的内容的颜色，不设置就默认是上面的绿色*/
-        }
-        /*单选按钮选中后内部中心*/
-        radio .wx-radio-input.wx-radio-input-checked::before {
-          width: 60%;
-          height: 60%;
-          background: #16b297;/* 内圈实心圆选中状态颜色*/
-          border-radius: 50%;
-          content: '';/* 隐藏✔️*/
-          transform: translate(-50%, -50%) scale(1);
-          -webkit-transform: translate(-50%, -50%) scale(1);
-        }
-        .contract-content{display:flex;}
+
+      radio .wx-radio-input {
+        width: 28rpx;
+        height: 28rpx;
+        border: 1rpx solid #848484; /* 外圈边框，默认灰色，即未选中状态*/
+        border-radius: 50%;
+        background: none;
+      }
+
+      /*单选按钮选中后内部样式*/
+      radio .wx-radio-input.wx-radio-input-checked {
+        border: 1rpx solid #16b297 !important; /* 外圈边框，选中状态颜色*/
+        background-color: white !important; /* 外圈边框与内圈实心圆间的内容的颜色，不设置就默认是上面的绿色*/
+      }
+
+      /*单选按钮选中后内部中心*/
+      radio .wx-radio-input.wx-radio-input-checked::before {
+        width: 60%;
+        height: 60%;
+        background: #16b297; /* 内圈实心圆选中状态颜色*/
+        border-radius: 50%;
+        content: ''; /* 隐藏✔️*/
+        transform: translate(-50%, -50%) scale(1);
+        -webkit-transform: translate(-50%, -50%) scale(1);
+      }
+
+      .contract-content {
+        display: flex;
       }
     }
-    .modal-title{font-size:36rpx;font-weight:600;color:#16b297;}
-    .modal-inner{text-align:left;font-weight: normal;}
-    .modal-bolder{font-weight:bolder;}
+  }
+
+  .modal-title {
+    font-size: 36rpx;
+    font-weight: 600;
+    color: #16b297;
+  }
+
+  .modal-inner {
+    text-align: left;
+  }
 }
