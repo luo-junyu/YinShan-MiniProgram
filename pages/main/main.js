@@ -55,11 +55,13 @@ Page({
   oCircleTime: null,
   oShortAudio: null,
   oCountAudio: null,
+  oBackgroundAudio: null,
   oShortAudioUrl:{
-    excellent: 'https://downsc.chinaz.net/Files/DownLoad/sound1/202112/15130.mp3',
-    well: 'https://downsc.chinaz.net/Files/DownLoad/sound1/202102/13954.mp3',
-    fair: 'https://downsc.chinaz.net/Files/DownLoad/sound1/202006/13010.mp3'
+    excellent: 'https://kangfu-action-video-1258481652.cos.ap-beijing.myqcloud.com/audio/sound-effect/excellent.mp3',
+    well: 'https://kangfu-action-video-1258481652.cos.ap-beijing.myqcloud.com/audio/sound-effect/well.mp3',
+    fair: 'https://kangfu-action-video-1258481652.cos.ap-beijing.myqcloud.com/audio/sound-effect/fair.mp3'
   },
+  backgroundAudioUrl: 'https://kangfu-action-video-1258481652.cos.ap-beijing.myqcloud.com/audio/background/meihaodeyitian.mp3',
   idxAudioUrl: [
     'https://kangfu-action-video-1258481652.cos.ap-beijing.myqcloud.com/audio/xuhao/diyigedongzuo.m4a',
     'https://kangfu-action-video-1258481652.cos.ap-beijing.myqcloud.com/audio/xuhao/diergedongzuo.m4a',
@@ -129,9 +131,9 @@ Page({
   initMedia(){
     //初始化音频、视频
     this.oVideo = wx.createVideoContext("main-video");
-    // this.oVideo.play();
     this.initShortAudio();
     this.initCountAudio();
+    this.initBackgroundAudio();
   },
   initShortAudio(){
     this.oShortAudio = wx.createInnerAudioContext({useWebAudioImplement:true});
@@ -139,9 +141,20 @@ Page({
       console.log('短音频结束')
     })
   },
+  initBackgroundAudio(){
+    this.oBackgroundAudio = wx.createInnerAudioContext({useWebAudioImplement:true})
+    this.oBackgroundAudio.src = this.backgroundAudioUrl;
+    this.oBackgroundAudio.loop = true;
+    this.oBackgroundAudio.volume = 0.3;
+    this.oBackgroundAudio.onEnded((event) => {
+      console.log('短音频结束')
+    })
+    this.oBackgroundAudio.play();
+  },
   initCountAudio(){
     this.oCountAudio = wx.createInnerAudioContext({useWebAudioImplement:true});
-    this.oCountAudio.src = "https://96.f.1ting.com/local_to_cube_202004121813/96kmp3/2021/12/12/12a_nhj/01.mp3";
+    this.oCountAudio.src = "https://kangfu-action-video-1258481652.cos.ap-beijing.myqcloud.com/audio/sound-effect/countdown.mp3";
+    this.oCountAudio.loop = true;
     this.oCountAudio.onEnded((event) => {
       console.log('短音频结束')
     })
@@ -351,6 +364,7 @@ Page({
     app.globalData.oAudio.pause();
     this.oShortAudio.pause();
     this.oCountAudio.pause();
+    this.oBackgroundAudio.pause();
     this.data.oPause.showPause((this.data.nAction + 1) < this.data.aAction.length);
   },
   //继续课程
@@ -361,6 +375,7 @@ Page({
       })
     })
     this.oVideo.play();
+    this.oBackgroundAudio.play();
     app.globalData.oAudio.play();
   },
   //下一个动作
@@ -377,6 +392,7 @@ Page({
     this.oVideo.stop();
     this.oShortAudio.destroy();
     this.oCountAudio.destroy();
+    this.oBackgroundAudio.destroy();
     console.log('退出小程序');
     app.globalData.oWs.send({
       data: JSON.stringify(
@@ -391,6 +407,7 @@ Page({
     this.oVideo.stop();
     this.oShortAudio.destroy();
     this.oCountAudio.destroy();
+    this.oBackgroundAudio.pause();
     app.globalData.oAudio.pause();
     console.log('结束课程')
     app.globalData.oWs.send({
@@ -594,7 +611,7 @@ Page({
         setTimeout(()=>{
           app.globalData.oAudio.src = tempAction.actionAudioUrl;
           app.globalData.oAudio.play();
-        },2000)
+        },2300)
       })
       //播放加载倒计时
     })
@@ -614,6 +631,7 @@ Page({
       // app.globalData.oAudio.src = this.data.oAudioUrl.class;
       // app.globalData.oAudio.play(); 
       this.oVideo.play();
+      this.oBackgroundAudio.play();
       let tempAction = this.data.aAction[this.data.nAction] || {};
       console.log('发送信息',tempAction);
       app.globalData.oWs.send({
