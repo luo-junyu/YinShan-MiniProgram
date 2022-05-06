@@ -3,6 +3,6 @@
     "header": "/components/header/header",
     "toast": "/components/toast/toast",
     "auth": "/components/auth/auth",
-    "header": "/components/header/header"
+    "modalView": "/components/modal/modal"
   }
 }

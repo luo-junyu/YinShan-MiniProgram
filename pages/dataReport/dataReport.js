@@ -43,5 +43,10 @@ Page({
       console.log('动作详情', { ...res, highest, lowest })
       this.setData({ ...res, highest, lowest })
     })
+  },
+  goBack(){
+    wx.redirectTo({
+      url: '/pages/course/course'
+    })
   }
 })

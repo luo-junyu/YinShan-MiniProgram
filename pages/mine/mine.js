@@ -5,7 +5,9 @@ const app = getApp()
 Page({
   data: {
     userName: '',
-    userPic: ''
+    userPic: '',
+    bUserModal: false,
+    single: true
   },
   oAuth: null,
   oToast: null,
@@ -19,6 +21,10 @@ Page({
     this.oToast = this.selectComponent('#toast')
     this.oAuth = this.selectComponent('#auth')
     // this.oAuth.loginASession(this.getCourseInfo)
+  },
+  showUserContract(){
+    this.setData({ bUserModal: true })
+    console.log('press show user contract')
   },
   handlePinggu () {
     this.oToast.showToast('我们正在加紧开发中哦~')

@@ -30,7 +30,7 @@
       </view>
     </view>
     <view class="bottom-area common-wrap">
-      <view class="contact common-nav">
+      <view class="contact common-nav" bindtap="showUserContract">
         <text>用户协议</text>
       </view>
     </view>
@@ -38,16 +38,6 @@
   <auth id='auth'></auth>
   <toast id='toast'></toast>
 </view>
-<view class="footer">
-    <view class="exe"  bindtap="gotoExe">
-      <image class="footer-image" src="../../assets/exe.png"></image>
-      <view class="footer-text">康复训练</view>
-    </view>
-    <view class="mine" >
-      <image class="footer-image" src="../../assets/mine-locked.png"></image>
-      <view class="footer-text locked">我的</view>
-    </view>
-  </view>
   <modalView show="{{bUserModal}}" bindcancel="modalCancel" bindconfirm='modalConfirm' single='{{single}}'>
 
     <view class='modal-content'>

@@ -616,7 +616,7 @@ Page({
     }, () => {
       this.setData({ startLoading: true }, () => {
         this.data.aAudioUrl = []
-        app.globalData.oAudio.src = app.globalData.sCountAudioUrl
+        app.globalData.oAudio.src = this.idxAudioUrl[this.data.nAction]
         app.globalData.oAudio.play()
         let tempAction = this.data.aAction[this.data.nAction] || {}
         console.log('准备开始',tempAction)
@@ -685,7 +685,7 @@ Page({
   // 骨骼图绘制
   drawDebug (aBone) {
     const ctx = this.oCtx
-    // this.oCanvas.width = this.oCanvas.width
+    this.oCanvas.width = this.oCanvas.width // Warning: This line can not be removed (by junyu)
     const drawLine = (aTwoP = [[], []]) => {
       ctx.beginPath()
       ctx.strokeStyle = 'rgba(255, 255, 255, 0.5)'
