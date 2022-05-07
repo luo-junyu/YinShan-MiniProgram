@@ -309,7 +309,6 @@ Page({
         console.log('收到结束课程确认消息')
         app.globalData.oWs.close()
         this.exitRoom()
-        // TODO: 不确定改navigateTo的风险，待验证 by GJJ
         wx.redirectTo({
           url: '/pages/end/end'
         })

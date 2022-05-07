@@ -40,7 +40,7 @@ Page({
     })
   },
   startExe () {
-    wx.redirectTo({
+    wx.navigateTo({
       url: '/pages/main/main'
     })
   }

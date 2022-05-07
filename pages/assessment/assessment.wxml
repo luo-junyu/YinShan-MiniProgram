@@ -7,7 +7,7 @@
     <view class="container-card">
       <text class="container-card-title">康复评估流程</text>
       <text class="container-card-hint">评估您的运动、感觉、心理、日常生活能力，为您制定全面、科学、有效的康复训练方案。</text>
-      <view wx:for="{{stepArray}}" wx:for-item="item" wx:for-index="index"
+      <view wx:for="{{stepArray}}" wx:for-item="item" wx:for-index="index" wx:key="index"
             class="assessment-item {{currentStep === index + 1 ? 'active': ''}}">
         <view class="assessment-item-content">
           <view wx:if="{{item.useNoIcon}}"
@@ -38,7 +38,7 @@
                 无资料则<text class="assessment-item-content-skip-action {{currentStep === index + 1 ? 'active': ''}}">跳过</text>
               </view>
               <view wx:elif="{{currentStep > index + 1}}">已完成</view>
-              <view wx:else style="color: #16B297">报告{{item.finished ? '已生成': '生成中...'}}</view>
+              <view wx:elif="{{currentStep === 4}}" style="color: #16B297">报告{{item.finished ? '已生成': '生成中...'}}</view>
             </view>
           </view>
         </view>

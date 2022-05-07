@@ -17,6 +17,10 @@ Page({
   oAuth: null,
   oToast: null,
   onShow () {
+    app.api.get({ url: uGetCourse }).then(res => {
+      res.aSession = this.formatData(res.sessionList, res.courseCreateTime)
+      this.setData(res)
+    })
   },
   onLoad (options) {
     this.oToast = this.selectComponent('#toast')
@@ -26,12 +30,16 @@ Page({
       url: uAssessStatus
     })
       .then(res => {
-        console.log(res)
+        const stepVarNameArray = ['medical_history_available', 'pose_assess_available', 'physical_exam_available', 'report_available']
+        const currentStep = stepVarNameArray.findIndex((item) => res[item]) // 当前步骤
+        const reportDone = res.reportDone // 报告是否生成
+        const examDone = res.physicalExamDone // 资料是否上传
+        if (currentStep > -1) {
+          wx.navigateTo({
+            url: `/pages/assessment/assessment?currentStep=${currentStep}&reportDone=${reportDone}&examDone=${examDone}`
+          })
+        }
       })
-    app.api.get({ url: uGetCourse }).then(res => {
-      res.aSession = this.formatData(res.sessionList, res.courseCreateTime)
-      this.setData(res)
-    })
     // this.oAuth.loginASession(this.getCourseInfo)
   },
   handleCalendar () {
@@ -115,7 +123,7 @@ Page({
     app.globalData.sessionWeek = e.currentTarget.dataset.week
     app.globalData.sessionNo = e.currentTarget.dataset.no
     console.log('开始上课', app.globalData.sessionname, app.globalData.sessionWeek, app.globalData.sessionNo)
-    wx.redirectTo({
+    wx.navigateTo({
       url: '/pages/main/main'
     })
   }

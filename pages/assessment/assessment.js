@@ -35,6 +35,12 @@ Page({
     currentStep: 4
   },
   onLoad: function (options) {
-
+    const temp = this.data.stepArray.slice()
+    temp[2].finished = options.examDone
+    temp[3].finished = options.reportDone
+    this.setData({
+      currentStep: +options.currentStep,
+      stepArray: temp
+    })
   }
 })

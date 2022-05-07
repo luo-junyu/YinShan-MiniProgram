@@ -1,6 +1,6 @@
 <!--index.wxml-->
 <view class="container">
-  <header class="container-nav" backgroundColor="#E3FBF7" title="告诉我们您的感受" returnable="{{true}}"
+  <header class="container-nav" backgroundColor="#E3FBF7" title="告诉我们您的感受" returnable="{{false}}"
           titleColor="#2B2B2B"></header>
   <view class="container-content">
     <image class="end-banner"
