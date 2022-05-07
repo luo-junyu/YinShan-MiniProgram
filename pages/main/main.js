@@ -72,12 +72,12 @@ Page({
     'https://kangfu-action-video-1258481652.cos.ap-beijing.myqcloud.com/audio/xuhao/diqigedongzuo.m4a',
     'https://kangfu-action-video-1258481652.cos.ap-beijing.myqcloud.com/audio/xuhao/dibagedongzuo.m4a',
     'https://kangfu-action-video-1258481652.cos.ap-beijing.myqcloud.com/audio/xuhao/dijiugedongzuo.m4a',
-    'https://kangfu-action-video-1258481652.cos.ap-beijing.myqcloud.com/audio/xuhao/dishigedongzuo.m4a',
+    'https://kangfu-action-video-1258481652.cos.ap-beijing.myqcloud.com/audio/xuhao/dishigedongzuo.m4a'
   ],
-  sStatus:'init',//当前状态，对比用
-  /* 通用变量 start*/
-  /* 通用函数 start*/
-  onShow(){
+  sStatus: 'init', // 当前状态，对比用
+  /* 通用变量 start */
+  /* 通用函数 start */
+  onShow () {
     // if(this.bEnded){
     //   return;
     // }
@@ -124,20 +124,20 @@ Page({
     })
   },
 
-  initMedia(){
-    //初始化音频、视频
-    this.oVideo = wx.createVideoContext("main-video")
+  initMedia () {
+    // 初始化音频、视频
+    this.oVideo = wx.createVideoContext('main-video')
     this.initShortAudio()
     this.initCountAudio()
     this.initBackgroundAudio()
   },
-  initShortAudio(){
+  initShortAudio () {
     this.oShortAudio = wx.createInnerAudioContext({ useWebAudioImplement: true })
     this.oShortAudio.onEnded((event) => {
       console.log('短音频结束')
     })
   },
-  initBackgroundAudio(){
+  initBackgroundAudio () {
     this.oBackgroundAudio = wx.createInnerAudioContext({ useWebAudioImplement: true })
     this.oBackgroundAudio.src = this.backgroundAudioUrl
     this.oBackgroundAudio.loop = true
@@ -147,9 +147,9 @@ Page({
     })
     this.oBackgroundAudio.play()
   },
-  initCountAudio(){
+  initCountAudio () {
     this.oCountAudio = wx.createInnerAudioContext({ useWebAudioImplement: true })
-    this.oCountAudio.src = "https://kangfu-action-video-1258481652.cos.ap-beijing.myqcloud.com/audio/sound-effect/countdown.mp3"
+    this.oCountAudio.src = 'https://kangfu-action-video-1258481652.cos.ap-beijing.myqcloud.com/audio/sound-effect/countdown.mp3'
     this.oCountAudio.loop = true
     this.oCountAudio.onEnded((event) => {
       console.log('短音频结束')
@@ -289,22 +289,22 @@ Page({
             }
           }
         })
-      }else if(data.type === 'audio_encourage'){
-        console.log('收到激励语音',data)
-        if(data['autio_type'] === 'encourage'){
-          this.sStatus = data.name;
+      } else if (data.type === 'audio_encourage') {
+        console.log('收到激励语音', data)
+        if (data.autio_type === 'encourage') {
+          this.sStatus = data.name
           this.oShortAudio.src = this.oShortAudioUrl[this.sStatus]
-          this.oShortAudio.play();
+          this.oShortAudio.play()
           this.setData({ sEncourage: this.sStatus }, () => {
             setTimeout(() => {
               this.sStatus = 'init'
               this.setData({ sEncourage: this.sStatus })
-            },2000)
+            }, 2000)
           })
         } else {
           this.inputAudio(data)
         }
-        this.playAudioList();
+        this.playAudioList()
       } else if (data.type === 'finish_class_confirm') {
         console.log('收到结束课程确认消息')
         app.globalData.oWs.close()
@@ -618,12 +618,12 @@ Page({
         this.data.aAudioUrl = []
         app.globalData.oAudio.src = this.idxAudioUrl[this.data.nAction]
         app.globalData.oAudio.play()
-        let tempAction = this.data.aAction[this.data.nAction] || {}
-        console.log('准备开始',tempAction)
-        setTimeout(()=>{
+        const tempAction = this.data.aAction[this.data.nAction] || {}
+        console.log('准备开始', tempAction)
+        setTimeout(() => {
           app.globalData.oAudio.src = tempAction.actionAudioUrl
           app.globalData.oAudio.play()
-        },2300)
+        }, 2300)
       })
       // 播放加载倒计时
     })
@@ -650,7 +650,7 @@ Page({
         data: JSON.stringify({
           type: 'change_action',
           // action_name: 'tunqiao',//qtemp
-          action_id : tempAction.actionId,
+          action_id: tempAction.actionId
         })
       })
     })

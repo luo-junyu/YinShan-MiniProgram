@@ -136,7 +136,7 @@ Page({
         this.oToast.showToast('保存成功')
         wx.setStorageSync('user', res.clientInfo)
 
-        wx.redirectTo({
+        wx.switchTab({
           url: '/pages/course/course'
         })
       }).catch(res => {

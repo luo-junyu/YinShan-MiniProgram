@@ -148,28 +148,29 @@
       line-height: 1;
       font-weight: bold;
 
+      .lowest-image {
+        position: absolute;
+        width: 39rpx;
+        height: 32rpx;
+        left: -45rpx;
+        top: -2rpx;
+      }
+
+      .highest-image {
+        position: absolute;
+        width: 34rpx;
+        height: 43rpx;
+        left: -45rpx;
+        top: -6rpx;
+      }
+
       &.highest {
         color: #6437c1;
 
-        .highest-image {
-          position: absolute;
-          width: 34rpx;
-          height: 43rpx;
-          left: -45rpx;
-          top: -6rpx;
-        }
       }
 
       &.lowest {
         color: #F28238;
-
-        .lowest-image {
-          position: absolute;
-          width: 39rpx;
-          height: 32rpx;
-          left: -45rpx;
-          top: -2rpx;
-        }
       }
 
       .action-li-point {

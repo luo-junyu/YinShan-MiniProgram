@@ -1,0 +1,147 @@
+.container {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: #F5F5F5;
+
+  &-nav {
+    flex: 0 0 auto;
+  }
+
+  &-content {
+    flex: 1 1 auto;
+    overflow: auto;
+    padding: 20rpx;
+  }
+
+  &-card {
+    background: white;
+    border-radius: 10rpx;
+    padding: 40rpx 27rpx;
+    display: flex;
+    flex-direction: column;
+    margin: 10rpx 0;
+    &-title {
+      font-size: 34rpx;
+      font-weight: 600;
+      color: #2B2B2B;
+      line-height: 60rpx;
+    }
+    &-hint {
+      font-size: 32rpx;
+      font-weight: 300;
+      color: #252829;
+      line-height: 50rpx;
+    }
+  }
+}
+
+
+.assessment {
+  &-item {
+    height: 236rpx;
+    position: relative;
+    background-color: #F5F5F5;
+    border-radius: 10rpx;
+    margin-top: 20rpx;
+    &.active {
+      background-color: #F1FDFB;
+      color: #42c1ab;
+    }
+    &-back {
+      position: absolute;
+      right: 0;
+      bottom: 0;
+      width: 152rpx;
+      height: 111rpx;
+    }
+    &-content {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      padding: 36rpx 20rpx;
+      z-index: 1;
+      display: flex;
+      &-skip {
+        &.active {
+          color: #42c1ab;
+        }
+        &-action {
+          text-decoration: underline;
+          &.active {
+            font-size: 34rpx;
+          }
+        }
+      }
+      &-indicator {
+        flex: 0 0 auto;
+        display: flex;
+        align-items: center;
+        margin-top: 30rpx;
+        color: #2b2b2b;
+        font-size: 26rpx;
+        min-height: 50rpx;
+        &.active {
+          color: #42c1ab;
+        }
+      }
+      &-icon {
+        width: 36rpx;
+        height: 43rpx;
+      }
+      &-no {
+        width: 42rpx;
+        height: 42rpx;
+        color: rgb(132, 132, 132);
+        background-color: rgb(223, 223, 223);
+        border-radius: 42rpx;
+        text-align: center;
+        line-height: 42rpx;
+        font-weight: bold;
+        &.active {
+          color: #42c1ab;
+          background-color: rgba(66, 193, 171, 0.2);
+        }
+      }
+      &-next {
+        width: 50rpx;
+        height: 50rpx;
+        margin-right: 20rpx;
+      }
+      &-info {
+        display: flex;
+        flex-direction: column;
+        margin-left: 19rpx;
+      }
+      &-topic {
+        flex: 1 1 auto;
+        margin-top: 4rpx;
+        margin-bottom: 10rpx;
+        font-size: 34rpx;
+        line-height: 34rpx;
+        height: 34rpx;
+        font-weight: bold;
+        color: #2B2B2B;
+        &.active {
+          color: #42c1ab;
+        }
+      }
+      &-require {
+        color: #DF2626;
+        font-size: 34rpx;
+      }
+      &-desc {
+        flex: 0 1 auto;
+        color: #252829;
+        font-size: 26rpx;
+        margin: 10rpx 0;
+        height: 26rpx;
+        &.active {
+          color: #42c1ab;
+        }
+      }
+    }
+  }
+}

@@ -8,7 +8,7 @@ page{height:100%;}
   position:relative;
   font-family: PingFangSC,"Microsoft YaHei",微软雅黑,"MicrosoftJhengHei",华文细黑,STHeiti,MingLiu;
   box-sizing: border-box;
-} 
+}
 .text-overflow{
   display:block;
     white-space: nowrap;
@@ -32,7 +32,9 @@ checkbox .wx-checkbox-input {
 }
 /*checkbox选中后样式  */
 checkbox .wx-checkbox-input.wx-checkbox-input-checked {
-  
+
 background: rgba(22, 178, 151, 0.1);
   border-color:#16b297;
 }
+
+// TODO: container样式抽出

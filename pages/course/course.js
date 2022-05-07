@@ -1,5 +1,5 @@
 /// index.js
-import { uGetCourse } from '../../utils/api/api.js'
+import { uAssessStatus, uGetCourse } from '../../utils/api/api.js'
 import { findWeek } from '../../utils/util.js'
 // 获取应用实例
 const app = getApp()
@@ -22,6 +22,12 @@ Page({
     this.oToast = this.selectComponent('#toast')
     this.oAuth = this.selectComponent('#auth')
     app.initShare()
+    app.api.get({
+      url: uAssessStatus
+    })
+      .then(res => {
+        console.log(res)
+      })
     app.api.get({ url: uGetCourse }).then(res => {
       res.aSession = this.formatData(res.sessionList, res.courseCreateTime)
       this.setData(res)

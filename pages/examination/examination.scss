@@ -1,0 +1,110 @@
+.container {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: #F5F5F5;
+
+  &-nav {
+    flex: 0 0 auto;
+  }
+
+  &-content {
+    flex: 1 1 auto;
+    overflow: auto;
+    padding: 0 20rpx 30rpx;
+  }
+
+  &-bottom {
+    flex: 0 0 auto;
+    background: white;
+    padding: 20rpx;
+    button {
+      width: 706rpx;
+      height: 96rpx;
+      background: #16B297;
+      color: white;
+      padding: 0;
+      line-height: 96rpx;
+      font-size: 36rpx;
+      border-radius: 10rpx;
+    }
+  }
+
+  &-category {
+    &-title {
+      color: #2B2B2B;
+      font-size: 34rpx;
+      font-weight: bold;
+      margin-top: 40rpx;
+      margin-bottom: 29rpx;
+      margin-left: 20rpx;
+    }
+    &-hint {
+      color: #505050;
+      font-size: 26rpx;
+      font-weight: bold;
+      margin-bottom: 31rpx;
+      margin-left: 20rpx;
+    }
+  }
+
+  &-card {
+    border-radius: 10rpx;
+    background: white;
+    padding: 30rpx;
+    &-title {
+      font-size: 34rpx;
+      color: #2b2b2b;
+      font-weight: bold;
+    }
+    &-horizontal {
+      display: flex;
+      &-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        &-image {
+          width: 180rpx;
+          height: 120rpx;
+          border-radius: 10rpx;
+        }
+        &-text {
+          margin-top: 20rpx;
+          color: #505050;
+          font-size: 26rpx;
+        }
+      }
+    }
+    &-vertical {
+      padding: 40rpx 0 20rpx;
+      display: flex;
+      flex-direction: column;
+      &-item {
+        display: flex;
+        flex-wrap: nowrap;
+        margin: 14rpx 0;
+        &-info {
+          flex: 1 1 auto;
+          display: flex;
+          flex-direction: column;
+          &-title {
+            color: #2B2B2B;
+            font-size: 32rpx;
+            margin: 10rpx 0;
+          }
+          &-desc {
+            margin: 10rpx 0;
+            color: #505050;
+            font-size: 26rpx;
+          }
+        }
+        &-image {
+          flex: 0 0 230rpx;
+          border-radius: 10rpx;
+          height: 144rpx;
+        }
+      }
+    }
+  }
+
+}

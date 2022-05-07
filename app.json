@@ -11,7 +11,9 @@
     "pages/session/session",
     "pages/course/course",
     "pages/fillname/fillname",
-    "pages/assess/assess"
+    "pages/assess/assess",
+    "pages/assessment/assessment",
+    "pages/examination/examination"
   ],
   "window":{
     "backgroundTextStyle":"light",

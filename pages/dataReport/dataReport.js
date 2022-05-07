@@ -44,8 +44,8 @@ Page({
       this.setData({ ...res, highest, lowest })
     })
   },
-  goBack(){
-    wx.redirectTo({
+  goBack () {
+    wx.switchTab({
       url: '/pages/course/course'
     })
   }

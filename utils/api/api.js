@@ -8,6 +8,7 @@ const uGetSession = '/session/get_session_details'// 获取单课详情
 const uControlStart = '/control/start'
 const uGetStatistic = '/session/get_session_statistic'
 const uPostFeedback = '/session/feedback'
+const uAssessStatus = '/client/assess_status'
 // 抛出getCourseInfo这个常量
 module.exports = {
   uPostAuth,
@@ -18,5 +19,6 @@ module.exports = {
   uGetSession,
   uControlStart,
   uGetStatistic,
-  uPostFeedback
+  uPostFeedback,
+  uAssessStatus
 }

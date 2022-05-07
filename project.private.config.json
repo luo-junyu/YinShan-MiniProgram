@@ -12,6 +12,20 @@
           "query": "",
           "launchMode": "default",
           "scene": null
+        },
+        {
+          "name": "",
+          "pathName": "pages/assessment/assessment",
+          "query": "",
+          "launchMode": "default",
+          "scene": null
+        },
+        {
+          "name": "",
+          "pathName": "pages/examination/examination",
+          "query": "",
+          "launchMode": "default",
+          "scene": null
         }
       ]
     }

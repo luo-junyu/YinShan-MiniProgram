@@ -1,0 +1,85 @@
+<view class="container">
+  <header class="container-nav" backgroundColor="#F5F5F5" title="体格检查" returnable="{{true}}"
+          titleColor="#2B2B2B"></header>
+  <view class="container-content">
+    <view class="container-category-title">所需器材</view>
+    <view class="container-card">
+      <view class="container-card-horizontal">
+        <view class="container-card-horizontal-item">
+          <image class="container-card-horizontal-item-image" src="/assets/logo.png"></image>
+          <view class="container-card-horizontal-item-text">瑜伽垫</view>
+        </view>
+      </view>
+    </view>
+    <view class="container-category-title">体格检查流程</view>
+    <view class="container-category-hint"><text style="color:#FF8332">温馨提示：</text>
+      请按照流程一次性完成体格检查
+    </view>
+    <view class="container-card">
+      <view class="container-card-title">活动度测量</view>
+      <view class="container-card-vertical">
+        <view class="container-card-vertical-item">
+          <view class="container-card-vertical-item-info">
+            <view class="container-card-vertical-item-info-title">
+              前屈
+            </view>
+            <view class="container-card-vertical-item-info-desc">
+              测量躯干向前屈曲的角度
+            </view>
+          </view>
+          <image class="container-card-vertical-item-image" src="/assets/logo.png"></image>
+        </view>
+        <view class="container-card-vertical-item">
+          <view class="container-card-vertical-item-info">
+            <view class="container-card-vertical-item-info-title">
+              前屈
+            </view>
+            <view class="container-card-vertical-item-info-desc">
+              测量躯干向前屈曲的角度
+            </view>
+          </view>
+          <image class="container-card-vertical-item-image" src="/assets/logo.png"></image>
+        </view>
+        <view class="container-card-vertical-item">
+          <view class="container-card-vertical-item-info">
+            <view class="container-card-vertical-item-info-title">
+              前屈
+            </view>
+            <view class="container-card-vertical-item-info-desc">
+              测量躯干向前屈曲的角度
+            </view>
+          </view>
+          <image class="container-card-vertical-item-image" src="/assets/logo.png"></image>
+        </view>
+        <view class="container-card-vertical-item">
+          <view class="container-card-vertical-item-info">
+            <view class="container-card-vertical-item-info-title">
+              前屈
+            </view>
+            <view class="container-card-vertical-item-info-desc">
+              测量躯干向前屈曲的角度
+            </view>
+          </view>
+          <image class="container-card-vertical-item-image" src="/assets/logo.png"></image>
+        </view>
+      </view>
+      <view class="container-card-title">肌肉力量测试</view>
+      <view class="container-card-vertical">
+        <view class="container-card-vertical-item">
+          <view class="container-card-vertical-item-info">
+            <view class="container-card-vertical-item-info-title">
+              前屈
+            </view>
+            <view class="container-card-vertical-item-info-desc">
+              测量躯干向前屈曲的角度
+            </view>
+          </view>
+          <image class="container-card-vertical-item-image" src="/assets/logo.png"></image>
+        </view>
+      </view>
+    </view>
+  </view>
+  <view class="container-bottom">
+    <button class="container-bottom-action">立即检查</button>
+  </view>
+</view>

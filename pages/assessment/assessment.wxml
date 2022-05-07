@@ -1,0 +1,56 @@
+<view
+  class="container"
+>
+  <header class="container-nav" backgroundColor="#F5F5F5" title="康复评估" returnable="{{false}}"
+          titleColor="#2B2B2B"></header>
+  <view class="container-content">
+    <view class="container-card">
+      <text class="container-card-title">康复评估流程</text>
+      <text class="container-card-hint">评估您的运动、感觉、心理、日常生活能力，为您制定全面、科学、有效的康复训练方案。</text>
+      <view wx:for="{{stepArray}}" wx:for-item="item" wx:for-index="index"
+            class="assessment-item {{currentStep === index + 1 ? 'active': ''}}">
+        <view class="assessment-item-content">
+          <view wx:if="{{item.useNoIcon}}"
+                class="assessment-item-content-no {{currentStep === index + 1 ? 'active': ''}}">{{index + 1}}
+          </view>
+          <image wx:else src="/assets/assess_icon_report{{currentStep === index + 1 ? '_s': ''}}.png"
+                 class="assessment-item-content-icon"></image>
+          <view class="assessment-item-content-info">
+            <view class="assessment-item-content-topic {{currentStep === index + 1 ? 'active': ''}}">
+              {{item.title}}<text wx:if="{{item.required}}" class="assessment-item-content-require">*</text>
+            </view>
+            <view class="assessment-item-content-desc {{currentStep === index + 1 ? 'active': ''}}">
+              {{item.desc}}
+            </view>
+            <view wx:if="{{item.skipable && !item.finished && currentStep > index + 1}}" class="assessment-item-content-indicator">无资料已跳过</view>
+            <view wx:else class="assessment-item-content-indicator {{currentStep === index + 1}}">
+              <image
+                wx:if="{{item.useNoIcon}}"
+                class="assessment-item-content-next"
+                src="/assets/assess_next{{currentStep === index + 1 ? '_ing': currentStep > index + 1 ? '_done': ''}}.png">
+              </image>
+              <image
+                wx:else
+                class="assessment-item-content-next"
+                src="/assets/assess_report_icon{{item.finished ? '_done': currentStep === index + 1 ? '_ing': ''}}.png">
+              </image>
+              <view wx:if="{{item.skipable && currentStep <= index + 1}}" class="assessment-item-content-skip {{currentStep === index + 1 ? 'active': ''}}">
+                无资料则<text class="assessment-item-content-skip-action {{currentStep === index + 1 ? 'active': ''}}">跳过</text>
+              </view>
+              <view wx:elif="{{currentStep > index + 1}}">已完成</view>
+              <view wx:else style="color: #16B297">报告{{item.finished ? '已生成': '生成中...'}}</view>
+            </view>
+          </view>
+        </view>
+        <image wx:if="{{currentStep === index + 1}}" class="assessment-item-back"
+               src="/assets/assess_step_{{index + 1}}.png"></image>
+      </view>
+    </view>
+    <view class="container-card">
+      <text class="container-card-title">康复评估的重要性</text>
+      <view class="container-card-hint">康复开始于评估。通过全面、系统、准确的康复评估，专业的康复治疗师将更好的掌握您的问题所在以及功能情况，为您量身制定全面、合理、有效的康复训练方案，指导您开展科学的康复治疗训练，确定康复疗效，提高康复治疗质量。
+      </view>
+      <view class="container-card-hint" style="margin-top: 10rpx">通过康复评估，也可以使您对自身问题及日常功能有更深入的了解，及时了解自己的恢复与进步，提高您对治疗的信心和积极性，从而更加主动地参与康复训练。</view>
+    </view>
+  </view>
+</view>
