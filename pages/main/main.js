@@ -274,6 +274,7 @@ Page({
           // sEncourage:'init'
         }, () => {
           if (data.action_id !== this.nNowActionId && this.bFinished) {
+            console.log('[DEBUG] Change nNowActionId', this.nNowActionId, ' -> ', data.action_id)
             this.nNowActionId = data.action_id
             this.bFinished = false
           } else {
@@ -284,6 +285,9 @@ Page({
               console.log('计数', this.data.nAction, this.data.aAction)
               this.nextAction()
             } else {
+              if (this.nNowActionId !== data.action_id) {
+                this.nNowActionId = data.action_id
+              }
               this.oCircleNum.drawCanvas()
               this.oCircleTime.drawCanvas()
             }
@@ -337,9 +341,11 @@ Page({
   },
   // 播放语音列表
   playAudioList () {
-    const oUrl = this.data.aAudioUrl.shift()
-    app.globalData.oAudio.src = oUrl.path
-    app.globalData.oAudio.play()
+    if(!this.startLoading) {
+      const oUrl = this.data.aAudioUrl.shift()
+      app.globalData.oAudio.src = oUrl.path
+      app.globalData.oAudio.play()
+    }
   },
   // 暂停课程
   pauseAction () {
@@ -387,6 +393,7 @@ Page({
     this.oCountAudio.destroy()
     this.oBackgroundAudio.destroy()
     console.log('退出小程序')
+    app.globalData.hasSkip = false
     app.globalData.oWs.send({
       data: JSON.stringify(
         {
@@ -606,6 +613,9 @@ Page({
   // 进入训练中加载阶段：开始加载动画，加载倒计时音频
   handleEnterIngLoading () {
     console.log('进入ing-loading')
+    if (this.oBackgroundAudio.paused) {
+      this.oBackgroundAudio.play()
+    }
     this.setData({
       sStep: 'ing-loading',
       bShowVideo: true,
@@ -622,7 +632,7 @@ Page({
         setTimeout(() => {
           app.globalData.oAudio.src = tempAction.actionAudioUrl
           app.globalData.oAudio.play()
-        }, 2300)
+        }, 2000)
       })
       // 播放加载倒计时
     })
@@ -642,7 +652,6 @@ Page({
       // app.globalData.oAudio.src = this.data.oAudioUrl.class;
       // app.globalData.oAudio.play();
       this.oVideo.play()
-      this.oBackgroundAudio.play()
       const tempAction = this.data.aAction[this.data.nAction] || {}
       console.log('发送信息', tempAction)
       app.globalData.oWs.send({
