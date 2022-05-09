@@ -84,29 +84,44 @@ Page({
     // if(this.bEnded){
     //   return;
     // }
+    // 设置屏幕常亮
     wx.setKeepScreenOn({
       keepScreenOn: true
     })
+    // socket连接存在并调用Pause控件的恢复方法
     app.globalData.oWs && this.data.oPause.resumeAction()
   },
   onHide () {
     console.log('hide')
+    // 恢复屏幕非常亮
+    wx.setKeepScreenOn({
+      keepScreenOn: false
+    })
+    // 结束课程资源回收
     this.endClass()
+    // FIXME: 该变量未使用
     this.bEnded = true
     // this.trtcRoomContext.exitRoom();
   },
   onLoad (options) {
+    // FIXME: 暂无options使用
     this.oOptions = options
+    // 初始化页面Share设置
     app.initShare()
+    // 获取Toast控件
     this.oToast = this.selectComponent('#toast')
+    // 获取Pause蒙层控件
     this.data.oPause = this.selectComponent('#pause')
+    // 全局音频播放组件的结束事件注册
     app.globalData.oAudio.onEnded((event) => {
       console.log('音频结束')
       if (this.data.aAudioUrl.length > 0) {
         this.playAudioList()
       }
     })
+    // 全局变量当前是否跳过课程默认值
     app.globalData.hasSkip = false
+    // 调用接口开始上课
     app.api.post({
       url: uControlStart,
       data: {
@@ -114,24 +129,38 @@ Page({
         courseId: app.globalData.courseId
       }
     }).then(res => {
+      // 从返回中获取streamId并入_rtcConfig
       Object.assign(this.data._rtcConfig, { streamId: res.streamId })
+      // 从返回中获取动作列表并存储
       this.setData({ aAction: res.actionList })
+      // 保存这一次AI康复科课的记录号到全局变量中
       app.globalData.cslId = res.cslId
+      // 保存这次的动作列表到全局变量中
       app.globalData.aAction = res.actionList
+      // 如返回中指定了AIServerUrl则使用，否则使用全局默认socketUrl
       this.aiServerUrl = res.aiServerUrl || app.globalData.wsUrl
+      // 初始化腾讯实时音视频
       this.initTrtc()
+      // 绑定实时音视频事件
       this.bindTRTCRoomEvent()
+      // 进入房间开始推流
       this.enterRoom()
+      // 绘图canvas相关初始化
       this.initDrawDebug()
+      // 媒体播放相关初始化
       this.initMedia()
     })
   },
 
   initMedia () {
     // 初始化音频、视频
+    // 获取video标签
     this.oVideo = wx.createVideoContext('main-video')
+    // 初始化短音频播放组件
     this.initShortAudio()
+    // 初始化倒数音频组件
     this.initCountAudio()
+    // 初始化背景音乐音频组件
     this.initBackgroundAudio()
   },
   initShortAudio () {
@@ -175,6 +204,7 @@ Page({
             url: this.aiServerUrl
           }),
           success: () => {
+            // 向Socket Server注册后发送当前手机屏幕分辨率
             this.sendResolution()
           }
         })
@@ -186,6 +216,7 @@ Page({
         console.log('onError：', e)
       }
       task.onMessage = res => { // 钩子函数
+        // 分发socket收到的消息
         this.handleReceiveMsg(res.data)
       }
       task.onReconnect = () => { // 钩子函数
@@ -228,6 +259,7 @@ Page({
         that.oCanvas.width = res[0].width
         that.oCanvas.height = res[0].height
         that.oCtx.lineWidth = '6'
+        // 初始化Socket连接
         this.initSocket()
       })
     console.log('屏幕信息', app.globalData.nWidth, app.globalData.nHeight, wx.getSystemInfoSync().pixelRatio)
@@ -277,7 +309,6 @@ Page({
           // sEncourage:'init'
         }, () => {
           if (data.action_id !== this.nNowActionId && this.bFinished) {
-            console.log('[DEBUG] Change nNowActionId', this.nNowActionId, ' -> ', data.action_id)
             this.nNowActionId = data.action_id
             this.bFinished = false
           } else {
@@ -293,9 +324,9 @@ Page({
                 this.nextAction()
               }, 1000);
             } else {
-              if (this.nNowActionId !== data.action_id) {
-                this.nNowActionId = data.action_id
-              }
+                if (this.nNowActionId !== data.action_id) {
+                    this.nNowActionId = data.action_id
+                }
               this.oCircleNum.drawCanvas()
               this.oCircleTime.drawCanvas()
             }
@@ -517,8 +548,10 @@ Page({
       })
     })
   },
+  // 进入房间
   enterRoom () {
     const roomID = app.globalData.clientId
+    // 参数中放入音视频roomId
     const config = Object.assign(this.data._rtcConfig, { roomID })
     this.setData({
       pusher: this.TRTC.enterRoom(config)
@@ -540,6 +573,7 @@ Page({
       pusher: this.TRTC.setPusherAttributes(options)
     })
   },
+  // 将LivePusher的事件转发到实时音视频组件处理
   _pusherStateChangeHandler (event) {
     this.TRTC.pusherEventHandler(event)
   },
@@ -573,6 +607,7 @@ Page({
   _playerAudioVolumeNotify (event) {
     this.TRTC.playerAudioVolumeNotify(event)
   },
+  // 控制当前所在步骤相关逻辑方法
   switchStep (sNew, sOld) {
     // 整个阶段：test-explain(系统说明) -> test(人物检测) -> ing-loading(课程加载) -> ing(课程进行中) ->
     switch (sOld) {
@@ -632,7 +667,7 @@ Page({
   handleEnterIngLoading () {
     console.log('进入ing-loading')
     if (this.oBackgroundAudio.paused) {
-      this.oBackgroundAudio.play()
+        this.oBackgroundAudio.play()
     }
     // 清空待播放列表
     this.data.aAudioUrl = []

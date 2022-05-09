@@ -53,10 +53,10 @@
                           wx:if="{{!citem.sessionAvailable && Utils.ifPassLine(citem.sessionStartTime)}}">{{Utils.transTime(citem.sessionStartTime)}}解锁</text>
                     <text class="class-time"
                           wx:if="{{!citem.sessionAvailable && !Utils.ifPassLine(citem.sessionStartTime)}}">未解锁</text>
-                    <text class="goto-report" bindtap="gotoReport"
+                    <view class="goto-report" bindtap="gotoReport"
                           wx:if="{{citem.sessionAvailable && citem.cslId !== 0}}" data-cslid="{{citem.cslId}}"
                           data-week="{{item.nWeek}}" data-no="{{key}}" data-sessionid="{{citem.sessionId}}"
-                          data-sessionname="{{citem.sessionName}}">查看训练报告 -></text>
+                          data-sessionname="{{citem.sessionName}}">查看训练报告<image class="goto-report-indicator" src="/assets/arrow_right.png"></image></view>
                     <button class="class-start-btn" wx:if="{{citem.sessionAvailable && citem.cslId === 0}}"
                             catchtap="startClass" data-week="{{item.nWeek}}" data-no="{{key}}"
                             data-sessionid="{{citem.sessionId}}" data-sessionname="{{citem.sessionName}}">开始训练
