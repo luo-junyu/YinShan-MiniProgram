@@ -74,6 +74,9 @@ Page({
     'https://kangfu-action-video-1258481652.cos.ap-beijing.myqcloud.com/audio/xuhao/dijiugedongzuo.m4a',
     'https://kangfu-action-video-1258481652.cos.ap-beijing.myqcloud.com/audio/xuhao/dishigedongzuo.m4a'
   ],
+  finishClassEncourageAudio: 'https://kangfu-action-video-1258481652.cos.ap-beijing.myqcloud.com/audio/yuyinjili/wanchengyundongchufanggongxini-wanchenglebencixunlian.m4a',
+  unfinishClassEncourageAudio: 'https://kangfu-action-video-1258481652.cos.ap-beijing.myqcloud.com/audio/yuyinjili/wanchengyundongchufangxiacijiayou-jianchiwanchengxunliano.m4a',
+  finishActionEncourageAudio: 'https://kangfu-action-video-1258481652.cos.ap-beijing.myqcloud.com/audio/yuyinjili/dangedongzuowanchengyuyinjilimubiaodacheng.m4a',
   sStatus: 'init', // 当前状态，对比用
   /* 通用变量 start */
   /* 通用函数 start */
@@ -283,7 +286,12 @@ Page({
               this.bFinished = true
               console.log('动作完成比例超过了100', data)
               console.log('计数', this.data.nAction, this.data.aAction)
-              this.nextAction()
+              app.globalData.oAudio.src = this.finishActionEncourageAudio
+              console.log('[debug] 目标达成 finishActionEncourageAudio')
+              app.globalData.oAudio.play()
+              setTimeout(() => {
+                this.nextAction()
+              }, 1000);
             } else {
               if (this.nNowActionId !== data.action_id) {
                 this.nNowActionId = data.action_id
@@ -343,8 +351,11 @@ Page({
   playAudioList () {
     if(!this.startLoading) {
       const oUrl = this.data.aAudioUrl.shift()
-      app.globalData.oAudio.src = oUrl.path
-      app.globalData.oAudio.play()
+      if (oUrl !== undefined) {
+        console.log('[debug] 播放', oUrl.path)
+        app.globalData.oAudio.src = oUrl.path
+        app.globalData.oAudio.play()
+      }
     }
   },
   // 暂停课程
@@ -393,7 +404,7 @@ Page({
     this.oCountAudio.destroy()
     this.oBackgroundAudio.destroy()
     console.log('退出小程序')
-    app.globalData.hasSkip = false
+    app.globalData.hasSkip = true
     app.globalData.oWs.send({
       data: JSON.stringify(
         {
@@ -410,6 +421,13 @@ Page({
     this.oBackgroundAudio.pause()
     app.globalData.oAudio.pause()
     console.log('结束课程')
+    if (!app.globalData.hasSkip && (this.data.nAction + 1) === this.data.aAction.length) {
+      app.globalData.oAudio.src = this.finishClassEncourageAudio
+      app.globalData.oAudio.play()
+    } else {
+      app.globalData.oAudio.src = this.unfinishClassEncourageAudio
+      app.globalData.oAudio.play()
+    }
     app.globalData.oWs.send({
       data: JSON.stringify(
         {
@@ -616,6 +634,8 @@ Page({
     if (this.oBackgroundAudio.paused) {
       this.oBackgroundAudio.play()
     }
+    // 清空待播放列表
+    this.data.aAudioUrl = []
     this.setData({
       sStep: 'ing-loading',
       bShowVideo: true,
