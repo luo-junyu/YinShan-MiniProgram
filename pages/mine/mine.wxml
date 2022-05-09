@@ -10,28 +10,39 @@
       </view>
     </view>
     <view class="top-area common-wrap">
-      <view class="report common-nav" bindtap="handlePinggu">
+      <view class="common-nav" bindtap="handlePinggu">
+        <image class="common-nav-image" mode="aspectFit" src="/assets/mine-report.png"></image>
         <text>评估报告</text>
+        <image class="common-nav-indicator" src="/assets/indicator.svg"></image>
       </view>
-      <view class="scheme common-nav" bindtap="gotoCalendar">
+      <view class="common-nav" bindtap="gotoCalendar">
+        <image class="common-nav-image" mode="aspectFit" src="/assets/mine-scheme.png"></image>
         <text>我的课表</text>
+        <image class="common-nav-indicator" src="/assets/indicator.svg"></image>
       </view>
-      <view class="data common-nav" bindtap="gotoExeData">
+      <view class="common-nav" bindtap="gotoExeData">
+        <image class="common-nav-image" mode="aspectFit" src="/assets/mine-data.png"></image>
         <text>康复训练数据</text>
+        <image class="common-nav-indicator" src="/assets/indicator.svg"></image>
       </view>
     </view>
     <view class="middle-area common-wrap">
-      <view class="fish common-nav">
+      <view class="common-nav">
+        <image class="common-nav-image" mode="aspectFit" src="/assets/mine-fish.png"></image>
         <text>使用鱼眼镜头</text>
-        <switch checked="{{true}}"/>
+        <switch color="#16B297" checked="{{true}}"/>
       </view>
-      <view class="music common-nav" bindtap="handleMusic">
+      <view class="common-nav" bindtap="handleMusic">
+        <image class="common-nav-image" mode="aspectFit" src="/assets/mine-music.png"></image>
         <text>背景音乐</text>
+        <image class="common-nav-indicator" src="/assets/indicator.svg"></image>
       </view>
     </view>
     <view class="bottom-area common-wrap">
-      <view class="contact common-nav" bindtap="showUserContract">
+      <view class="common-nav" bindtap="showUserContract">
+        <image class="common-nav-image" mode="aspectFit" src="/assets/mine-contact.png"></image>
         <text>用户协议</text>
+        <image class="common-nav-indicator" src="/assets/indicator.svg"></image>
       </view>
     </view>
   </view>
