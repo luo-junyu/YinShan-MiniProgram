@@ -36,9 +36,9 @@
       <view class="action-list">
         <block wx:for="{{actionList}}" wx:for-index="key" wx:for-item="item" wx:key="actionName">
           <view
-            class="action-li {{item.actionScore === highest ? 'highest' : ''}} {{(item.actionScore === lowest && item.actionScore !== highest) ? 'lowest' : ''}}">
-            <image src="../../assets/highest.png" class="highest-image" wx:if="{{item.actionScore === highest}}"></image>
-            <image src="../../assets/lowest.png" class="lowest-image" wx:if="{{item.actionScore === lowest && lowest !== highest}}"></image>
+            class="action-li {{item.actionScore == highest ? 'highest' : ''}} {{(item.actionScore == lowest && item.actionScore != highest) ? 'lowest' : ''}}">
+            <image src="../../assets/highest.png" class="highest-image" wx:if="{{item.actionScore == highest}}"></image>
+            <image src="../../assets/lowest.png" class="lowest-image" wx:if="{{item.actionScore == lowest && lowest != highest}}"></image>
             <view class="action-li-label ">{{item.actionName}}</view>
             <view class="action-li-point">{{item.actionScore ? item.actionScore : '跳过'}}</view>
           </view>
