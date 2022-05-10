@@ -1,0 +1,21 @@
+<view class="exam-vertical">
+  <view class="exam-vertical-ready" wx:if="{{currentStep === 0}}">
+    <text class="exam-vertical-ready-text">请参考人物框，身体左侧正对手机
+      屏幕，站立，让身体进入人物框，
+      并保持3s</text>
+    <image class="exam-vertical-ready-image" src="/assets/exam_vertical_mask_r.png" mode="aspectFill bottom"></image>
+    <view class="exam-vertical-ready-mask">
+      <text class="exam-vertical-ready-mask-count">3</text>
+    </view>
+  </view>
+  <view class="exam-vertical-topic" wx:elif="{{currentStep === 1}}">
+    <view class="exam-vertical-topic-title">活动度测量</view>
+    <view class="exam-vertical-topic-text">第1项：前屈</view>
+    <view class="exam-vertical-topic-text">请身体左侧正对手机屏幕，测量躯干向前屈曲的角度</view>
+    <view class="loading-bar {{startLoading ? 'loaded-bar' : 'empty-bar'}}" bindtransitionend="handleTransEnd"></view>
+  </view>
+  <view wx:elif="{{currentStep === 3}}" class="exam-vertical-warn">
+    <image class="exam-vertical-warn-icon" src="/assets/lowest.png"></image>
+    <view class="exam-vertical-warn-text">请回到正确位置，继续完成体格检查吧</view>
+  </view>
+</view>

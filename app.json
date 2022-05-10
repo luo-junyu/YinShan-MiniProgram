@@ -14,7 +14,8 @@
     "pages/assess/assess",
     "pages/assessment/assessment",
     "pages/examination/examination",
-    "pages/examination/examHorizontal"
+    "pages/examination/examHorizontal",
+    "pages/examination/examVertical"
   ],
   "window":{
     "backgroundTextStyle":"light",
