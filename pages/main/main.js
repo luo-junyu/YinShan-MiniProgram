@@ -322,11 +322,11 @@ Page({
               app.globalData.oAudio.play()
               setTimeout(() => {
                 this.nextAction()
-              }, 1000);
+              }, 1000)
             } else {
-                if (this.nNowActionId !== data.action_id) {
-                    this.nNowActionId = data.action_id
-                }
+              if (this.nNowActionId !== data.action_id) {
+                this.nNowActionId = data.action_id
+              }
               this.oCircleNum.drawCanvas()
               this.oCircleTime.drawCanvas()
             }
@@ -380,7 +380,7 @@ Page({
   },
   // 播放语音列表
   playAudioList () {
-    if(!this.startLoading) {
+    if (!this.startLoading) {
       const oUrl = this.data.aAudioUrl.shift()
       if (oUrl !== undefined) {
         console.log('[debug] 播放', oUrl.path)
@@ -667,7 +667,7 @@ Page({
   handleEnterIngLoading () {
     console.log('进入ing-loading')
     if (this.oBackgroundAudio.paused) {
-        this.oBackgroundAudio.play()
+      this.oBackgroundAudio.play()
     }
     // 清空待播放列表
     this.data.aAudioUrl = []

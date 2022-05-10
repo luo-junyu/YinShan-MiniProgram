@@ -13,7 +13,8 @@
     "pages/fillname/fillname",
     "pages/assess/assess",
     "pages/assessment/assessment",
-    "pages/examination/examination"
+    "pages/examination/examination",
+    "pages/examination/examHorizontal"
   ],
   "window":{
     "backgroundTextStyle":"light",
