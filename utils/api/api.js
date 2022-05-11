@@ -9,6 +9,7 @@ const uControlStart = '/control/start'
 const uGetStatistic = '/session/get_session_statistic'
 const uPostFeedback = '/session/feedback'
 const uAssessStatus = '/client/assess_status'
+const uPhysicalExam = '/physical_exam'
 // 抛出getCourseInfo这个常量
 module.exports = {
   uPostAuth,
@@ -20,5 +21,6 @@ module.exports = {
   uControlStart,
   uGetStatistic,
   uPostFeedback,
-  uAssessStatus
+  uAssessStatus,
+  uPhysicalExam
 }
