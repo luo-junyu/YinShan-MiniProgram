@@ -18,7 +18,7 @@ Page({
   oToast: null,
   onShow () {
     app.api.get({ url: uGetCourse }).then(res => {
-      res.aSession = this.formatData(res.sessionList, res.courseCreateTime)
+      res.aSession = this.formatData(res.sessionList, res.courseStartTime)
       this.setData(res)
     })
   },
@@ -45,26 +45,29 @@ Page({
   handleCalendar () {
     this.oToast.showToast('我们正在加紧开发中哦~')
   },
-  formatData (data, createTime) {
+  formatData (data, courseStartTime) {
     const aReturn = []
     let nowWeek
     let nWeek
+    let week_idx
     if (data != null) {
       for (let i = 0; i < data.length; i++) {
-        nWeek = findWeek(data[i].sessionStartTime, createTime)
+        nWeek = findWeek(data[i].sessionStartTime, courseStartTime)
         if (i === 0) {
           // 第一节课
           nowWeek = nWeek
+          week_idx = 0
           aReturn.push({
             nWeek,
             aSession: [data[i]]
           })
         } else if (nWeek === nowWeek) {
           // 同一周的其他课
-          aReturn.aSession.push([data[i]])
+          aReturn[week_idx].aSession.push(data[i])
         } else {
           // 新一周的课
           nowWeek = nWeek
+          week_idx = week_idx + 1
           aReturn.push({
             nWeek,
             aSession: [data[i]]
