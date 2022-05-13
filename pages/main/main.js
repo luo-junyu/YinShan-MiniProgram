@@ -431,6 +431,10 @@ Page({
       keepScreenOn: false
     })
     this.oVideo.stop()
+    this.oBackgroundAudio.stop()
+    this.oShortAudio.stop()
+    this.oCountAudio.stop()
+    
     this.oShortAudio.destroy()
     this.oCountAudio.destroy()
     this.oBackgroundAudio.destroy()
@@ -713,7 +717,7 @@ Page({
         data: JSON.stringify({
           type: 'change_action',
           // action_name: 'tunqiao',//qtemp
-          action_id: tempAction.actionId
+          action_id: tempAction.actionRuleIndex
         })
       })
     })

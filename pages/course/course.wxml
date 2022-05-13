@@ -5,7 +5,7 @@
   <view class="container-content">
     <text class="session-title text-overflow">{{courseName}}</text>
     <view class="session-calendar">
-      <text class="calendar-label">疗程: {{courseAbstract}}</text>
+      <text class="calendar-label">疗程: {{courseScript}}</text>
       <image class="calendar-image" src="../../assets/calendar.png" bindtap="handleCalendar"></image>
     </view>
     <view class="coach-area common-area">
@@ -50,7 +50,7 @@
                   <view class="class-nums">{{citem.sessionActionCount}}个康复动作</view>
                   <view class="class-operate">
                     <text class="class-time"
-                          wx:if="{{!citem.sessionAvailable && Utils.ifPassLine(citem.sessionStartTime)}}">{{Utils.transTime(citem.sessionStartTime)}}解锁</text>
+                          wx:if="{{!citem.sessionAvailable && Utils.ifPassLine(citem.sessionStartTime)}}">{{Utils.transTime(citem.sessionStartTime)}} 解锁</text>
                     <text class="class-time"
                           wx:if="{{!citem.sessionAvailable && !Utils.ifPassLine(citem.sessionStartTime)}}">未解锁</text>
                     <view class="goto-report" bindtap="gotoReport"
@@ -96,6 +96,7 @@
     }
   }
   module.exports = {
-    transTime: transTime
+    transTime: transTime,
+    ifPassLine: ifPassLine
   }
 </wxs>
