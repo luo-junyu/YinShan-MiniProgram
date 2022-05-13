@@ -1,6 +1,14 @@
 /// index.js
 import { uAssessStatus, uGetCourse } from '../../utils/api/api.js'
-import { findWeek } from '../../utils/util.js'
+const dayjs = require('../../utils/dayjs/dayjs.min')
+const weekOfYear = require('../../utils/dayjs/plugin/weekOfYear')
+dayjs.extend(weekOfYear)
+const groupBy = function (xs, key) {
+  return xs.reduce(function (rv, x) {
+    (rv[x[key]] = rv[x[key]] || []).push(x)
+    return rv
+  }, {})
+}
 // 获取应用实例
 const app = getApp()
 Page({
@@ -18,7 +26,17 @@ Page({
   oToast: null,
   onShow () {
     app.api.get({ url: uGetCourse }).then(res => {
-      res.aSession = this.formatData(res.sessionList, res.courseCreateTime)
+      if (res.sessionList.length > 0) {
+        let minWeek = -1
+        let data = res.sessionList.sort((a, b) => dayjs(a.sessionStartTime).isBefore(dayjs(b.sessionStartTime)))
+        data.forEach(item => {
+          const sessionWeek = dayjs(item.sessionStartTime).week()
+          if (minWeek === -1) minWeek = sessionWeek - 1
+          item.week = sessionWeek - minWeek
+        })
+        data = groupBy(data, 'week')
+        res.aSession = data
+      }
       this.setData(res)
     })
   },
@@ -44,35 +62,6 @@ Page({
   },
   handleCalendar () {
     this.oToast.showToast('我们正在加紧开发中哦~')
-  },
-  formatData (data, createTime) {
-    const aReturn = []
-    let nowWeek
-    let nWeek
-    if (data != null) {
-      for (let i = 0; i < data.length; i++) {
-        nWeek = findWeek(data[i].sessionStartTime, createTime)
-        if (i === 0) {
-          // 第一节课
-          nowWeek = nWeek
-          aReturn.push({
-            nWeek,
-            aSession: [data[i]]
-          })
-        } else if (nWeek === nowWeek) {
-          // 同一周的其他课
-          aReturn.aSession.push([data[i]])
-        } else {
-          // 新一周的课
-          nowWeek = nWeek
-          aReturn.push({
-            nWeek,
-            aSession: [data[i]]
-          })
-        }
-      }
-    }
-    return aReturn
   },
   handleTapClass (e) {
     console.log('点击卡片')

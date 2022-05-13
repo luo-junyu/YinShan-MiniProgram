@@ -5,9 +5,9 @@
     <view class="container-category-title">所需器材</view>
     <view class="container-card">
       <view class="container-card-horizontal">
-        <view class="container-card-horizontal-item">
-          <image class="container-card-horizontal-item-image" src="/assets/logo.png"></image>
-          <view class="container-card-horizontal-item-text">瑜伽垫</view>
+        <view class="container-card-horizontal-item" wx:for="{{tools}}" wx:for-index="tIndex" wx:for-item="tItem" wx:key="tIndex">
+          <image class="container-card-horizontal-item-image" src="{{tItem.excToolPirUrl}}"></image>
+          <view class="container-card-horizontal-item-text">{{tItem.excToolName}}</view>
         </view>
       </view>
     </view>
@@ -18,63 +18,30 @@
     <view class="container-card">
       <view class="container-card-title">活动度测量</view>
       <view class="container-card-vertical">
-        <view class="container-card-vertical-item">
+        <view class="container-card-vertical-item" wx:for="{{flexItems}}" wx:for-item="fItem" wx:for-index="fIndex" wx:key="fIndex">
           <view class="container-card-vertical-item-info">
             <view class="container-card-vertical-item-info-title">
-              前屈
+              {{fItem.name}}
             </view>
             <view class="container-card-vertical-item-info-desc">
-              测量躯干向前屈曲的角度
+              {{fItem.script}}
             </view>
           </view>
-          <image class="container-card-vertical-item-image" src="/assets/logo.png"></image>
-        </view>
-        <view class="container-card-vertical-item">
-          <view class="container-card-vertical-item-info">
-            <view class="container-card-vertical-item-info-title">
-              前屈
-            </view>
-            <view class="container-card-vertical-item-info-desc">
-              测量躯干向前屈曲的角度
-            </view>
-          </view>
-          <image class="container-card-vertical-item-image" src="/assets/logo.png"></image>
-        </view>
-        <view class="container-card-vertical-item">
-          <view class="container-card-vertical-item-info">
-            <view class="container-card-vertical-item-info-title">
-              前屈
-            </view>
-            <view class="container-card-vertical-item-info-desc">
-              测量躯干向前屈曲的角度
-            </view>
-          </view>
-          <image class="container-card-vertical-item-image" src="/assets/logo.png"></image>
-        </view>
-        <view class="container-card-vertical-item">
-          <view class="container-card-vertical-item-info">
-            <view class="container-card-vertical-item-info-title">
-              前屈
-            </view>
-            <view class="container-card-vertical-item-info-desc">
-              测量躯干向前屈曲的角度
-            </view>
-          </view>
-          <image class="container-card-vertical-item-image" src="/assets/logo.png"></image>
+          <image class="container-card-vertical-item-image" src="{{fItem.picUrl}}"></image>
         </view>
       </view>
       <view class="container-card-title">肌肉力量测试</view>
       <view class="container-card-vertical">
-        <view class="container-card-vertical-item">
+        <view class="container-card-vertical-item" wx:for="{{strengthItems}}" wx:for-item="sItem" wx:for-index="sIndex" wx:key="sIndex">
           <view class="container-card-vertical-item-info">
             <view class="container-card-vertical-item-info-title">
-              前屈
+              {{sItem.name}}
             </view>
             <view class="container-card-vertical-item-info-desc">
-              测量躯干向前屈曲的角度
+              {{sItem.script}}
             </view>
           </view>
-          <image class="container-card-vertical-item-image" src="/assets/logo.png"></image>
+          <image class="container-card-vertical-item-image" src="{{sItem.picUrl}}"></image>
         </view>
       </view>
     </view>

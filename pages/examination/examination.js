@@ -2,7 +2,11 @@ import { uPhysicalExam } from '../../utils/api/api'
 
 const app = getApp()
 Page({
-  data: {},
+  data: {
+    tools: [],
+    flexItems: [],
+    strengthItems: []
+  },
   onLoad: function (options) {
     this.fetchPhysicalExam()
   },
@@ -12,6 +16,11 @@ Page({
     })
       .then(response => {
         console.log(response)
+        this.setData({
+          tools: response.examTools,
+          flexItems: response.flexibilityItems,
+          strengthItems: response.strengthItems
+        })
       })
       .catch(error => {
         console.log(error)
