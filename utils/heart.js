@@ -3,8 +3,8 @@ class WebsocketHeartbeat {
     {
       miniprogram, // Taro,支付宝my,百度swan，微信wx，等等只要有相应方法，比如connectSocket等
       connectSocketParams, // 小程序connectSocket的参数
-      pingTimeout = 15000,
-      pongTimeout = 10000,
+      pingTimeout = 1000,
+      pongTimeout = 3000,
       reconnectTimeout = 2000,
       pingMsg = 'heartbeat',
       repeatLimit = null,
@@ -103,7 +103,7 @@ class WebsocketHeartbeat {
   registerHeartBeatEvent () {
     this.socketTask.onClose(() => {
       this.onClose()
-      this.reconnect()
+      // this.reconnect()   // Update Junyu 5/14: 这里取消在close的时候自动重连
     })
     this.socketTask.onError(() => {
       this.onError()
@@ -126,14 +126,24 @@ class WebsocketHeartbeat {
   }
 
   reconnect () {
-    if (this.opts.repeatLimit > 0 && this.opts.repeatLimit <= this.repeat) { return } // limit repeat the number
+    if (this.opts.repeatLimit > 0 && this.opts.repeatLimit <= this.repeat) { 
+      console.log('[websocket] limited by repeat limit')
+      return 
+    } // limit repeat the number
+    console.log('this.lockReconnect: ', this.lockReconnect)
+    console.log('this.forbidReconnect: ', this.forbidReconnect)
     if (this.lockReconnect || this.forbidReconnect) return
-    if (this.status === 'connect') return
+    // if (this.status === 'connect') return  // Update Junyu 05/14 status 无用
     this.lockReconnect = true
     this.repeat++ // 必须在lockReconnect之后，避免进行无效计数
+    console.log('[WebSocket] 尝试重连: ', this.repeat)
     this.onReconnect()
     // 没连接上会一直重连，设置延迟避免请求过多
-    setTimeout(() => {
+    this.newSocketTimeoutId = setTimeout(() => {
+      // update junyu 05/14：如果不能重连，则设置新的socket连接，关闭以前的
+      if (this.socketTask !== null) {
+        this.socketTask.close()
+      }
       this.createWebSocket()
       this.lockReconnect = false
     }, this.opts.reconnectTimeout)
@@ -144,35 +154,39 @@ class WebsocketHeartbeat {
   }
 
   heartCheck () {
-    console.log('发送心跳')
     this.heartReset()
     this.heartStart()
   }
 
   heartStart () {
+    console.log('[websocket] wew heart start')
     if (this.forbidReconnect) return // 不再重连就不再执行心跳
     this.pingTimeoutId = setTimeout(() => {
       // 这里发送一个心跳，后端收到后，返回一个心跳消息，
       // onMessage拿到返回的心跳就说明连接正常
-      console.log('发送心跳')
+      console.log('[WebSocket] Ping Time Out 发送心跳')
       this.send({
         data: this.opts.pingMsg
       })
-      // 如果超过一定时间还没重置，说明后端主动断开了
       this.pongTimeoutId = setTimeout(() => {
         // 如果onClose会执行reconnect，我们执行ws.close()就行了.如果直接执行reconnect 会触发onClose导致重连两次
-        this.socketTask.close()
+        console.log('[WebSocket] Pong Time Out')
+        this.reconnect()
+        // this.socketTask.close()
       }, this.opts.pongTimeout)
     }, this.opts.pingTimeout)
   }
 
   heartReset () {
-    clearTimeout(this.pingTimeoutId)
-    clearTimeout(this.pongTimeoutId)
+    console.log('[WebSocket] Heart Reset')
+    clearTimeout(this.pingTimeoutId)    // ping 清零
+    clearTimeout(this.pongTimeoutId)    // pong 清零
+    clearTimeout(this.newSocketTimeoutId) // 如果重连上，就不需要设置新的socket连接了
   }
 
   close (miniprogramParam) {
     // 如果手动关闭连接，不再重连
+    console.log('[WebSocket] Close connection on hand.')
     this.forbidReconnect = true
     this.heartReset()
     this.socketTask.close(miniprogramParam)

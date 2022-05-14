@@ -41,6 +41,7 @@ Page({
   bPlayingCountTime: false, // 正在播放计时器音效
   bEnded: false, // 最小化后置true
   nNowActionId: '', // 当前动作的id
+  firstConnection: true, // 只有第一次连接的时候进入课程页面
   skeleton: [[22, 20], [20, 18], [18, 16], [21, 19], [19, 17], [17, 15], [15, 16], [15, 14], [16, 14], [14, 13], [13, 12], [12, 4], [12, 5], [4, 5], [11, 9], [9, 7], [7, 5], [10, 8], [8, 6], [6, 4], [4, 1], [1, 2], [1, 3], [2, 0], [3, 0], [4, 15], [5, 16]], // [15,13],[13,11],[16,14],[14,12],[11,12],[5,11],[6,12],[5,6],[5,7],[6,8],[7,9],[8,10],[1,2],[0,1],[0,2],[1,3],[2,4],[3,5],[4,6]
   TRTC: null,
   oOptions: {},
@@ -224,7 +225,10 @@ Page({
           data: JSON.stringify({
             type: 'register_client',
             url: this.aiServerUrl
-          })
+          }),
+          success: () => {
+            console.log('[websocket] reconnection, send register client')
+          }
         })
         console.log('reconnect...')
       }
@@ -238,7 +242,10 @@ Page({
         width: app.globalData.nWidth
       }),
       success: () => {
-        this.switchStep('ing-loading')
+        if (this.firstConnection) {
+          this.firstConnection = false
+          this.switchStep('ing-loading')
+        }
       }
     })
   },
