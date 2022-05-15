@@ -1,0 +1,46 @@
+<view class="survey container">
+  <header class="container-nav" backgroundColor="#F5F5F5" title="病史采集" returnable="{{true}}"
+          titleColor="#2B2B2B"></header>
+  <view class="container-content">
+    <view class="survey-form">
+      <view class="survey-form-item" wx:for="{{surveyArray}}" wx:key="index" wx:for-index="index" wx:for-item="item">
+        <view class="survey-form-item-title">
+          {{item.title}}
+        </view>
+        <input class="survey-form-item-input"
+               wx:if="{{item.type==='fill'}}"
+               id="{{index}}"
+               placeholder="请输入"
+               bindinput="bindUserInput"
+               value="{{item.value}}"></input>
+        <radio-group class="survey-form-item-radio"
+                     wx:elif="{{item.type==='single-check'}}"
+                     id="{{index}}"
+                     bindchange="bindRadioChange"
+        >
+          <radio class="survey-form-item-radio-item" wx:for="{{item.choice}}" wx:for-item="cItem" wx:for-index="cIndex"
+                 wx:key="cIndex" value="{{cIndex}}">
+            {{cItem}}
+          </radio>
+        </radio-group>
+        <checkbox-group class="survey-form-item-check" wx:elif="{{item.type === 'multi_check'}}"
+                        bindchange="bindCheckChange" id="{{index}}"
+        >
+          <checkbox class="survey-form-item-check-item" wx:for="{{item.choice}}" wx:for-item="cItem"
+                    wx:for-index="cIndex" wx:key="cIndex">
+            {{cItem}}
+          </checkbox>
+        </checkbox-group>
+        <picker class="survey-form-item-date" wx:elif="{{item.type==='date'}}" mode="date" value="{{item.value}}"
+                bindchange="bindDateChange" id="{{index}}"
+        >
+          <view class="picker">
+            {{item.value ? item.value : '请选择'}}
+          </view>
+        </picker>
+      </view>
+      <button class="survey-form-submit" type="primary" bindtap="submitResult">提交</button>
+    </view>
+  </view>
+  <toast id="survey-toast"></toast>
+</view>

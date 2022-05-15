@@ -40,6 +40,13 @@
           "query": "",
           "launchMode": "default",
           "scene": null
+        },
+        {
+          "name": "",
+          "pathName": "pages/survey/survey",
+          "query": "",
+          "launchMode": "default",
+          "scene": null
         }
       ]
     }

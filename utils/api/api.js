@@ -10,6 +10,8 @@ const uGetStatistic = '/session/get_session_statistic'
 const uPostFeedback = '/session/feedback'
 const uAssessStatus = '/client/assess_status'
 const uPhysicalExam = '/physical_exam'
+const uGetMedicalHistoryQT = '/client/get_medical_history_qt'
+const uRegMedicalHistoryQT = '/client/reg_medical_history_qt'
 // 抛出getCourseInfo这个常量
 module.exports = {
   uPostAuth,
@@ -22,5 +24,7 @@ module.exports = {
   uGetStatistic,
   uPostFeedback,
   uAssessStatus,
-  uPhysicalExam
+  uPhysicalExam,
+  uGetMedicalHistoryQT,
+  uRegMedicalHistoryQT
 }
