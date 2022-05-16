@@ -4,10 +4,9 @@ view,header,button{box-sizing: border-box;}
 page{height:100%;}
 .container {
   height: 100%;
-  padding:0;
-  position:relative;
   font-family: PingFangSC,"Microsoft YaHei",微软雅黑,"MicrosoftJhengHei",华文细黑,STHeiti,MingLiu;
   box-sizing: border-box;
+  overflow: hidden;
 }
 .text-overflow{
   display:block;

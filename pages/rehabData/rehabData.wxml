@@ -1,0 +1,33 @@
+<view class="container">
+  <header class="container-nav" backgroundColor="#FFFFFF" title="康复训练数据" returnable="{{true}}"
+          titleColor="#2B2B2B"></header>
+  <view class="container-content">
+    <view class="rehab-info">
+      <image class="rehab-info-avatar" src="{{userPic}}"></image>
+      <view class="rehab-info-name">{{userName}}</view>
+      <view class="rehab-info-data">
+        <view class="rehab-info-data-item">
+          <view class="rehab-info-data-item-value">{{totalDays}}</view>
+          <view class="rehab-info-data-item-desc">训练天数</view>
+        </view>
+        <view class="rehab-info-data-item">
+          <view class="rehab-info-data-item-value">{{totalTime}}</view>
+          <view class="rehab-info-data-item-desc">训练时长(min)</view>
+        </view>
+        <view class="rehab-info-data-item">
+          <view class="rehab-info-data-item-value">{{totalAction}}</view>
+          <view class="rehab-info-data-item-desc">康复动作</view>
+        </view>
+      </view>
+    </view>
+    <view class="rehab-list">
+      <view class="rehab-list-item" wx:for="{{sessionList}}" wx:for-index="index" wx:for-item="item" wx:key="index">
+        <view class="rehab-list-item-title">
+          暂无标题数据字段
+        </view>
+        <view class="rehab-list-item-time">{{ item.sessionDuration }}</view>
+        <view class="rehab-list-item-action">查看训练报告<image style="margin-left:10rpx;width:21rpx;height:20rpx" src="/assets/arrow_right.png"></image></view>
+      </view>
+    </view>
+  </view>
+</view>

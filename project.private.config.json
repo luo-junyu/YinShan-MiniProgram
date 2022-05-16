@@ -47,6 +47,13 @@
           "query": "",
           "launchMode": "default",
           "scene": null
+        },
+        {
+          "name": "",
+          "pathName": "pages/rehabData/rehabData",
+          "query": "",
+          "launchMode": "default",
+          "scene": null
         }
       ]
     }

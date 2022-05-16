@@ -36,6 +36,8 @@ Page({
     this.oToast.showToast('我们正在加紧开发中哦~')
   },
   gotoExeData () {
-    this.oToast.showToast('我们正在加紧开发中哦~')
+    wx.navigateTo({
+      url: '/pages/rehabData/rehabData'
+    })
   }
 })
