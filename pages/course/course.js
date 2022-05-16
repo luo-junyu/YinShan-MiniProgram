@@ -27,7 +27,8 @@ Page({
     app.api.get({ url: uGetCourse }).then(res => {
       if (res.sessionList.length > 0) {
         let minWeek = -1
-        let data = res.sessionList.sort((a, b) => dayjs(a.sessionStartTime).isBefore(dayjs(b.sessionStartTime)))
+        let data = res.sessionList.slice()
+        data.sort((a, b) => dayjs(a.sessionStartTime).isAfter(dayjs(b.sessionStartTime)) ? 1 : -1)
         data.forEach(item => {
           const sessionWeek = dayjs(item.sessionStartTime).week()
           if (minWeek === -1) minWeek = sessionWeek - 1
@@ -47,8 +48,8 @@ Page({
       url: uAssessStatus
     })
       .then(res => {
-        const stepVarNameArray = ['medical_history_available', 'pose_assess_available', 'physical_exam_available', 'report_available']
-        const currentStep = stepVarNameArray.findIndex((item) => res[item]) // 当前步骤
+        const stepVarNameArray = ['medicalHistoryAvailable', 'poseAssessAvailable', 'physicalExamAvailable', 'reportAvailable']
+        const currentStep = stepVarNameArray.findIndex((item) => res[item]) + 1 // 当前步骤
         const reportDone = res.reportDone // 报告是否生成
         const examDone = res.physicalExamDone // 资料是否上传
         if (currentStep > -1) {

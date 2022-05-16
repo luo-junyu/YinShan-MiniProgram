@@ -1,14 +1,14 @@
 <view
   class="container"
 >
-  <header class="container-nav" backgroundColor="#F5F5F5" title="康复评估" returnable="{{false}}"
+  <header class="container-nav" backgroundColor="#F5F5F5" title="康复评估" returnable="{{true}}"
           titleColor="#2B2B2B"></header>
   <view class="container-content">
     <view class="container-card">
       <text class="container-card-title">康复评估流程</text>
       <text class="container-card-hint">评估您的运动、感觉、心理、日常生活能力，为您制定全面、科学、有效的康复训练方案。</text>
-      <view wx:for="{{stepArray}}" wx:for-item="item" wx:for-index="index" wx:key="index"
-            class="assessment-item {{currentStep === index + 1 ? 'active': ''}}">
+      <view wx:for="{{stepArray}}" wx:for-item="item" wx:for-index="index" wx:key="index" data-index="{{index}}"
+            class="assessment-item {{currentStep === index + 1 ? 'active': ''}}" bindtap="handleStepItemClicked">
         <view class="assessment-item-content">
           <view wx:if="{{item.useNoIcon}}"
                 class="assessment-item-content-no {{currentStep === index + 1 ? 'active': ''}}">{{index + 1}}
@@ -32,7 +32,7 @@
               <image
                 wx:else
                 class="assessment-item-content-next"
-                src="/assets/assess_report_icon{{item.finished ? '_done': currentStep === index + 1 ? '_ing': ''}}.png">
+                src="/assets/assess_report_icon{{currentStep === 4 ? '_ing': item.finished ? '_done' : ''}}.png">
               </image>
               <view wx:if="{{item.skipable && currentStep <= index + 1}}" class="assessment-item-content-skip {{currentStep === index + 1 ? 'active': ''}}">
                 无资料则<text class="assessment-item-content-skip-action {{currentStep === index + 1 ? 'active': ''}}">跳过</text>

@@ -4,5 +4,6 @@
     "toast": "/components/toast/toast",
     "auth": "/components/auth/auth",
     "modalView": "/components/modal/modal"
-  }
+  },
+  "disableScroll": true
 }

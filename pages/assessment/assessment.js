@@ -6,14 +6,16 @@ Page({
         required: true,
         desc: '了解您的症状、既往病史、心理情况等',
         useNoIcon: true,
-        skipable: false
+        skipable: false,
+        route: '/pages/survey/survey'
       },
       {
         title: '体格检查',
         required: true,
         desc: '评估您的腰部活动度、腰部核心稳定力量水平',
         useNoIcon: true,
-        skipable: false
+        skipable: false,
+        route: '/pages/examination/examination'
       },
       {
         title: '资料上传',
@@ -36,11 +38,20 @@ Page({
   },
   onLoad: function (options) {
     const temp = this.data.stepArray.slice()
-    temp[2].finished = options.examDone
-    temp[3].finished = options.reportDone
+    temp[2].finished = options.examDone === 'true'
+    temp[3].finished = options.reportDone === 'true'
     this.setData({
       currentStep: +options.currentStep,
       stepArray: temp
     })
+  },
+  handleStepItemClicked (e) {
+    const tapStep = e.currentTarget.dataset.index
+    if (tapStep + 1 !== this.data.currentStep) return
+    if (this.data.stepArray[tapStep].route) {
+      wx.navigateTo({
+        url: this.data.stepArray[tapStep].route
+      })
+    }
   }
 })

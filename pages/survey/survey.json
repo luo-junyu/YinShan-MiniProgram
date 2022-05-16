@@ -3,5 +3,6 @@
     "header": "/components/header/header",
     "toast": "/components/toast/toast",
     "toast": "/components/toast/toast"
-  }
+  },
+  "disableScroll": true
 }
