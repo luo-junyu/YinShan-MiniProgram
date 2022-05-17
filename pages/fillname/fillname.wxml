@@ -5,6 +5,8 @@
   <text class="text-label">温馨提示：姓名一旦填写即不可更改，请认真填写。</text>
   <input class="weui-input" value="{{inputValue}}" auto-focus type="text" bindinput="bindKeyInput"
          placeholder="请输入真实姓名"/>
+  <input class="weui-input" value="{{inviteCode}}" type="text" bindinput="bindCodeInput"
+         placeholder="请输入您的邀请码"/>
   <view class="avatar-area">
     <image src="{{avatarImg}}" class="avatar-image default-pic"></image>
     <button class="check-btn" open-type="chooseAvatar" bindchooseavatar="handleAvatar">获取用户信息</button>
