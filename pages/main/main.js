@@ -719,12 +719,18 @@ Page({
       // app.globalData.oAudio.play();
       this.oVideo.play()
       const tempAction = this.data.aAction[this.data.nAction] || {}
+      app.globalData.oWs.send({
+        data: JSON.stringify({
+          type: 'resume_class'
+        })
+      })
       console.log('发送信息', tempAction)
       app.globalData.oWs.send({
         data: JSON.stringify({
           type: 'change_action',
           // action_name: 'tunqiao',//qtemp
-          action_id: tempAction.actionRuleIndex
+          action_id: tempAction.actionRuleIndex,
+          db_action_id: tempAction.actionId,
         })
       })
     })

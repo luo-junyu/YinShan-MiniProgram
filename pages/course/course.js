@@ -25,6 +25,7 @@ Page({
   oToast: null,
   onShow () {
     app.api.get({ url: uGetCourse }).then(res => {
+      app.globalData.courseId = res.courseId
       if (res.sessionList.length > 0) {
         const minWeek = dayjs(res.courseStartTime).week()
         let data = res.sessionList.sort((a, b) => dayjs(b.sessionStartTime).isBefore(dayjs(a.sessionStartTime)))

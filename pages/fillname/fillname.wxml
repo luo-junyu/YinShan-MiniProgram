@@ -9,7 +9,7 @@
          placeholder="请输入您的邀请码"/>
   <view class="avatar-area">
     <image src="{{avatarImg}}" class="avatar-image default-pic"></image>
-    <button class="check-btn" open-type="chooseAvatar" bindchooseavatar="handleAvatar">获取用户信息</button>
+    <button class="check-btn" open-type="chooseAvatar" bindchooseavatar="handleAvatar">获取头像信息</button>
   </view>
   <button class="check-btn" bindtap="handleTap">保存</button>
   <auth id='auth'></auth>
