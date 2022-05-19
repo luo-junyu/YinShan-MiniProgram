@@ -17,7 +17,8 @@
     "pages/examination/examHorizontal",
     "pages/examination/examVertical",
     "pages/survey/survey",
-    "pages/rehabData/rehabData"
+    "pages/rehabData/rehabData",
+    "pages/schedule/schedule"
   ],
   "window":{
     "backgroundTextStyle":"light",

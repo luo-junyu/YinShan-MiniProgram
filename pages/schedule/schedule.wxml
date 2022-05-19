@@ -1,0 +1,24 @@
+<view class="container">
+  <header class="container-nav" backgroundColor="#F5F5F5" title="康复训练疗程课表" returnable="{{true}}"
+          titleColor="#2B2B2B"></header>
+  <view class="container-content calendar">
+    <view class="calendar-header">
+      <view class="calendar-header-item" wx:for="{{week}}" wx:for-index="index" wx:for-item="item" wx:key="index">
+        {{item}}
+      </view>
+    </view>
+    <view class="calendar-content">
+      <view class="calendar-month" wx:for="{{monthData}}" wx:key="index" wx:for-item="item" wx:for-index="index">
+        <view class="calendar-month-title">{{item.month}}</view>
+        <view class="calendar-month-content">
+          <view class="calendar-month-item" wx:for="{{item.days}}" wx:for-item="dItem" wx:for-index="dIndex"
+                wx:key="dIndex">
+            <view wx:if="{{dItem.currentMonth}}">{{ dItem.dayValue }}</view>
+            <image wx:if="{{dItem.currentMonth && dItem.status === 1}}" src="/assets/schedule_status_done.png"
+                   class="calendar-month-item-icon"></image>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>
