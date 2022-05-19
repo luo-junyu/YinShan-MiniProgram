@@ -27,6 +27,7 @@ Page({
     if (user && user.phoneNumber && user.clientName) {
       app.globalData.clientId = String(user.clientId)
       this.setData({ sLoged: 'loged' })
+      this.fnLogin()
     } else {
       this.setData({ sLoged: 'unloged' })
     }

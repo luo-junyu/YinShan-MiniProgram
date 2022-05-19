@@ -193,18 +193,19 @@ Page({
       miniprogram: wx,
       connectSocketParams: {
         url: app.globalData.wsUrl,
-        repeatLimit: 10
+        repeatLimit: 30
       }
     }).then(task => {
       app.globalData.oWs = task
       task.onOpen = () => { // 钩子函数
-        console.log('open------------------------------------------------------------------------------')
+        console.log('[WebSocket] open a new ws connection')
         app.globalData.oWs.send({
           data: JSON.stringify({
             type: 'register_client',
             url: this.aiServerUrl
           }),
           success: () => {
+            console.log('[WebSocket] reg ai service ok!')
             // 向Socket Server注册后发送当前手机屏幕分辨率
             this.sendResolution()
           }
@@ -221,16 +222,16 @@ Page({
         this.handleReceiveMsg(res.data)
       }
       task.onReconnect = () => { // 钩子函数
-        app.globalData.oWs.send({
-          data: JSON.stringify({
-            type: 'register_client',
-            url: this.aiServerUrl
-          }),
-          success: () => {
-            console.log('[websocket] reconnection, send register client')
-          }
-        })
-        console.log('reconnect...')
+        // app.globalData.oWs.send({
+        //   data: JSON.stringify({
+        //     type: 'register_client',
+        //     url: this.aiServerUrl
+        //   }),
+        //   success: () => {
+        //     console.log('[websocket] reconnection, send register client')
+        //   }
+        // })
+        console.log('onReconnect...')
       }
     })
   },
@@ -454,6 +455,13 @@ Page({
         }
       )
     })
+    if (app.globalData.oWs.status === 'loss') {
+      app.globalData.oWs.close()
+      this.exitRoom()
+      wx.redirectTo({
+        url: '/pages/end/end'
+      })
+    }
   },
   // 结束课程
   endClass () {
@@ -477,6 +485,13 @@ Page({
         }
       )
     })
+    if (app.globalData.oWs.status === 'loss') {
+      app.globalData.oWs.close()
+      this.exitRoom()
+      wx.redirectTo({
+        url: '/pages/end/end'
+      })
+    }
   },
   // trtc事件监听
   bindTRTCRoomEvent () {

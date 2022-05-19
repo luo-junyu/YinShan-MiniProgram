@@ -40,7 +40,7 @@
             <view class="class-week">第{{key}}周</view>
             <view class="class-li-list">
               <!-- 以课为颗粒度的列表 -->
-              <view class="class-li-li {{citem.sessionAvailable ? 'class-active' : '' }}" data-week="{{key}}"
+              <view class="class-li-li {{citem.sessionAvailable ? 'class-active' : '' }}" data-week="{{citem.week}}"
                     data-no="{{key}}" data-sessionid="{{citem.sessionId}}" data-sessionname="{{citem.sessionName}}"
                     data-active="{{citem.sessionAvailable}}" wx:for="{{item}}" wx:for-index="key"
                     wx:for-item="citem" wx:key="id" bindtap="handleTapClass">

@@ -27,9 +27,9 @@ App({
     })
     view.onShareAppMessage = function () {
       return {
-        title: '银杉1健康',
-        path: '/pages/login/login?courseId=1',
-        imageUrl: 'https://image.baidu.com/search/detail?ct=503316480&z=undefined&tn=baiduimagedetail&ipn=d&word=%E4%B9%9D%E5%AF%A8%E6%B2%9F&step_word=&ie=utf-8&in=&cl=2&lm=-1&st=undefined&hd=undefined&latest=undefined&copyright=undefined&cs=1100170378,2263328691&os=1912318745,480731773&simid=3495939032,395514222&pn=0&rn=1&di=7077204560107798529&ln=1799&fr=&fmq=1650450547291_R&fm=&ic=undefined&s=undefined&se=&sme=&tab=0&width=undefined&height=undefined&face=undefined&is=0,0&istype=0&ist=&jit=&bdtype=0&spn=0&pi=0&gsm=0&objurl=https%3A%2F%2Fgimg2.baidu.com%2Fimage_search%2Fsrc%3Dhttp%253A%252F%252Fdpic.tiankong.com%252Fpl%252Fmf%252FQJ9125899859.jpg%26refer%3Dhttp%253A%252F%252Fdpic.tiankong.com%26app%3D2002%26size%3Df9999%2C10000%26q%3Da80%26n%3D0%26g%3D0n%26fmt%3Dauto%3Fsec%3D1653042547%26t%3Dc4c3d015759ca5f5ca86a23a67461c3b&rpstart=0&rpnum=0&adpicid=0&nojc=undefined&dyTabStr=MCwzLDEsNiw1LDQsOCw3LDIsOQ%3D%3D'
+        title: '肩颈腰腿疼运动康复，就来银杉健康',
+        path: '/pages/login/login',
+        imageUrl: 'https://kangfu-action-video-1258481652.cos.ap-beijing.myqcloud.com/picture/appsharepage.png'
       }
     }
 
@@ -57,7 +57,7 @@ App({
     // wsUrl: 'ws://127.0.0.1:8181',
     oWs: '',
     oAudio: null,
-    sCountAudioUrl: 'https://downsc.chinaz.net/Files/DownLoad/sound1/201806/10278.wav',
+    sCountAudioUrl: '',
     courseId: 1, // 总课程id
     clientId: '', // 用户id
     sessionId: '', // 课程id

@@ -8,7 +8,6 @@ class WebsocketHeartbeat {
       reconnectTimeout = 2000,
       pingMsg = 'heartbeat',
       repeatLimit = null,
-      status = ''
     },
     { resolve, reject }
   ) {
@@ -44,6 +43,7 @@ class WebsocketHeartbeat {
     this.onReconnect = () => {}
 
     this.createWebSocket(resolve)
+    this.status = 'connect'
   }
 
   createWebSocket (resolve) {
@@ -111,13 +111,14 @@ class WebsocketHeartbeat {
     })
     this.socketTask.onOpen(() => {
       this.repeat = 0
-      console.log('copnnect')
+      console.log('[websocket] onOpen')
       this.status = 'connect'
       this.onOpen()
       // 心跳检测重置
       this.heartCheck()
     })
     this.socketTask.onMessage((event) => {
+      this.status = 'connect'
       this.onMessage(event)
       // 如果获取到消息，心跳检测重置
       // 拿到任何消息都说明当前连接是正常的
@@ -133,11 +134,10 @@ class WebsocketHeartbeat {
     console.log('this.lockReconnect: ', this.lockReconnect)
     console.log('this.forbidReconnect: ', this.forbidReconnect)
     if (this.lockReconnect || this.forbidReconnect) return
-    // if (this.status === 'connect') return  // Update Junyu 05/14 status 无用
     this.lockReconnect = true
     this.repeat++ // 必须在lockReconnect之后，避免进行无效计数
     console.log('[WebSocket] 尝试重连: ', this.repeat)
-    this.onReconnect()
+    // this.onReconnect()
     // 没连接上会一直重连，设置延迟避免请求过多
     this.newSocketTimeoutId = setTimeout(() => {
       // update junyu 05/14：如果不能重连，则设置新的socket连接，关闭以前的
@@ -159,7 +159,7 @@ class WebsocketHeartbeat {
   }
 
   heartStart () {
-    console.log('[websocket] wew heart start')
+    console.log('[websocket] new heart start')
     if (this.forbidReconnect) return // 不再重连就不再执行心跳
     this.pingTimeoutId = setTimeout(() => {
       // 这里发送一个心跳，后端收到后，返回一个心跳消息，
@@ -171,6 +171,7 @@ class WebsocketHeartbeat {
       this.pongTimeoutId = setTimeout(() => {
         // 如果onClose会执行reconnect，我们执行ws.close()就行了.如果直接执行reconnect 会触发onClose导致重连两次
         console.log('[WebSocket] Pong Time Out')
+        this.status = 'loss'  // 标记为失联
         this.reconnect()
         // this.socketTask.close()
       }, this.opts.pongTimeout)
