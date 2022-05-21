@@ -1,14 +1,9 @@
 /// index.js
 import { uAssessStatus, uGetCourse } from '../../utils/api/api.js'
+import { groupBy } from '../../utils/util'
 const dayjs = require('../../utils/dayjs/dayjs.min')
 const weekOfYear = require('../../utils/dayjs/plugin/weekOfYear')
 dayjs.extend(weekOfYear)
-const groupBy = function (xs, key) {
-  return xs.reduce(function (rv, x) {
-    (rv[x[key]] = rv[x[key]] || []).push(x)
-    return rv
-  }, {})
-}
 // 获取应用实例
 const app = getApp()
 Page({
@@ -61,7 +56,10 @@ Page({
     // this.oAuth.loginASession(this.getCourseInfo)
   },
   handleCalendar () {
-    this.oToast.showToast('我们正在加紧开发中哦~')
+    wx.setStorageSync('sessionList', this.data.sessionList)
+    wx.navigateTo({
+      url: '/pages/schedule/schedule'
+    })
   },
   handleTapClass (e) {
     console.log('点击卡片')

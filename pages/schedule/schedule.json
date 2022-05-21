@@ -1,6 +1,6 @@
 {
   "usingComponents": {
-    "calendar": "/components/calendar/index",
-    "header": "/components/header/header"
+    "header": "/components/header/header",
+    "van-dialog": "@vant/weapp/dialog/index"
   }
 }

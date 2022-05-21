@@ -1,3 +1,10 @@
+const groupBy = function (xs, key) {
+  return xs.reduce(function (rv, x) {
+    (rv[x[key]] = rv[x[key]] || []).push(x)
+    return rv
+  }, {})
+}
+
 const formatTime = date => {
   const year = date.getFullYear()
   const month = date.getMonth() + 1
@@ -39,6 +46,7 @@ const parseData = (str) => {
   }
 }
 module.exports = {
+  groupBy,
   formatTime,
   findWeek,
   parseData

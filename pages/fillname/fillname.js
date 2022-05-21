@@ -5,7 +5,8 @@ const app = getApp()
 Page({
   data: {
     inputValue: '',
-    avatarImg: ''
+    avatarImg: '',
+    inviteCode: '',
   },
   phone: '',
   oAuth: null,
@@ -16,6 +17,9 @@ Page({
   },
   bindKeyInput (e) {
     this.setData({ inputValue: e.detail.value })
+  },
+  bindCodeInput (e) {
+    this.setData({ inviteCode: e.detail.value })
   },
   handleAvatar (e) {
     const originPath = e.detail.avatarUrl
@@ -121,16 +125,20 @@ Page({
   // },
   handleTap () {
     if (!/^[\u4e00-\u9fa5]{2,6}$/.test(this.data.inputValue)) {
+      console.log('name: ', this.data.inputValue)
       this.oToast.showToast('请输入真实姓名')
     } else if (!this.data.avatarImg) {
       this.oToast.showToast('请设置头像')
+    } else if (this.data.inviteCode == '') {
+      this.oToast.showToast('请输入邀请码')
     } else {
       app.api.post({
         url: uSignUp,
         data: {
           clientName: this.data.inputValue,
           phoneNumber: this.phone,
-          avatarBase64: this.avatarbase64
+          avatarBase64: this.avatarbase64,
+          inviteCode: this.data.inviteCode
         }
       }).then(res => {
         this.oToast.showToast('保存成功')

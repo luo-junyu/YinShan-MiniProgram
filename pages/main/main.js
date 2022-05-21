@@ -193,18 +193,19 @@ Page({
       miniprogram: wx,
       connectSocketParams: {
         url: app.globalData.wsUrl,
-        repeatLimit: 10
+        repeatLimit: 30
       }
     }).then(task => {
       app.globalData.oWs = task
       task.onOpen = () => { // 钩子函数
-        console.log('open------------------------------------------------------------------------------')
+        console.log('[WebSocket] open a new ws connection')
         app.globalData.oWs.send({
           data: JSON.stringify({
             type: 'register_client',
             url: this.aiServerUrl
           }),
           success: () => {
+            console.log('[WebSocket] reg ai service ok!')
             // 向Socket Server注册后发送当前手机屏幕分辨率
             this.sendResolution()
           }
@@ -221,16 +222,16 @@ Page({
         this.handleReceiveMsg(res.data)
       }
       task.onReconnect = () => { // 钩子函数
-        app.globalData.oWs.send({
-          data: JSON.stringify({
-            type: 'register_client',
-            url: this.aiServerUrl
-          }),
-          success: () => {
-            console.log('[websocket] reconnection, send register client')
-          }
-        })
-        console.log('reconnect...')
+        // app.globalData.oWs.send({
+        //   data: JSON.stringify({
+        //     type: 'register_client',
+        //     url: this.aiServerUrl
+        //   }),
+        //   success: () => {
+        //     console.log('[websocket] reconnection, send register client')
+        //   }
+        // })
+        console.log('onReconnect...')
       }
     })
   },
@@ -357,6 +358,7 @@ Page({
         this.playAudioList()
       } else if (data.type === 'finish_class_confirm') {
         console.log('收到结束课程确认消息')
+        app.globalData.oWs.forbidConnect()
         app.globalData.oWs.close()
         this.exitRoom()
         wx.redirectTo({
@@ -454,6 +456,14 @@ Page({
         }
       )
     })
+    if (app.globalData.oWs.status === 'loss') {
+        app.globalData.oWs.forbidConnect()
+      app.globalData.oWs.close()
+      this.exitRoom()
+      wx.redirectTo({
+        url: '/pages/end/end'
+      })
+    }
   },
   // 结束课程
   endClass () {
@@ -477,6 +487,14 @@ Page({
         }
       )
     })
+    if (app.globalData.oWs.status === 'loss') {
+        app.globalData.oWs.forbidConnect()
+      app.globalData.oWs.close()
+      this.exitRoom()
+      wx.redirectTo({
+        url: '/pages/end/end'
+      })
+    }
   },
   // trtc事件监听
   bindTRTCRoomEvent () {
@@ -719,12 +737,18 @@ Page({
       // app.globalData.oAudio.play();
       this.oVideo.play()
       const tempAction = this.data.aAction[this.data.nAction] || {}
+      app.globalData.oWs.send({
+        data: JSON.stringify({
+          type: 'resume_class'
+        })
+      })
       console.log('发送信息', tempAction)
       app.globalData.oWs.send({
         data: JSON.stringify({
           type: 'change_action',
           // action_name: 'tunqiao',//qtemp
-          action_id: tempAction.actionRuleIndex
+          action_id: tempAction.actionRuleIndex,
+          db_action_id: tempAction.actionId,
         })
       })
     })
