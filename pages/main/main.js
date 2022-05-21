@@ -212,7 +212,7 @@ Page({
         })
       }
       task.onClose = () => { // 钩子函数
-        console.log('close')
+        console.log('onClose')
       }
       task.onError = e => { // 钩子函数
         console.log('onError：', e)
@@ -301,7 +301,7 @@ Page({
     const { data, type } = parseData(str)
     if (type === 'obj') {
       // 发送回来的是json
-      console.log('接收到的:', data)
+      // console.log('接收到的:', data)
       if (data.type === 'update_client_info') {
         this.drawDebug(data.cur_pose)
         // this.sStatus = 'init';
@@ -358,6 +358,7 @@ Page({
         this.playAudioList()
       } else if (data.type === 'finish_class_confirm') {
         console.log('收到结束课程确认消息')
+        app.globalData.oWs.forbidConnect()
         app.globalData.oWs.close()
         this.exitRoom()
         wx.redirectTo({
@@ -456,6 +457,7 @@ Page({
       )
     })
     if (app.globalData.oWs.status === 'loss') {
+      app.globalData.oWs.forbidConnect()
       app.globalData.oWs.close()
       this.exitRoom()
       wx.redirectTo({
@@ -486,6 +488,7 @@ Page({
       )
     })
     if (app.globalData.oWs.status === 'loss') {
+      app.globalData.oWs.forbidConnect()
       app.globalData.oWs.close()
       this.exitRoom()
       wx.redirectTo({

@@ -58,7 +58,7 @@
                           data-week="{{key}}" data-no="{{key}}" data-sessionid="{{citem.sessionId}}"
                           data-sessionname="{{citem.sessionName}}">查看训练报告<image class="goto-report-indicator" src="/assets/arrow_right.png"></image></view>
                     <button class="class-start-btn" wx:if="{{citem.sessionAvailable && citem.cslId === 0}}"
-                            catchtap="startClass" data-week="{{item.nWeek}}" data-no="{{key}}"
+                            catchtap="startClass" data-week="{{citem.week}}" data-no="{{key}}"
                             data-sessionid="{{citem.sessionId}}" data-sessionname="{{citem.sessionName}}">开始训练
                     </button>
                   </view>
