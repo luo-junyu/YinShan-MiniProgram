@@ -305,12 +305,19 @@ Page({
       if (data.type === 'update_client_info') {
         this.drawDebug(data.cur_pose)
         // this.sStatus = 'init';
-        if (!this.bPlayingCountTime && data.cur_duration_ratio > 0) {
-          this.bPlayingCountTime = true
-          this.oCountAudio.play()
-        } else if (this.bPlayingCountTime && data.cur_duration_ratio === 0) {
-          this.bPlayingCountTime = false
-          this.oCountAudio.stop()
+        if (!this.bPlayingCountTime) {
+          if (data.cur_duration_ratio > 0 && data.cur_duration_ratio < 100) {
+            this.bPlayingCountTime = true
+            this.oCountAudio.play()
+          }
+        } else {
+          if (data.cur_duration_ratio === 0) {
+            this.bPlayingCountTime = false
+            this.oCountAudio.stop()
+          } else if (data.cur_duration_ratio >= 100) {
+            this.bPlayingCountTime = false
+            this.oCountAudio.stop()
+          }
         }
         this.setData({
           oExeing: data
@@ -369,6 +376,7 @@ Page({
   },
   // 存入音频进列表
   inputAudio (data) {
+    console.log('inputAudio: ', data)
     if (this.data.aAudioUrl.length === 0) {
       this.data.aAudioUrl.push(data)
       return

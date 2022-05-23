@@ -6,7 +6,7 @@
   <view class="num">
     <view wx:if="{{type === 'num'}}"><text>{{current}}</text>/<text>{{total}}</text>
     </view>
-    <view wx:if="{{type === 'time'}}"><text>{{Utils.qFormatZero(current)}}</text>"
+    <view wx:if="{{type === 'time'}}"><text>{{current}}</text>"
     </view>
   </view>
 </view>

@@ -29,7 +29,7 @@
   </view>
   <view class="process-area" style="display:{{showCircle ? 'block' : 'none'}}">
     <circle id="counttime" type="time" draw='counttime' r='115' cs='#F08742' ce='#F08742'
-            style="visibility:{{aAction[nAction].actionType ? 'hidden' : 'visible'}}" current="{{oExeing.cur_duration}}"
+            style="display:{{aAction[nAction].actionType ? 'none' : 'block'}}" current="{{oExeing.cur_duration}}"
             total="{{oExeing.all_duration}}" ratio="{{oExeing.cur_duration_ratio}}"></circle>
     <circle id="countnum" type="num" draw='countnum' r='115' cs='#16B297' ce='#16B297'
             current="{{oExeing.finish_count}}" total="{{oExeing.all_count}}"
