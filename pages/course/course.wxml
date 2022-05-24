@@ -74,12 +74,15 @@
   <toast id='toast'></toast>
 </view>
 <wxs module="Utils">
+  var paddingZero = function (s) {
+    return  s < 10 ? '0' + s : s
+  }
   var transTime = function (sDate) {
     if (sDate) {
       sDate = sDate.replace(getRegExp('T|\..*$', 'g'), ' ');
       sDate = sDate.replace(getRegExp('-', 'g'), '/');
       var date = getDate(sDate);
-      return (date.getMonth() + 1) + '月' + date.getDate() + '日 ' + date.getHours() + ':' + date.getMinutes();
+      return (date.getMonth() + 1) + '月' + date.getDate() + '日 ' + date.getHours() + ':' + paddingZero(date.getMinutes());
     } else {
       return ''
     }

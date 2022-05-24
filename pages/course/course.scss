@@ -2,7 +2,7 @@
   height: 100vh;
   display: flex;
   flex-direction: column;
-  background: linear-gradient(180deg, #E3FBF7, #F5F5F5);
+  background: linear-gradient(180deg, #E3FBF7, #F5F5F5 40%);
 
   &-nav {
     flex: 0 0 auto;
@@ -138,6 +138,8 @@
   font-size: 24rpx;
   line-height: 1;
   margin-top: 12rpx;
+  color:#252829;
+  font-weight: lighter;
 }
 
 .class-area {
@@ -210,7 +212,7 @@
                 line-height: 52rpx;
                 padding: 0;
                 text-align: center;
-                font-size: 24rpx;
+                font-size: 26rpx;
                 color: #fff;
                 background: #16b297;
                 margin-left: 0;

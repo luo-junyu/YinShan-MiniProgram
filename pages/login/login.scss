@@ -51,13 +51,15 @@
       color: #fff;
       background: #16b297;
       border-radius: 10rpx;
+      height: 96rpx;
+      line-height: 96rpx;
     }
 
     .contract {
       /* 单选按钮样式*/
       display: flex;
       align-items: center;
-      justify-content: center;
+      justify-content: flex-start;
       margin-top: 44rpx;
       font-size: 22rpx;
       color: #464f4c;
@@ -94,6 +96,8 @@
 
       .contract-content {
         display: flex;
+        color: #464F4C;
+        font-weight: lighter;
       }
     }
   }
