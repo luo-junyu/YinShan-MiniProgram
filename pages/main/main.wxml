@@ -13,19 +13,22 @@
 <view class="ing-container" style="visibility :{{Utils.qIndexOf(sStep,'ing') !== -1 ?  'visible':'hidden'}}">
   <!--加载信息 采用start接口返回的信息 -->
   <view class="ing-loading" style="visibility :{{sStep === 'ing-loading'? 'visible':'hidden'}}">
-    <view class="loading-title">第{{nAction + 1}}个动作</view>
-    <view class="loading-name">{{aAction[nAction].actionName}}</view>
-    <view class="loading-detail">{{aAction[nAction].actionScript}}</view>
-    <view class="loading-bar {{startLoading ? 'loaded-bar' : 'empty-bar'}}" bindtransitionend="handleTransEnd"></view>
+    <view class="loading-back"></view>
+    <view class="loading-content">
+      <view class="loading-title">第{{nAction + 1}}个动作</view>
+      <view class="loading-name">{{aAction[nAction].actionName}}</view>
+      <view class="loading-detail">{{aAction[nAction].actionScript}}</view>
+      <view class="loading-bar {{startLoading ? 'loaded-bar' : 'empty-bar'}}" bindtransitionend="handleTransEnd"></view>
+    </view>
   </view>
   <!-- 左上角课程简略信息 采用start接口返回的信息-->
-  <view class="class-info">
+  <view class="class-info {{needBlur ? 'need-blur': ''}}">
     <view class="class-title">{{aAction[nAction].actionName}}</view>
     <view class="class-detail">{{(nAction + 1) + '/' + aAction.length}}</view>
   </view>
   <view class="btn-area">
-    <button class="btn-explain" bindtap="explainAction">动作讲解</button>
-    <button class="btn-pause" bindtap="pauseAction">暂停</button>
+    <button class="btn-explain {{needBlur ? 'need-blur': ''}}" bindtap="explainAction">动作讲解</button>
+    <button class="btn-pause {{needBlur ? 'need-blur': ''}}" bindtap="pauseAction">暂停</button>
   </view>
   <view class="process-area" style="display:{{showCircle ? 'block' : 'none'}}">
     <circle id="counttime" type="time" draw='counttime' r='115' cs='#F08742' ce='#F08742'
@@ -41,7 +44,7 @@
   <!-- 训练中 -->
 </view>
 <live-pusher style="visibility:{{bShowLivePusher?'visible':'hidden'}}"
-             class="pusher {{bSmallPusher ? 'small' : ''}}"
+             class="pusher {{bSmallPusher ? 'small' : ''}} {{needBlur ? 'need-blur': ''}}"
              url="{{pusher.url}}"
              mode="{{pusher.mode}}"
              autopush="{{pusher.autopush}}"
@@ -80,11 +83,14 @@
              bindbgmcomplete="_pusherBGMCompleteHandler"
              bindaudiovolumenotify="_pusherAudioVolumeNotify"
 />
-<canvas id='debug-canvas' type="2d" class="debug-canvas small"
+<canvas id='debug-canvas' type="2d" class="debug-canvas small {{needBlur ? 'need-blur': ''}}"
         style="visibility:{{bShowDebug? 'visible':'hidden'}}"></canvas>
-<video id="main-video" src="{{sVideoUrl}}" autoplay="{{false}}" style="display:{{bShowVideo?'block':'none'}}"
-       bindended="handleVideoEnded" loop="{{true}}" show-center-play-btn="{{false}}" object-fit="cover" muted="{{true}}"
-       controls="{{bShowVideoControl}}" class=""></video>
+<view class="main-video">
+  <video id="main-video" src="{{sVideoUrl}}" autoplay="{{false}}" style="display:{{bShowVideo?'block':'none'}}"
+         bindended="handleVideoEnded" loop="{{true}}" show-center-play-btn="{{false}}" object-fit="cover" muted="{{true}}"
+         controls="{{bShowVideoControl}}" class="main-video-content {{needBlur ? 'need-blur': ''}}"></video>
+  <view class="main-video-mask" wx:if="{{bShowVideo}}"></view>
+</view>
   <!-- <audio id="main-audio" src="{{sAudioUrl}}" /> -->
 <toast id='toast'></toast>
 <pause id='pause' bindresume="resumeAction" bindend="endClass" bindnext="nextAction"></pause>

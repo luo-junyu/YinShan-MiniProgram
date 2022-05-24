@@ -35,12 +35,13 @@
 
   .pause-title {
     font-size: tovmin(38);
-    font-weight: bold;
     color: #fff;
-
+    margin-top:tovmin(50);
   }
 
   .btn-end {
+    margin-top: tovmin(20);
+    margin-right: tovmin(180);
     .image-area {
       width: tovmin(190);
       height: tovmin(190);
@@ -54,6 +55,9 @@
 
     .btn-title {
     }
+    .small {
+      margin-top:tovmin(70);
+    }
   }
 
   .btn-exe {
@@ -65,6 +69,7 @@
       .btn-image {
         width: tovmin(68);
         height: tovmin(84);
+        margin-left: tovmin(9);
       }
     }
 
@@ -73,6 +78,8 @@
   }
 
   .btn-next {
+    margin-top: tovmin(20);
+    margin-left: tovmin(180);
     .image-area {
       width: tovmin(190);
       height: tovmin(190);
@@ -85,6 +92,9 @@
     }
 
     .btn-title {
+    }
+    .small {
+      margin-top:tovmin(70);
     }
   }
 
@@ -107,12 +117,12 @@
   }
 
   .dialog-content {
-    padding: tovmin(40) tovmin(40) tovmin(30) tovmin(40);
+    padding: tovmin(30) tovmin(40);
 
     .dialog-text {
       color: #2b2b2b;
       line-height: tovmin(40);
-      font-weight: 100;
+      font-weight: lighter;
       font-size: tovmin(28);
     }
 
@@ -123,13 +133,12 @@
       width: 100%;
       display: flex;
       font-size: tovmin(28);
-      font-weight: 400;
       color: #2b2b2b;
-      line-height: 1;
+      line-height: tovmin(84);
+      height: tovmin(84);
 
       view {
         width: 50%;
-        padding-bottom: tovmin(30);
         text-align: center;
       }
     }

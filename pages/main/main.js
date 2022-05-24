@@ -29,13 +29,13 @@ Page({
     localAudio: false,
     localVideo: false,
     bSmallPusher: true,
-    bShowDebug: true,
-    // 课程中相关数据
+    bShowDebug: true, // 课程中相关数据
     aAction: [],
     oExeing: {}, // websocket返回的数据
     sEncourage: '', // 激励文
     nAction: 0, // 当前动作,
-    showCircle: true// 展示两个圈
+    showCircle: true, // 展示两个圈
+    needBlur: false// 需要高斯模糊背景
   },
   bFinished: true, // 一组动作是否结束
   bPlayingCountTime: false, // 正在播放计时器音效
@@ -63,18 +63,7 @@ Page({
     fair: 'https://kangfu-action-video-1258481652.cos.ap-beijing.myqcloud.com/audio/sound-effect/fair.mp3'
   },
   backgroundAudioUrl: 'https://kangfu-action-video-1258481652.cos.ap-beijing.myqcloud.com/audio/background/meihaodeyitian.mp3',
-  idxAudioUrl: [
-    'https://kangfu-action-video-1258481652.cos.ap-beijing.myqcloud.com/audio/xuhao/diyigedongzuo.m4a',
-    'https://kangfu-action-video-1258481652.cos.ap-beijing.myqcloud.com/audio/xuhao/diergedongzuo.m4a',
-    'https://kangfu-action-video-1258481652.cos.ap-beijing.myqcloud.com/audio/xuhao/disangedongzuo.m4a',
-    'https://kangfu-action-video-1258481652.cos.ap-beijing.myqcloud.com/audio/xuhao/disigedongzuo.m4a',
-    'https://kangfu-action-video-1258481652.cos.ap-beijing.myqcloud.com/audio/xuhao/diwugedongzuo.m4a',
-    'https://kangfu-action-video-1258481652.cos.ap-beijing.myqcloud.com/audio/xuhao/diliugedongzuo.m4a',
-    'https://kangfu-action-video-1258481652.cos.ap-beijing.myqcloud.com/audio/xuhao/diqigedongzuo.m4a',
-    'https://kangfu-action-video-1258481652.cos.ap-beijing.myqcloud.com/audio/xuhao/dibagedongzuo.m4a',
-    'https://kangfu-action-video-1258481652.cos.ap-beijing.myqcloud.com/audio/xuhao/dijiugedongzuo.m4a',
-    'https://kangfu-action-video-1258481652.cos.ap-beijing.myqcloud.com/audio/xuhao/dishigedongzuo.m4a'
-  ],
+  idxAudioUrl: ['https://kangfu-action-video-1258481652.cos.ap-beijing.myqcloud.com/audio/xuhao/diyigedongzuo.m4a', 'https://kangfu-action-video-1258481652.cos.ap-beijing.myqcloud.com/audio/xuhao/diergedongzuo.m4a', 'https://kangfu-action-video-1258481652.cos.ap-beijing.myqcloud.com/audio/xuhao/disangedongzuo.m4a', 'https://kangfu-action-video-1258481652.cos.ap-beijing.myqcloud.com/audio/xuhao/disigedongzuo.m4a', 'https://kangfu-action-video-1258481652.cos.ap-beijing.myqcloud.com/audio/xuhao/diwugedongzuo.m4a', 'https://kangfu-action-video-1258481652.cos.ap-beijing.myqcloud.com/audio/xuhao/diliugedongzuo.m4a', 'https://kangfu-action-video-1258481652.cos.ap-beijing.myqcloud.com/audio/xuhao/diqigedongzuo.m4a', 'https://kangfu-action-video-1258481652.cos.ap-beijing.myqcloud.com/audio/xuhao/dibagedongzuo.m4a', 'https://kangfu-action-video-1258481652.cos.ap-beijing.myqcloud.com/audio/xuhao/dijiugedongzuo.m4a', 'https://kangfu-action-video-1258481652.cos.ap-beijing.myqcloud.com/audio/xuhao/dishigedongzuo.m4a'],
   finishClassEncourageAudio: 'https://kangfu-action-video-1258481652.cos.ap-beijing.myqcloud.com/audio/yuyinjili/wanchengyundongchufanggongxini-wanchenglebencixunlian.m4a',
   unfinishClassEncourageAudio: 'https://kangfu-action-video-1258481652.cos.ap-beijing.myqcloud.com/audio/yuyinjili/wanchengyundongchufangxiacijiayou-jianchiwanchengxunliano.m4a',
   finishActionEncourageAudio: 'https://kangfu-action-video-1258481652.cos.ap-beijing.myqcloud.com/audio/yuyinjili/dangedongzuowanchengyuyinjilimubiaodacheng.m4a',
@@ -257,7 +246,11 @@ Page({
     this.oCircleTime = this.selectComponent('#counttime')
     console.log('初始化圆画布')
     query.select('#debug-canvas')
-      .fields({ node: true, size: true, boundingClientRect: true })
+      .fields({
+        node: true,
+        size: true,
+        boundingClientRect: true
+      })
       .exec((res) => {
         app.globalData.nWidth = res[0].width
         app.globalData.nHeight = res[0].height
@@ -298,7 +291,10 @@ Page({
     })
   },
   handleReceiveMsg (str) {
-    const { data, type } = parseData(str)
+    const {
+      data,
+      type
+    } = parseData(str)
     if (type === 'obj') {
       // 发送回来的是json
       console.log('接收到的:', data)
@@ -366,8 +362,7 @@ Page({
         })
       }
     }
-  },
-  // 存入音频进列表
+  }, // 存入音频进列表
   inputAudio (data) {
     if (this.data.aAudioUrl.length === 0) {
       this.data.aAudioUrl.push(data)
@@ -382,12 +377,10 @@ Page({
         break
       }
     }
-  },
-  // 动作讲解
+  }, // 动作讲解
   explainAction () {
 
-  },
-  // 播放语音列表
+  }, // 播放语音列表
   playAudioList () {
     if (!this.startLoading) {
       const oUrl = this.data.aAudioUrl.shift()
@@ -397,8 +390,7 @@ Page({
         app.globalData.oAudio.play()
       }
     }
-  },
-  // 暂停课程
+  }, // 暂停课程
   pauseAction () {
     console.log('课程暂停--------')
     app.globalData.oWs.send({
@@ -411,20 +403,26 @@ Page({
     this.oShortAudio.pause()
     this.oCountAudio.pause()
     this.oBackgroundAudio.pause()
+    this.setData({
+      needBlur: true,
+      showCircle: false
+    })
     this.data.oPause.showPause((this.data.nAction + 1) < this.data.aAction.length)
-  },
-  // 继续课程
+  }, // 继续课程
   resumeAction () {
     app.globalData.oWs.send({
       data: JSON.stringify({
         type: 'resume_class'
       })
     })
+    this.setData({
+      needBlur: false,
+      showCircle: true
+    })
     this.oVideo.play()
     this.oBackgroundAudio.play()
     app.globalData.oAudio.play()
-  },
-  // 下一个动作
+  }, // 下一个动作
   nextAction () {
     if ((this.data.nAction + 1) < this.data.aAction.length) {
       this.setData({ nAction: this.data.nAction + 1 }, () => {
@@ -443,29 +441,26 @@ Page({
     this.oBackgroundAudio.stop()
     this.oShortAudio.stop()
     this.oCountAudio.stop()
-    
+
     this.oShortAudio.destroy()
     this.oCountAudio.destroy()
     this.oBackgroundAudio.destroy()
     console.log('退出小程序')
     app.globalData.hasSkip = true
     app.globalData.oWs.send({
-      data: JSON.stringify(
-        {
-          type: 'finish_class'
-        }
-      )
+      data: JSON.stringify({
+        type: 'finish_class'
+      })
     })
     if (app.globalData.oWs.status === 'loss') {
-        app.globalData.oWs.forbidConnect()
+      app.globalData.oWs.forbidConnect()
       app.globalData.oWs.close()
       this.exitRoom()
       wx.redirectTo({
         url: '/pages/end/end'
       })
     }
-  },
-  // 结束课程
+  }, // 结束课程
   endClass () {
     this.oVideo.stop()
     this.oShortAudio.destroy()
@@ -481,22 +476,19 @@ Page({
       app.globalData.oAudio.play()
     }
     app.globalData.oWs.send({
-      data: JSON.stringify(
-        {
-          type: 'finish_class'
-        }
-      )
+      data: JSON.stringify({
+        type: 'finish_class'
+      })
     })
     if (app.globalData.oWs.status === 'loss') {
-        app.globalData.oWs.forbidConnect()
+      app.globalData.oWs.forbidConnect()
       app.globalData.oWs.close()
       this.exitRoom()
       wx.redirectTo({
         url: '/pages/end/end'
       })
     }
-  },
-  // trtc事件监听
+  }, // trtc事件监听
   bindTRTCRoomEvent () {
     const TRTC_EVENT = this.TRTC.EVENT
     // 初始化事件订阅
@@ -527,7 +519,10 @@ Page({
     // 远端用户退出
     this.TRTC.on(TRTC_EVENT.REMOTE_USER_LEAVE, (event) => {
       console.log('* room REMOTE_USER_LEAVE', event)
-      const { userID, playerList } = event.data
+      const {
+        userID,
+        playerList
+      } = event.data
       this.setData({
         playerList
       })
@@ -576,8 +571,7 @@ Page({
         pusher
       })
     })
-  },
-  // 进入房间
+  }, // 进入房间
   enterRoom () {
     const roomID = app.globalData.clientId
     // 参数中放入音视频roomId
@@ -595,14 +589,12 @@ Page({
       pusher: result.pusher,
       playerList: result.playerList
     })
-  },
-  // 设置 pusher 属性
+  }, // 设置 pusher 属性
   setPusherAttributesHandler (options) {
     this.setData({
       pusher: this.TRTC.setPusherAttributes(options)
     })
-  },
-  // 将LivePusher的事件转发到实时音视频组件处理
+  }, // 将LivePusher的事件转发到实时音视频组件处理
   _pusherStateChangeHandler (event) {
     this.TRTC.pusherEventHandler(event)
   },
@@ -635,8 +627,7 @@ Page({
   },
   _playerAudioVolumeNotify (event) {
     this.TRTC.playerAudioVolumeNotify(event)
-  },
-  // 控制当前所在步骤相关逻辑方法
+  }, // 控制当前所在步骤相关逻辑方法
   switchStep (sNew, sOld) {
     // 整个阶段：test-explain(系统说明) -> test(人物检测) -> ing-loading(课程加载) -> ing(课程进行中) ->
     switch (sOld) {
@@ -667,32 +658,34 @@ Page({
         this.handleEnterIng()
         break
     }
-  },
-  // 进入训练准备中的解释阶段test-explain:播放准备视频，显示播放控制条，
+  }, // 进入训练准备中的解释阶段test-explain:播放准备视频，显示播放控制条，
   handleEnterTestExplain () {
     console.log('进入test-explain阶段')
-    this.setData({ sStep: 'test-explain', bShowVideoControl: true, sVideoUrl: this.data.oVideoUrl.explain }, () => {
+    this.setData({
+      sStep: 'test-explain',
+      bShowVideoControl: true,
+      sVideoUrl: this.data.oVideoUrl.explain
+    }, () => {
       this.oVideo.play()
     })
-  },
-  // 离开训练准备中的解释阶段:音乐关闭，视频关闭，
+  }, // 离开训练准备中的解释阶段:音乐关闭，视频关闭，
   handleLeaveTestExplain () {
     console.log('离开test-explain')
     this.oVideo.stop()
     this.setData({ bShowVideo: false })
-  },
-  // 进入训练准备中的检测阶段：初始化trtc，进入房间，绑定trtc事件
+  }, // 进入训练准备中的检测阶段：初始化trtc，进入房间，绑定trtc事件
   handleEnterTest () {
     console.log('进入test阶段')
-    this.setData({ sStep: 'test', bShowLivePusher: true }, () => {
+    this.setData({
+      sStep: 'test',
+      bShowLivePusher: true
+    }, () => {
 
     })
-  },
-  // 离开训练准备中的检测阶段
+  }, // 离开训练准备中的检测阶段
   handleLeaveTest () {
     console.log('离开test')
-  },
-  // 进入训练中加载阶段：开始加载动画，加载倒计时音频
+  }, // 进入训练中加载阶段：开始加载动画，加载倒计时音频
   handleEnterIngLoading () {
     console.log('进入ing-loading')
     if (this.oBackgroundAudio.paused) {
@@ -701,6 +694,8 @@ Page({
     // 清空待播放列表
     this.data.aAudioUrl = []
     this.setData({
+      needBlur: true,
+      showCircle: false,
       sStep: 'ing-loading',
       bShowVideo: true,
       bShowLivePusher: true,
@@ -720,19 +715,23 @@ Page({
       })
       // 播放加载倒计时
     })
-  },
-  // 离开训练中加载阶段：隐藏浮层，倒计时音频停止
+  }, // 离开训练中加载阶段：隐藏浮层，倒计时音频停止
   handleLeaveIngLoading () {
     console.log('离开ing-loading')
     app.globalData.oAudio.stop()
     this.oVideo.stop()
     this.setData({ showCircle: true })
-  },
-  // 进入训练中正式阶段：开始播放动作视频，动作音频,关掉视频播放条
+  }, // 进入训练中正式阶段：开始播放动作视频，动作音频,关掉视频播放条
   handleEnterIng () {
     console.log('进入ing')
     // this.setData({sStep:'ing',startLoading:false,bShowVideoControl:false,sVideoUrl:'http://vjs.zencdn.net/v/oceans.mp4'}, () => {
-    this.setData({ sStep: 'ing', startLoading: false, bShowVideoControl: false }, () => {
+    this.setData({
+      needBlur: false,
+      showCircle: true,
+      sStep: 'ing',
+      startLoading: false,
+      bShowVideoControl: false
+    }, () => {
       // app.globalData.oAudio.src = this.data.oAudioUrl.class;
       // app.globalData.oAudio.play();
       this.oVideo.play()
@@ -745,23 +744,20 @@ Page({
       console.log('发送信息', tempAction)
       app.globalData.oWs.send({
         data: JSON.stringify({
-          type: 'change_action',
-          // action_name: 'tunqiao',//qtemp
+          type: 'change_action', // action_name: 'tunqiao',//qtemp
           action_id: tempAction.actionRuleIndex,
-          db_action_id: tempAction.actionId,
+          db_action_id: tempAction.actionId
         })
       })
     })
-  },
-  // 离开训练中正式阶段
+  }, // 离开训练中正式阶段
   handleLeaveIng () {
     console.log('离开ing')
     app.globalData.oAudio.stop()
     this.oCountAudio.stop()
     // 圆圈隐藏
     this.setData({ showCircle: false })
-  },
-  /* ready 函数start */
+  }, /* ready 函数start */
 
   handleVideoEnded () {
     console.log('视频播放停止')
@@ -777,12 +773,12 @@ Page({
     // this.selectComponent("#count-time").init();
     // this.oPause.showPause();
     this.switchStep('ing', 'ing-loading')
-  },
-  /* ready 函数end */
+  }, /* ready 函数end */
   /* 页面事件 start */
   // 骨骼图绘制
   drawDebug (aBone) {
     const ctx = this.oCtx
+    // eslint-disable-next-line no-self-assign
     this.oCanvas.width = this.oCanvas.width // Warning: This line can not be removed (by junyu)
     const drawLine = (aTwoP = [[], []]) => {
       ctx.beginPath()
@@ -803,7 +799,8 @@ Page({
     //   }
     // })
     // ctx.fillStyle="rgba(248, 143, 44, 1.0)";
-    ctx.fillStyle = 'rgba(255, 0,0, 1.0)'
+    // ctx.fillStyle = 'rgba(255, 0,0, 1.0)'
+    ctx.fillStyle = 'rgba(255,255,255)'
     for (let index = 0; index < aBone.length; index++) {
       if (aBone[index][2] < 0.2) {
         continue

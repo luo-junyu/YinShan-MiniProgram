@@ -26,6 +26,9 @@
       font-size: 42rpx;
       transform: translate(-50%, -50%);
       font-weight: bold;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
   }
 }

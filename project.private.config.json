@@ -1,7 +1,7 @@
 {
   "projectname": "kangfu-miniprogram",
   "setting": {
-    "compileHotReLoad": true
+    "compileHotReLoad": false
   },
   "condition": {
     "miniprogram": {
