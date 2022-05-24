@@ -20,6 +20,7 @@ Page({
   oToast: null,
   onShow () {
     app.api.get({ url: uGetCourse }).then(res => {
+      app.globalData.courseId = res.courseId
       if (res.sessionList.length > 0) {
         let minWeek = -1
         let data = res.sessionList.slice()
