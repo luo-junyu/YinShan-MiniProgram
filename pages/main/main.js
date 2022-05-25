@@ -354,7 +354,7 @@ Page({
         this.playAudioList()
       } else if (data.type === 'finish_class_confirm') {
         console.log('收到结束课程确认消息')
-        app.globalData.oWs.forbidConnect()
+        // app.globalData.oWs.forbidConnect()
         app.globalData.oWs.close()
         this.exitRoom()
         wx.redirectTo({
@@ -453,7 +453,7 @@ Page({
       })
     })
     if (app.globalData.oWs.status === 'loss') {
-      app.globalData.oWs.forbidConnect()
+      // app.globalData.oWs.forbidConnect()
       app.globalData.oWs.close()
       this.exitRoom()
       wx.redirectTo({
@@ -481,7 +481,7 @@ Page({
       })
     })
     if (app.globalData.oWs.status === 'loss') {
-      app.globalData.oWs.forbidConnect()
+      // app.globalData.oWs.forbidConnect()
       app.globalData.oWs.close()
       this.exitRoom()
       wx.redirectTo({
