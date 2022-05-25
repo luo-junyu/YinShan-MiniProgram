@@ -6,8 +6,8 @@ class WebsocketHeartbeat {
       miniprogram, // Taro,支付宝my,百度swan，微信wx，等等只要有相应方法，比如connectSocket等
       connectSocketParams, // 小程序connectSocket的参数
       pingTimeout = 1000,
-      pongTimeout = 2000,
-      reconnectTimeout = 2000,
+      pongTimeout = 1000,
+      reconnectTimeout = 1000,
       pingMsg = 'heartbeat',
       repeatLimit = null,
     },
