@@ -6,8 +6,8 @@ class WebsocketHeartbeat {
       miniprogram, // Taro,支付宝my,百度swan，微信wx，等等只要有相应方法，比如connectSocket等
       connectSocketParams, // 小程序connectSocket的参数
       pingTimeout = 1000,
-      pongTimeout = 2000,
-      reconnectTimeout = 2000,
+      pongTimeout = 1000,
+      reconnectTimeout = 1000,
       pingMsg = 'heartbeat',
       repeatLimit = null,
     },
@@ -46,7 +46,7 @@ class WebsocketHeartbeat {
 
     this.createWebSocket(resolve)
     this.status = 'connect'
-      this.forbidReconnect = false
+    this.forbidReconnect = false
   }
 
   createWebSocket (resolve) {
@@ -107,6 +107,7 @@ class WebsocketHeartbeat {
   // 注册心跳和钩子函数
   registerHeartBeatEvent () {
     this.socketTask.onClose(() => {
+      log.info('[websocket] this.socketTask.onClose')
       this.onClose()
       this.reconnect()   // Update Junyu 5/14: 这里取消在close的时候自动重连
     })
@@ -117,8 +118,8 @@ class WebsocketHeartbeat {
     })
     this.socketTask.onOpen(() => {
       this.repeat = 0
-        this.forbidReconnect = false
-        log.info('[websocket] this.socketTask.onOpen')
+      this.forbidReconnect = false
+      log.info('[websocket] this.socketTask.onOpen')
       console.log('[websocket] onOpen')
       this.status = 'connect'
       this.onOpen()
@@ -136,18 +137,18 @@ class WebsocketHeartbeat {
 
   reconnect () {
     if (this.opts.repeatLimit > 0 && this.opts.repeatLimit <= this.repeat) { 
-        log.info('[websocket] 尝试重连次数过多')
+      log.info('[websocket] 尝试重连次数过多')
       console.log('[websocket] limited by repeat limit')
       return 
     } // limit repeat the number
-      console.log('[websocket] in reconnect')
-      log.info('[websocket] in reconnect')
-      if (this.forbidReconnect) {
-          log.info('[websocket] 禁止重连')
-          console.log('[websocket] 禁止重连')
-          return
-      }
-      // this.lockReconnect = true
+    console.log('[websocket] in reconnect')
+    log.info('[websocket] in reconnect')
+    if (this.forbidReconnect) {
+        log.info('[websocket] 禁止重连')
+        console.log('[websocket] 禁止重连')
+        return
+    }
+    // this.lockReconnect = true
     this.repeat++ // 必须在lockReconnect之后，避免进行无效计数
     console.log('[WebSocket] 尝试重连: ', this.repeat)
     // this.onReconnect()
@@ -207,6 +208,10 @@ class WebsocketHeartbeat {
     this.forbidReconnect = true
     this.heartReset()
     this.socketTask.close(miniprogramParam)
+  }
+
+  forbidConnect(){
+    this.forbidReconnect = true
   }
 }
 

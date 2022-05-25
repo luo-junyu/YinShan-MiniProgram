@@ -201,7 +201,7 @@ Page({
         })
       }
       task.onClose = () => { // 钩子函数
-        console.log('close')
+        console.log('onClose')
       }
       task.onError = e => { // 钩子函数
         console.log('onError：', e)
@@ -301,12 +301,19 @@ Page({
       if (data.type === 'update_client_info') {
         this.drawDebug(data.cur_pose)
         // this.sStatus = 'init';
-        if (!this.bPlayingCountTime && data.cur_duration_ratio > 0) {
-          this.bPlayingCountTime = true
-          this.oCountAudio.play()
-        } else if (this.bPlayingCountTime && data.cur_duration_ratio === 0) {
-          this.bPlayingCountTime = false
-          this.oCountAudio.stop()
+        if (!this.bPlayingCountTime) {
+          if (data.cur_duration_ratio > 0 && data.cur_duration_ratio < 100) {
+            this.bPlayingCountTime = true
+            this.oCountAudio.play()
+          }
+        } else {
+          if (data.cur_duration_ratio === 0) {
+            this.bPlayingCountTime = false
+            this.oCountAudio.stop()
+          } else if (data.cur_duration_ratio >= 100) {
+            this.bPlayingCountTime = false
+            this.oCountAudio.stop()
+          }
         }
         this.setData({
           oExeing: data
@@ -354,7 +361,7 @@ Page({
         this.playAudioList()
       } else if (data.type === 'finish_class_confirm') {
         console.log('收到结束课程确认消息')
-        // app.globalData.oWs.forbidConnect()
+        app.globalData.oWs.forbidConnect()
         app.globalData.oWs.close()
         this.exitRoom()
         wx.redirectTo({
@@ -453,7 +460,7 @@ Page({
       })
     })
     if (app.globalData.oWs.status === 'loss') {
-      // app.globalData.oWs.forbidConnect()
+      app.globalData.oWs.forbidConnect()
       app.globalData.oWs.close()
       this.exitRoom()
       wx.redirectTo({
@@ -481,7 +488,7 @@ Page({
       })
     })
     if (app.globalData.oWs.status === 'loss') {
-      // app.globalData.oWs.forbidConnect()
+      app.globalData.oWs.forbidConnect()
       app.globalData.oWs.close()
       this.exitRoom()
       wx.redirectTo({

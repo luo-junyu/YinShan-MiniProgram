@@ -22,13 +22,13 @@ Page({
     app.api.get({ url: uGetCourse }).then(res => {
       app.globalData.courseId = res.courseId
       if (res.sessionList.length > 0) {
-        let minWeek = -1
+        const minWeek = dayjs(res.courseStartTime).week()
         let data = res.sessionList.slice()
         data.sort((a, b) => dayjs(a.sessionStartTime).isAfter(dayjs(b.sessionStartTime)) ? 1 : -1)
         data.forEach(item => {
           const sessionWeek = dayjs(item.sessionStartTime).week()
-          if (minWeek === -1) minWeek = sessionWeek - 1
-          item.week = sessionWeek - minWeek
+          // if (minWeek === -1) minWeek = sessionWeek - 1
+          item.week = sessionWeek - minWeek + 1
         })
         data = groupBy(data, 'week')
         res.aSession = data
