@@ -25,16 +25,16 @@ Page({
         actionId: item.actionId
       }
     })
-    // this.setData({
-    //   bTotalEnded: app.globalData.hasSkip === false,
-    //   aQuestions: tempAction
-    // })
     this.setData({
-      aQuestions: [{
-        actionName: '腰方肌拉伸',
-        actionId: 1
-      }]
+      bTotalEnded: app.globalData.hasSkip === false,
+      aQuestions: tempAction
     })
+    // this.setData({
+    //   aQuestions: [{
+    //     actionName: '腰方肌拉伸',
+    //     actionId: 1
+    //   }]
+    // })
     this.oToast = this.selectComponent('#toast')
     this.oAuth = this.selectComponent('#auth')
 
