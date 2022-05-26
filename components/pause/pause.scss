@@ -36,12 +36,13 @@
   .pause-title {
     font-size: tovmin(38);
     color: #fff;
-    margin-top:tovmin(50);
+    margin-top: tovmin(50);
   }
 
   .btn-end {
     margin-top: tovmin(20);
     margin-right: tovmin(180);
+
     .image-area {
       width: tovmin(190);
       height: tovmin(190);
@@ -55,8 +56,9 @@
 
     .btn-title {
     }
+
     .small {
-      margin-top:tovmin(70);
+      margin-top: tovmin(70);
     }
   }
 
@@ -80,6 +82,7 @@
   .btn-next {
     margin-top: tovmin(20);
     margin-left: tovmin(180);
+
     .image-area {
       width: tovmin(190);
       height: tovmin(190);
@@ -93,8 +96,9 @@
 
     .btn-title {
     }
+
     .small {
-      margin-top:tovmin(70);
+      margin-top: tovmin(70);
     }
   }
 
@@ -102,44 +106,62 @@
 
 .end-dialog {
   position: absolute;
-  width: tovmin(576);
-  height: tovmin(472);
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 400;
-  background: #fff;
-  border-radius: tovmin(10);
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
 
-  .dialog-top {
+  &-back {
+    position: absolute;
+    top: 0;
+    left: 0;
     width: 100%;
-    height: tovmin(200);
+    height: 100%;
+    background: rgba(0, 0, 0, .7);
+    z-index: 390;
   }
 
-  .dialog-content {
-    padding: tovmin(30) tovmin(40);
+  &-content {
+    position: absolute;
+    width: tovmin(576);
+    height: tovmin(472);
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 400;
+    background: #fff;
+    border-radius: tovmin(10);
 
-    .dialog-text {
-      color: #2b2b2b;
-      line-height: tovmin(40);
-      font-weight: lighter;
-      font-size: tovmin(28);
+    .dialog-top {
+      width: 100%;
+      height: tovmin(200);
     }
 
-    .dialog-btn-area {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      display: flex;
-      font-size: tovmin(28);
-      color: #2b2b2b;
-      line-height: tovmin(84);
-      height: tovmin(84);
+    .dialog-content {
+      padding: tovmin(30) tovmin(40);
 
-      view {
-        width: 50%;
-        text-align: center;
+      .dialog-text {
+        color: #2b2b2b;
+        line-height: tovmin(40);
+        font-weight: lighter;
+        font-size: tovmin(28);
+      }
+
+      .dialog-btn-area {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        display: flex;
+        font-size: tovmin(28);
+        color: #2b2b2b;
+        line-height: tovmin(84);
+        height: tovmin(84);
+
+        view {
+          width: 50%;
+          text-align: center;
+        }
       }
     }
   }

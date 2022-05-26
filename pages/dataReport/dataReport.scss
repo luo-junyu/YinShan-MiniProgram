@@ -11,7 +11,7 @@
   &-content {
     flex: 1 1 auto;
     overflow: auto;
-    padding: 40rpx 0 20rpx;
+    padding: 32rpx 0 20rpx;
   }
 }
 
@@ -23,10 +23,9 @@
 
 .common-wrap {
   width: 706rpx;
-  margin: 29rpx auto 0;
+  margin: 21rpx auto 0;
   background: #fff;
   border: 1px solid #fff;
-  padding: 40rpx 28rpx;
   border-radius: 20rpx;
 }
 
@@ -56,15 +55,15 @@
 
     .people-name {
       font-size: 32rpx;
-      color: #2c2c6e;
+      color: #2b2b2b;
       font-weight: 600;
       line-height: 1;
     }
 
     .people-time {
       font-size: 26rpx;
-      color: #252829;
-      font-weight: normal;
+      color: #505050;
+      font-weight: lighter;
       margin-top: 30rpx;
     }
   }
@@ -74,24 +73,28 @@
   text-align: center;
 
   .data-date {
+    color: #252829;
+    font-size: 32rpx;
+    font-weight: lighter;
+    margin-top: 40rpx;
   }
 
   .data-title {
     font-size: 38rpx;
-    color: #353535;
-    font-weight: bold;
+    color: #2B2B2B;
     line-height: 1;
     margin-top: 29rpx;
   }
 
   .data-list {
     display: flex;
-    justify-content: space-between;
-    margin-top: 39rpx;
-    padding: 0 17rpx;
+    justify-content: space-evenly;
+    margin-top: 40rpx;
+    margin-bottom: 40rpx;
 
     .data-li {
       text-align: center;
+      flex: 1 1 33%;
 
       .data-li-value {
         font-size: 50rpx;
@@ -115,38 +118,37 @@
   padding-right: 28rpx;
 
   .action-title {
+    margin-top: 40rpx;
     display: flex;
     padding-left: 56rpx;
-    padding-right: 56rpx;
+    padding-right: 28rpx;
     justify-content: space-between;
     font-size: 26rpx;
-    color: #2b2b2b;
     line-height: 1;
     padding-bottom: 42rpx;
     border-bottom: 1rpx solid #eaeaea;
+    font-weight: normal;
+    color: #2B2B2B;
 
     .action-label {
+      font-size: 26rpx;
     }
 
-    .action-point {
-      flex-basis: 131rpx;
-      flex: none;
-    }
   }
 
   .action-list {
     padding-left: 56rpx;
-    padding-right: 56rpx;
+    padding-right: 28rpx;
+    margin-bottom: 40rpx;
 
     .action-li {
       display: flex;
       justify-content: space-between;
       position: relative;
       margin-top: 40rpx;
-      font-size: 35rpx;
-      color: #353535;
+      font-size: 32rpx;
+      color: #2B2B2B;
       line-height: 1;
-      font-weight: bold;
 
       .lowest-image {
         position: absolute;
@@ -174,8 +176,7 @@
       }
 
       .action-li-point {
-        flex-basis: 131rpx;
-        flex: none;
+        flex: 0 0 100rpx;
       }
     }
   }
@@ -185,9 +186,10 @@
   width: 706rpx;
   margin: 20rpx auto;
   text-align: center;
-  font-weight: bold;
   font-size: 36rpx;
   color: #fff;
   background: #16b297;
   border-radius: 10rpx;
+  height: 96rpx;
+  line-height: 96rpx;
 }

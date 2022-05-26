@@ -20,9 +20,21 @@ Page({
     const that = this
     app.initShare()
     const tempAction = app.globalData.aAction.map((item) => {
-      return { actionName: item.actionName, actionId: item.actionId }
+      return {
+        actionName: item.actionName,
+        actionId: item.actionId
+      }
     })
-    this.setData({ bTotalEnded: app.globalData.hasSkip === false, aQuestions: tempAction })
+    // this.setData({
+    //   bTotalEnded: app.globalData.hasSkip === false,
+    //   aQuestions: tempAction
+    // })
+    this.setData({
+      aQuestions: [{
+        actionName: '腰方肌拉伸',
+        actionId: 1
+      }]
+    })
     this.oToast = this.selectComponent('#toast')
     this.oAuth = this.selectComponent('#auth')
 
@@ -63,10 +75,16 @@ Page({
       if (item.actionComfort !== 1) {
         item.actionComfort = 0
       }
-      return { actionId: item.actionId, actionComfort: item.actionComfort }
+      return {
+        actionId: item.actionId,
+        actionComfort: item.actionComfort
+      }
     })
     console.log('反馈', postData)
-    app.api.post({ url: uPostFeedback, data: postData }).then(res => {
+    app.api.post({
+      url: uPostFeedback,
+      data: postData
+    }).then(res => {
       this.oToast.showToast('反馈成功')
       wx.redirectTo({
         url: '/pages/dataReport/dataReport'
@@ -90,11 +108,17 @@ Page({
   },
   handleTapCom (e) {
     console.log('选中的id', e)
-    this.setData({ checkedCom: e.currentTarget.dataset.id, canSend: this.checkCanSend() })
+    this.setData({
+      checkedCom: e.currentTarget.dataset.id,
+      canSend: this.checkCanSend()
+    })
   },
   handleTapDiff (e) {
     console.log('选中的id', e)
-    this.setData({ checkedDiff: e.currentTarget.dataset.id, canSend: this.checkCanSend() })
+    this.setData({
+      checkedDiff: e.currentTarget.dataset.id,
+      canSend: this.checkCanSend()
+    })
   }
 
 })

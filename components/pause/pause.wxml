@@ -19,15 +19,18 @@
   </view>
 </view>
 <view class="end-dialog" wx:if="{{bShowEndDialog}}">
-  <image class="dialog-top" src="../../assets/end-dialog.png"/>
-  <view class="dialog-content">
-    <view class="dialog-text">
-      训练完整的运动处方，才会有良好的疗效，再坚持一会吧。提前结束将不会保存训练记录。
-    </view>
-    <view class="dialog-btn-area">
-      <view style="border-top: 1rpx solid #F5F5F5" bindtap="endClass">结束训练</view>
-      <view style="color: #16B297; border-top: 1rpx solid #F5F5F5; border-left: 1rpx solid #F5F5F5"
-            bindtap="resumeAction">我要坚持
+  <view class="end-dialog-back"></view>
+  <view class="end-dialog-content">
+    <image class="dialog-top" src="../../assets/end-dialog.png"/>
+    <view class="dialog-content">
+      <view class="dialog-text">
+        训练完整的运动处方，才会有良好的疗效，再坚持一会吧。提前结束将不会保存训练记录。
+      </view>
+      <view class="dialog-btn-area">
+        <view style="border-top: 1rpx solid #F5F5F5" bindtap="endClass">结束训练</view>
+        <view style="color: #16B297; border-top: 1rpx solid #F5F5F5; border-left: 1rpx solid #F5F5F5"
+              bindtap="resumeAction">我要坚持
+        </view>
       </view>
     </view>
   </view>

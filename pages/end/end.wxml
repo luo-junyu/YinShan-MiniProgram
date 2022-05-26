@@ -1,6 +1,6 @@
 <!--index.wxml-->
 <view class="container">
-  <header class="container-nav" backgroundColor="#E3FBF7" title="告诉我们您的感受" returnable="{{false}}"
+  <header class="container-nav" backgroundColor="#FFFFFF" title="告诉我们您的感受" returnable="{{false}}"
           titleColor="#2B2B2B"></header>
   <view class="container-content">
     <image class="end-banner"
@@ -56,7 +56,7 @@
     </view>
     <view class="detail-area common-area" wx:if="{{checkedCom === 'compromised' || checkedCom === 'uncomfortable'}}">
       <view class="common-title detail-title">具体有哪些动作感觉不适？请勾选：</view>
-      <view class="common-wrap">
+      <view class="common-wrap detail-wrap">
         <checkbox-group bindchange="checkboxChange">
           <label class="detail-outer" wx:for="{{aQuestions}}" wx:key="{{actionId}}">
             <view class="detail-label text-overflow">{{item.actionName}}</view>

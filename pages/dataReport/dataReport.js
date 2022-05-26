@@ -18,7 +18,7 @@ Page({
   onLoad (options) {
     app.initShare()
     const sessionName = app.globalData.sessionname
-    const tempDate = '第' + app.globalData.sessionWeek + '周第' + (app.globalData.sessionNo + 1) + '课'
+    const tempDate = '第' + app.globalData.sessionWeek + '周 第' + (app.globalData.sessionNo + 1) + '课'
     this.oToast = this.selectComponent('#toast')
     this.oAuth = this.selectComponent('#auth')
     this.setData({ user: wx.getStorageSync('user'), sessionName, qSessionTime: tempDate })
@@ -42,11 +42,6 @@ Page({
       })
       console.log('动作详情', { ...res, highest, lowest })
       this.setData({ ...res, highest, lowest })
-    })
-  },
-  goBack () {
-    wx.switchTab({
-      url: '/pages/course/course'
     })
   }
 })

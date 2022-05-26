@@ -1,7 +1,7 @@
 {
   "projectname": "kangfu-miniprogram",
   "setting": {
-    "compileHotReLoad": false
+    "compileHotReLoad": true
   },
   "condition": {
     "miniprogram": {
@@ -58,6 +58,13 @@
         {
           "name": "",
           "pathName": "pages/schedule/schedule",
+          "query": "",
+          "launchMode": "default",
+          "scene": null
+        },
+        {
+          "name": "",
+          "pathName": "pages/dataReport/dataReport",
           "query": "",
           "launchMode": "default",
           "scene": null
