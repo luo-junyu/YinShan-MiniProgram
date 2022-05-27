@@ -1,6 +1,28 @@
 @function tovmin($rpx) {
   @return #{$rpx * 100/750}vmin;
 }
+.exam-warn {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 500;
+  background: rgba(0,0,0,0.65);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: tovmin(10) solid #FE802E;
+  &-icon {
+    width: tovmin(74);
+    height: tovmin(65);
+  }
+  &-text {
+    font-size: tovmin(56);
+    color: white;
+    margin-left: tovmin(39);
+  }
+}
 
 @mixin btn-common {
   width: tovmin(230);

@@ -10,6 +10,10 @@
   </view>
   <!-- 检测 -->
 </view>
+<view wx:if="{{!fullBodyCheck}}" class="exam-warn">
+  <image class="exam-warn-icon" src="/assets/lowest.png"></image>
+  <view class="exam-warn-text">请回到正确位置，继续完成课程吧</view>
+</view>
 <view class="ing-container" style="visibility :{{Utils.qIndexOf(sStep,'ing') !== -1 ?  'visible':'hidden'}}">
   <!--加载信息 采用start接口返回的信息 -->
   <view class="ing-loading" style="visibility :{{sStep === 'ing-loading'? 'visible':'hidden'}}">
