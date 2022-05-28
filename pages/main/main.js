@@ -35,7 +35,8 @@ Page({
     sEncourage: '', // 激励文
     nAction: 0, // 当前动作,
     showCircle: true, // 展示两个圈
-    needBlur: false// 需要高斯模糊背景
+    needBlur: false, // 需要高斯模糊背景
+    fullBodyCheck: true
   },
   bFinished: true, // 一组动作是否结束
   bPlayingCountTime: false, // 正在播放计时器音效
@@ -69,6 +70,7 @@ Page({
   unfinishClassEncourageAudio: 'https://kangfu-action-video-1258481652.cos.ap-beijing.myqcloud.com/audio-tts/action/aikejili/jili-13.mp3',
   finishActionEncourageAudio: 'https://kangfu-action-video-1258481652.cos.ap-beijing.myqcloud.com/audio-tts/action/aikejili/jili-3.mp3',
   sStatus: 'init', // 当前状态，对比用
+  fullBodyCheckCountTime: null,
   /* 通用变量 start */
   /* 通用函数 start */
   onShow () {
@@ -300,6 +302,23 @@ Page({
       // 发送回来的是json
       console.log('接收到的:', data)
       if (data.type === 'update_client_info') {
+        if (!this.fullBodyCheckCountTime) this.fullBodyCheckCountTime = Date.now()
+        if (!data.full_body_check) {
+          if (Date.now() - this.fullBodyCheckCountTime > 3000) {
+            this.setData({
+              fullBodyCheck: false,
+              needBlur: true,
+              showCircle: false
+            })
+          }
+        } else {
+          this.setData({
+            fullBodyCheck: true,
+            needBlur: false,
+            showCircle: true
+          })
+          this.fullBodyCheckCountTime = Date.now()
+        }
         this.drawDebug(data.cur_pose)
         // this.sStatus = 'init';
         if (!this.bPlayingCountTime) {
