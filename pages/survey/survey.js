@@ -26,10 +26,12 @@ Page({
     this.data.surveyArray[+e.target.id].value = e.detail.value
   },
   bindRadioChange (e) {
-    this.data.surveyArray[+e.target.id].value = e.detail.value
+    this.data.surveyArray[+e.target.id].selection = e.detail.value
+    this.data.surveyArray[+e.target.id].value = (this.data.surveyArray[+e.target.id].choice)[+e.detail.value]
   },
   bindCheckChange (e) {
-    this.data.surveyArray[+e.target.id].value = e.detail.value
+    this.data.surveyArray[+e.target.id].selection = e.detail.value
+    this.data.surveyArray[+e.target.id].value = e.detail.value.map(item => (this.data.surveyArray[+e.target.id].choice)[+item])
   },
   bindDateChange (e) {
     this.data.surveyArray[+e.target.id].value = e.detail.value
@@ -44,18 +46,24 @@ Page({
       this.selectComponent('#survey-toast').showToast(validateItem.title + '还没有填写')
       return
     }
+    const postArray = this.data.surveyArray.map(item => {
+      if (item.type === 'multi-check') {
+        item.value = item.value.join(',')
+        item.selection = item.selection.join(',')
+      }
+      return item
+    })
     app.api.post({
       url: uRegMedicalHistoryQT,
       data: {
-        qt: this.data.surveyArray
+        qt: postArray
       }
     })
       .then(response => {
-        console.log(response)
         if (response.qt_status === 0) {
           this.selectComponent('#survey-toast').showToast('提交失败！')
         } else {
-          this.selectComponent('#survey-toast').showToast('提交成功')
+          this.selectComponent('#survey-toast').showToast('提交成功!')
           setTimeout(() => {
             wx.navigateBack()
           }, 2000)
