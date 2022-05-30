@@ -313,14 +313,14 @@ Page({
         if (!data.full_body_check) {
           this.bodyCheckFailedTimestamp = Date.now()
           // 检测false时，如果当前时间离上次最后true时间的间隔大于3s，则显示全屏提示
-          const isFailedCheckTimeout = Date.now() - this.bodyCheckSuccessTimestamp > 3000
-          if (this.data.sStep === 'ing') {
-            this.setData({
-              fullBodyCheck: !isFailedCheckTimeout,
-              needBlur: isFailedCheckTimeout,
-              showCircle: !isFailedCheckTimeout
-            })
-          }
+          // const isFailedCheckTimeout = Date.now() - this.bodyCheckSuccessTimestamp > 3000
+          // if (this.data.sStep === 'ing') {
+          //   this.setData({
+          //     fullBodyCheck: !isFailedCheckTimeout,
+          //     needBlur: isFailedCheckTimeout,
+          //     showCircle: !isFailedCheckTimeout
+          //   })
+          // }
           if (this.data.sStep === 'test') {
             this.setData({
               countDown: null
