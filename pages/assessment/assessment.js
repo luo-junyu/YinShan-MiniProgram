@@ -1,3 +1,6 @@
+import { uAssessStatus } from '../../utils/api/api'
+
+const app = getApp()
 Page({
   data: {
     stepArray: [
@@ -37,13 +40,28 @@ Page({
     currentStep: 4
   },
   onLoad: function (options) {
-    const temp = this.data.stepArray.slice()
-    temp[2].finished = options.examDone === 'true'
-    temp[3].finished = options.reportDone === 'true'
-    this.setData({
-      currentStep: +options.currentStep,
-      stepArray: temp
+    // const temp = this.data.stepArray.slice()
+    // temp[2].finished = options.examDone === 'true'
+    // temp[3].finished = options.reportDone === 'true'
+    // this.setData({
+    //   currentStep: +options.currentStep,
+    //   stepArray: temp
+    // })
+  },
+  onShow () {
+    app.api.get({
+      url: uAssessStatus
     })
+      .then(res => {
+        const stepVarNameArray = ['medicalHistoryAvailable', 'poseAssessAvailable', 'physicalExamAvailable', 'reportAvailable']
+        const temp = this.data.stepArray.slice()
+        temp[2].finished = res.physicalExamDone
+        temp[3].finished = res.reportDone
+        this.setData({
+          currentStep: stepVarNameArray.findIndex((item) => res[item]) + 1, // 当前步骤
+          stepArray: temp
+        })
+      })
   },
   handleStepItemClicked (e) {
     const tapStep = e.currentTarget.dataset.index
