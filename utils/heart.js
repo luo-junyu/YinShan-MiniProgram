@@ -1,4 +1,4 @@
-var log = require('./log.js')
+const log = require('./log.js')
 
 class WebsocketHeartbeat {
   constructor (
@@ -9,9 +9,12 @@ class WebsocketHeartbeat {
       pongTimeout = 1000,
       reconnectTimeout = 1000,
       pingMsg = 'heartbeat',
-      repeatLimit = null,
+      repeatLimit = null
     },
-    { resolve, reject }
+    {
+      resolve,
+      reject
+    }
   ) {
     if (!miniprogram) {
       const err = Error(
@@ -38,11 +41,16 @@ class WebsocketHeartbeat {
     this.socketTask = null // websocket实例
     this.repeat = 0
     // override
-    this.onClose = () => {}
-    this.onError = () => {}
-    this.onOpen = () => {}
-    this.onMessage = () => {}
-    this.onReconnect = () => {}
+    this.onClose = () => {
+    }
+    this.onError = () => {
+    }
+    this.onOpen = () => {
+    }
+    this.onMessage = () => {
+    }
+    this.onReconnect = () => {
+    }
 
     this.createWebSocket(resolve)
     this.status = 'connect'
@@ -52,7 +60,6 @@ class WebsocketHeartbeat {
   createWebSocket (resolve) {
     // 支付宝connectSocket不会返回实例，并且只允许一个websocket请求，api和其他小程序不一样这里需要兼容
     // offSocketClose只有支付宝才有
-    debugger
     if (this.opts.miniprogram.offSocketClose) {
       // 每次创建实例前，先清空之前的绑定事件
       this.opts.miniprogram.offSocketClose()
@@ -72,7 +79,8 @@ class WebsocketHeartbeat {
         this.opts.miniprogram.connectSocket(
           Object.assign(
             {
-              complete: () => {}
+              complete: () => {
+              }
             },
             this.opts.connectSocketParams
           )
@@ -84,12 +92,13 @@ class WebsocketHeartbeat {
       // wx,Taro,uni,百度等。Taro返回的promise，所以这里使用promise，兼容promise和直接返回对象
       // 本来使用的async await语法，但是在百度小程序内会有兼容问题，引入语法兼容会导致库包增大，得不偿失，因此不使用语法糖
       new Promise((res) => {
-          log.info('[websocket] 准备建立新的连接')
+        log.info('[websocket] 准备建立新的连接')
         res(
           this.opts.miniprogram.connectSocket(
             Object.assign(
               {
-                complete: () => {} // 为兼容uni-app：如果希望返回一个 socketTask 对象，需要至少传入 success / fail / complete 参数中的一个
+                complete: () => {
+                } // 为兼容uni-app：如果希望返回一个 socketTask 对象，需要至少传入 success / fail / complete 参数中的一个
               },
               this.opts.connectSocketParams
             )
@@ -97,7 +106,7 @@ class WebsocketHeartbeat {
         )
       }).then((socketTask) => {
         this.socketTask = socketTask
-          log.info('[websocket] 建立了一个新的连接')
+        log.info('[websocket] 建立了一个新的连接')
         this.registerHeartBeatEvent()
         resolve && resolve(this)
       })
@@ -109,10 +118,10 @@ class WebsocketHeartbeat {
     this.socketTask.onClose(() => {
       log.info('[websocket] this.socketTask.onClose')
       this.onClose()
-      this.reconnect()   // Update Junyu 5/14: 这里取消在close的时候自动重连
+      this.reconnect() // Update Junyu 5/14: 这里取消在close的时候自动重连
     })
     this.socketTask.onError(() => {
-        log.info('[websocket] this.socketTask.onError')
+      log.info('[websocket] this.socketTask.onError')
       this.onError()
       this.reconnect()
     })
@@ -136,17 +145,17 @@ class WebsocketHeartbeat {
   }
 
   reconnect () {
-    if (this.opts.repeatLimit > 0 && this.opts.repeatLimit <= this.repeat) { 
+    if (this.opts.repeatLimit > 0 && this.opts.repeatLimit <= this.repeat) {
       log.info('[websocket] 尝试重连次数过多')
       console.log('[websocket] limited by repeat limit')
-      return 
+      return
     } // limit repeat the number
     console.log('[websocket] in reconnect')
     log.info('[websocket] in reconnect')
     if (this.forbidReconnect) {
-        log.info('[websocket] 禁止重连')
-        console.log('[websocket] 禁止重连')
-        return
+      log.info('[websocket] 禁止重连')
+      console.log('[websocket] 禁止重连')
+      return
     }
     // this.lockReconnect = true
     this.repeat++ // 必须在lockReconnect之后，避免进行无效计数
@@ -155,13 +164,13 @@ class WebsocketHeartbeat {
     // 没连接上会一直重连，设置延迟避免请求过多
     this.newSocketTimeoutId = setTimeout(() => {
       // update junyu 05/14：如果不能重连，则设置新的socket连接，关闭以前的
-        log.info('[websocket] 准备断掉之前的连接，建立新的')
+      log.info('[websocket] 准备断掉之前的连接，建立新的')
       if (this.socketTask !== null) {
         this.socketTask.close()
       }
       this.createWebSocket()
-      //this.lockReconnect = false
-        log.info('[websocket] 重连的新socket准备好了！')
+      // this.lockReconnect = false
+      log.info('[websocket] 重连的新socket准备好了！')
     }, this.opts.reconnectTimeout)
   }
 
@@ -181,14 +190,14 @@ class WebsocketHeartbeat {
       // 这里发送一个心跳，后端收到后，返回一个心跳消息，
       // onMessage拿到返回的心跳就说明连接正常
       console.log('[WebSocket] Ping Time Out 发送心跳')
-        log.info('[websocket] Ping Time Out 发送心跳')
+      log.info('[websocket] Ping Time Out 发送心跳')
       this.send({
         data: this.opts.pingMsg
       })
       this.pongTimeoutId = setTimeout(() => {
         // 如果onClose会执行reconnect，我们执行ws.close()就行了.如果直接执行reconnect 会触发onClose导致重连两次
         console.log('[WebSocket] Pong Time Out')
-        this.status = 'loss'  // 标记为失联
+        this.status = 'loss' // 标记为失联
         this.reconnect()
         // this.socketTask.close()
       }, this.opts.pongTimeout)
@@ -197,8 +206,8 @@ class WebsocketHeartbeat {
 
   heartReset () {
     console.log('[WebSocket] Heart Reset')
-    clearTimeout(this.pingTimeoutId)    // ping 清零
-    clearTimeout(this.pongTimeoutId)    // pong 清零
+    clearTimeout(this.pingTimeoutId) // ping 清零
+    clearTimeout(this.pongTimeoutId) // pong 清零
     clearTimeout(this.newSocketTimeoutId) // 如果重连上，就不需要设置新的socket连接了
   }
 
@@ -210,7 +219,7 @@ class WebsocketHeartbeat {
     this.socketTask.close(miniprogramParam)
   }
 
-  forbidConnect(){
+  forbidConnect () {
     this.forbidReconnect = true
   }
 }

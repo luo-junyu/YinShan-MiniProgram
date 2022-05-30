@@ -10,7 +10,13 @@
   </view>
   <!-- 检测 -->
 </view>
-<view wx:if="{{!fullBodyCheck}}" class="exam-warn">
+<view wx:if="{{sStep === 'test'}}" class="exam-mask">
+  <text class="exam-mask-hint">请参考人物框，趴到瑜伽垫上，双手、膝盖撑地，
+    向后抬起右腿，让身体进入人物框，并保持3秒</text>
+  <text class="exam-mask-count">{{countDown || ''}}</text>
+  <image class="exam-mask-image" src="/assets/exam_horiz_mask.png" mode="aspectFill"></image>
+</view>
+<view wx:if="{{sStep === 'ing' && !fullBodyCheck}}" class="exam-warn">
   <image class="exam-warn-icon" src="/assets/lowest.png"></image>
   <view class="exam-warn-text">请回到正确位置，继续完成课程吧</view>
 </view>

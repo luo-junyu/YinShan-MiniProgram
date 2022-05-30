@@ -34,9 +34,36 @@
         height: 60rpx;
         padding-left: 20rpx;
       }
+      &-textarea {
+        border: 1px solid #DADADA;
+        border-radius: 10rpx;
+        line-height: 1.5;
+        padding: 20rpx;
+        width: 610rpx;
+      }
+      &-check {
+        display: flex;
+        flex-wrap: wrap;
+        &-item {
+          margin-bottom: 20rpx;
+          margin-right: 30rpx;
+          line-height: 1.5;
+        }
+      }
       &-radio {
-        &-item:not(:first-child) {
-          margin-left: 20rpx;
+        display: flex;
+        flex-wrap: wrap;
+        &-item {
+          margin-bottom: 20rpx;
+          margin-right: 30rpx;
+          line-height: 1.5;
+          display: flex;
+          .wx-radio-input {
+            flex: 0 0 auto;
+          }
+          .view {
+            flex: 1 1 auto;
+          }
         }
       }
       &-date {
@@ -46,6 +73,7 @@
         .picker {
           padding-left: 20rpx;
           line-height: 60rpx;
+          color: #666666;
         }
       }
     }
@@ -53,6 +81,9 @@
       margin-top: 50rpx;
       margin-bottom: 30rpx;
       width: 100%!important;
+      background-color: #16b297!important;
+      height: 96rpx;
+      line-height: 96rpx;
     }
   }
 }

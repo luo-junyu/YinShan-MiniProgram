@@ -5,14 +5,22 @@
     <view class="survey-form">
       <view class="survey-form-item" wx:for="{{surveyArray}}" wx:key="index" wx:for-index="index" wx:for-item="item">
         <view class="survey-form-item-title">
-          {{item.title}}
+          {{index + 1}}. {{item.title}}
         </view>
         <input class="survey-form-item-input"
-               wx:if="{{item.type==='fill'}}"
+               wx:if="{{item.type==='short-fill'}}"
                id="{{index}}"
                placeholder="请输入"
                bindinput="bindUserInput"
                value="{{item.value}}"></input>
+        <textarea
+          class="survey-form-item-textarea"
+          wx:if="{{item.type === 'long-fill'}}"
+          id="{{index}}"
+          placeholder="请输入"
+          bindinput="bindUserInput"
+          value="{{item.value}}"
+        ></textarea>
         <radio-group class="survey-form-item-radio"
                      wx:elif="{{item.type==='single-check'}}"
                      id="{{index}}"
@@ -20,14 +28,14 @@
         >
           <radio class="survey-form-item-radio-item" wx:for="{{item.choice}}" wx:for-item="cItem" wx:for-index="cIndex"
                  wx:key="cIndex" value="{{cIndex}}">
-            {{cItem}}
+            <view>{{cItem}}</view>
           </radio>
         </radio-group>
-        <checkbox-group class="survey-form-item-check" wx:elif="{{item.type === 'multi_check'}}"
+        <checkbox-group class="survey-form-item-check" wx:elif="{{item.type === 'multi-check'}}"
                         bindchange="bindCheckChange" id="{{index}}"
         >
           <checkbox class="survey-form-item-check-item" wx:for="{{item.choice}}" wx:for-item="cItem"
-                    wx:for-index="cIndex" wx:key="cIndex">
+                    wx:for-index="cIndex" wx:key="cIndex" value="{{cIndex}}">
             {{cItem}}
           </checkbox>
         </checkbox-group>

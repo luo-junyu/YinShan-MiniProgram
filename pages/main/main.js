@@ -21,7 +21,7 @@ Page({
       explain: 'http://vjs.zencdn.net/v/oceans.mp4'
     },
     aAudioUrl: [],
-    bShowVideoControl: true, // 是否显示视频播放条
+    bShowVideoControl: false, // 是否显示视频播放条
     bShowLivePusher: true, // 是否有推流图
     bShowFishDialog: false,
     bShowVideo: true,
@@ -36,7 +36,8 @@ Page({
     nAction: 0, // 当前动作,
     showCircle: true, // 展示两个圈
     needBlur: false, // 需要高斯模糊背景
-    fullBodyCheck: true
+    fullBodyCheck: true,
+    countDown: null
   },
   bFinished: true, // 一组动作是否结束
   bPlayingCountTime: false, // 正在播放计时器音效
@@ -70,7 +71,8 @@ Page({
   unfinishClassEncourageAudio: 'https://kangfu-action-video-1258481652.cos.ap-beijing.myqcloud.com/audio-tts/action/aikejili/jili-13.mp3',
   finishActionEncourageAudio: 'https://kangfu-action-video-1258481652.cos.ap-beijing.myqcloud.com/audio-tts/action/aikejili/jili-3.mp3',
   sStatus: 'init', // 当前状态，对比用
-  fullBodyCheckCountTime: null,
+  bodyCheckFailedTimestamp: null,
+  bodyCheckSuccessTimestamp: null,
   /* 通用变量 start */
   /* 通用函数 start */
   onShow () {
@@ -237,7 +239,8 @@ Page({
       success: () => {
         if (this.firstConnection) {
           this.firstConnection = false
-          this.switchStep('ing-loading')
+          this.switchStep('test')
+          // this.switchStep('ing-loading')
         }
       }
     })
@@ -302,22 +305,40 @@ Page({
       // 发送回来的是json
       console.log('接收到的:', data)
       if (data.type === 'update_client_info') {
-        if (!this.fullBodyCheckCountTime) this.fullBodyCheckCountTime = Date.now()
+        // 分别记录最后一次的check成功/失败时间戳
+        if (!this.bodyCheckFailedTimestamp) this.bodyCheckFailedTimestamp = Date.now()
+        if (!this.bodyCheckSuccessTimestamp) this.bodyCheckSuccessTimestamp = Date.now()
+        // TEST: set full body check to true for Test step switch
+        // data.full_body_check = true
         if (!data.full_body_check) {
-          if (Date.now() - this.fullBodyCheckCountTime > 3000) {
+          this.bodyCheckFailedTimestamp = Date.now()
+          // 检测false时，如果当前时间离上次最后true时间的间隔大于3s，则显示全屏提示
+          const isFailedCheckTimeout = Date.now() - this.bodyCheckSuccessTimestamp > 3000
+          if (this.data.sStep === 'ing') {
             this.setData({
-              fullBodyCheck: false,
-              needBlur: true,
-              showCircle: false
+              fullBodyCheck: !isFailedCheckTimeout,
+              needBlur: isFailedCheckTimeout,
+              showCircle: !isFailedCheckTimeout
+            })
+          }
+          if (this.data.sStep === 'test') {
+            this.setData({
+              countDown: null
             })
           }
         } else {
-          this.setData({
-            fullBodyCheck: true,
-            needBlur: false,
-            showCircle: true
-          })
-          this.fullBodyCheckCountTime = Date.now()
+          this.bodyCheckSuccessTimestamp = Date.now()
+          if (this.data.sStep === 'test') {
+            // 一旦检测到true，则开始倒数计时3s，当小于1时则进入下一步
+            const countDownNumber = 3 - Math.floor((Date.now() - this.bodyCheckFailedTimestamp) / 1000)
+            if (countDownNumber < 1) {
+              this.switchStep('ing-loading', 'test')
+            } else {
+              this.setData({
+                countDown: countDownNumber
+              })
+            }
+          }
         }
         this.drawDebug(data.cur_pose)
         // this.sStatus = 'init';
@@ -705,9 +726,16 @@ Page({
     console.log('进入test阶段')
     this.setData({
       sStep: 'test',
-      bShowLivePusher: true
+      bSmallPusher: false,
+      bShowLivePusher: true,
+      bShowDebug: false,
+      needBlur: false
     }, () => {
-
+      app.globalData.oWs.send({
+        data: JSON.stringify({
+          type: 'resume_class'
+        })
+      })
     })
   }, // 离开训练准备中的检测阶段
   handleLeaveTest () {
@@ -727,6 +755,7 @@ Page({
       bShowVideo: true,
       bShowLivePusher: true,
       bSmallPusher: true,
+      bShowDebug: true,
       sVideoUrl: this.data.aAction[this.data.nAction].actionAnimeUrl
     }, () => {
       this.setData({ startLoading: true }, () => {
