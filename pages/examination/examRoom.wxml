@@ -1,0 +1,37 @@
+<view class="exam">
+  <view class="exam-vertical-ready" wx:if="{{currentStep === 1 && pageDirection === 'vertical'}}">
+    <text class="exam-vertical-ready-text">请参考人物框，身体左侧正对手机
+      屏幕，站立，让身体进入人物框，
+      并保持3s</text>
+    <image class="exam-vertical-ready-image" src="/assets/exam_vertical_mask_r.png" mode="aspectFill bottom"></image>
+    <view class="exam-vertical-ready-mask">
+      <text class="exam-vertical-ready-mask-count">3</text>
+    </view>
+  </view>
+  <view wx:elif="{{currentStep === 1 && pageDirection === 'horizontal'}}" class="exam-mask">
+    <text class="exam-mask-hint">请参考人物框，趴到瑜伽垫上，双手、膝盖撑地，
+      向后抬起右腿，让身体进入人物框，并保持3秒</text>
+    <text class="exam-mask-count">1</text>
+    <image class="exam-mask-image" src="/assets/exam_horiz_mask.png" mode="aspectFill"></image>
+  </view>
+  <view class="exam-vertical-topic" wx:elif="{{currentStep === 2 && pageDirection === 'vertical'}}">
+    <view class="exam-vertical-topic-title">活动度测量</view>
+    <view class="exam-vertical-topic-text">第1项：前屈</view>
+    <view class="exam-vertical-topic-text">请身体左侧正对手机屏幕，测量躯干向前屈曲的角度</view>
+    <view class="loading-bar {{startLoading ? 'loaded-bar' : 'empty-bar'}}" bindtransitionend="handleTransEnd"></view>
+  </view>
+  <view wx:elif="{{currentStep === 2 && pageDirection === 'horizontal'}}" class="exam-topic">
+    <view class="exam-topic-title">肌肉力量测试</view>
+    <view class="exam-topic-text">第1项：仰卧举腿</view>
+    <view class="exam-topic-text">测试动态腹部肌肉（屈肌）耐力</view>
+    <view class="loading-bar {{startLoading ? 'loaded-bar' : 'empty-bar'}}" bindtransitionend="handleTransEnd"></view>
+  </view>
+  <view wx:elif="{{currentStep === 4 && pageDirection === 'vertical'}}" class="exam-vertical-warn">
+    <image class="exam-vertical-warn-icon" src="/assets/lowest.png"></image>
+    <view class="exam-vertical-warn-text">请回到正确位置，继续完成体格检查吧</view>
+  </view>
+  <view wx:elif="{{currentStep === 4 && pageDirection === 'horizontal'}}" class="exam-warn">
+    <image class="exam-warn-icon" src="/assets/lowest.png"></image>
+    <view class="exam-warn-text">请回到正确位置，继续完成体格检查吧</view>
+  </view>
+</view>

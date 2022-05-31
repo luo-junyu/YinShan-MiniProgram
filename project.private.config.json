@@ -68,6 +68,13 @@
           "query": "",
           "launchMode": "default",
           "scene": null
+        },
+        {
+          "name": "",
+          "pathName": "pages/examination/examRoom",
+          "query": "",
+          "launchMode": "default",
+          "scene": null
         }
       ]
     }
