@@ -97,6 +97,7 @@
         style="visibility:{{bShowDebug? 'visible':'hidden'}}"></canvas>
 <view class="main-video">
   <video id="main-video" src="{{sVideoUrl}}" autoplay="{{false}}" style="display:{{bShowVideo?'block':'none'}}"
+         binderror="handleVideoError"
          bindended="handleVideoEnded" loop="{{true}}" show-center-play-btn="{{false}}" object-fit="cover" muted="{{true}}"
          controls="{{bShowVideoControl}}" class="main-video-content {{needBlur ? 'need-blur': ''}}"></video>
   <view class="main-video-mask" wx:if="{{bShowVideo}}"></view>
