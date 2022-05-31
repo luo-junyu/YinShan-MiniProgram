@@ -396,9 +396,9 @@ Page({
               this.setData({ sEncourage: this.sStatus })
             }, 2000)
           })
-        } else {
-          this.inputAudio(data)
+        // } else {
         }
+        this.inputAudio(data)
         this.playAudioList()
       } else if (data.type === 'finish_class_confirm') {
         console.log('收到结束课程确认消息')
