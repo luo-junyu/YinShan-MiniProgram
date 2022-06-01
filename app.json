@@ -19,7 +19,8 @@
     "pages/survey/survey",
     "pages/rehabData/rehabData",
     "pages/schedule/schedule",
-    "pages/examination/examRoom"
+    "pages/examination/examRoom",
+    "pages/assessment/assessReport"
   ],
   "window":{
     "backgroundTextStyle":"light",
