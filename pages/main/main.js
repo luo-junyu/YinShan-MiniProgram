@@ -4,6 +4,8 @@ import WebsocketHeartbeat from '../../utils/heart.js'
 import { uControlStart } from '../../utils/api/api.js'
 import { parseData } from '../../utils/util.js'
 import { genTestUserSig } from '../../utils/GenerateTestUserSig.js'
+const log = require('../../utils/log.js')
+
 // 获取应用实例
 const app = getApp()
 // const io = require('../../utils/weapp.socket.io.js')
@@ -83,8 +85,13 @@ Page({
     wx.setKeepScreenOn({
       keepScreenOn: true
     })
+    this.setPusherAttributesHandler({ orientation: 'horizontal' })
+    this.setPusherAttributesHandler({ orientation: 'vertical' })
     // socket连接存在并调用Pause控件的恢复方法
     app.globalData.oWs && this.data.oPause.resumeAction()
+    if (app.globalData.oWs.repeat >= app.globalData.oWs.opts.repeatLimit) {
+      this.endClass()
+    }
   },
   onHide () {
     console.log('hide')
@@ -93,9 +100,9 @@ Page({
       keepScreenOn: false
     })
     // 结束课程资源回收
-    this.endClass()
+    // this.endClass()
     // FIXME: 该变量未使用
-    this.bEnded = true
+    // this.bEnded = true
     // this.trtcRoomContext.exitRoom();
   },
   onLoad (options) {
@@ -187,7 +194,7 @@ Page({
       miniprogram: wx,
       connectSocketParams: {
         url: app.globalData.wsUrl,
-        repeatLimit: 30
+        repeatLimit: 50
       }
     }).then(task => {
       app.globalData.oWs = task
@@ -276,12 +283,14 @@ Page({
     this.TRTC = new TRTC(this)
     // pusher 初始化参数
     const pusherConfig = {
-      beautyLevel: 0,
+      beautyLevel: 3,
+      whitenessLevel: 3,
       localMirror: 'auto',
       enableRemoteMirror: true,
-      audioVolumeType: 'media',
+      audioVolumeType: 'auto',
       videoWidth: 288,
-      videoHeight: 368
+      videoHeight: 368,
+      enableMic: false,
     }
     const pusher = this.TRTC.createPusher(pusherConfig)
     this.setData({
@@ -292,7 +301,7 @@ Page({
       },
       pusher: pusher.pusherAttributes,
       playerList: [],
-      localAudio: true,
+      localAudio: false,
       localVideo: true
     })
   },
@@ -398,7 +407,9 @@ Page({
           })
         // } else {
         }
-        this.inputAudio(data)
+        if (data.path) {
+          this.inputAudio(data)
+        }
         this.playAudioList()
       } else if (data.type === 'finish_class_confirm') {
         console.log('收到结束课程确认消息')
@@ -545,9 +556,9 @@ Page({
       if (this.data.localVideo) {
         this.setPusherAttributesHandler({ enableCamera: true })
       }
-      if (this.data.localAudio) {
-        this.setPusherAttributesHandler({ enableMic: true })
-      }
+      // if (this.data.localAudio) {
+      //   this.setPusherAttributesHandler({ enableMic: true })
+      // }
     })
     this.TRTC.on(TRTC_EVENT.LOCAL_LEAVE, (event) => {
       console.log('* room LOCAL_LEAVE', event)
@@ -869,6 +880,10 @@ Page({
   skipExplain () {
     // this.switchStep('test','test-explain')
     this.switchStep('ing-loading', 'test-explain') // qtemp
+  },
+  handleVideoError() {
+    log.info('[main page] 视频播放错误: ', this.oVideo.src)
+    this.oVideo.play()
   }
   /* 页面事件 end */
 })

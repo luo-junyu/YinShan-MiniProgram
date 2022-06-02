@@ -171,7 +171,7 @@ class WebsocketHeartbeat {
       this.createWebSocket()
       // this.lockReconnect = false
       log.info('[websocket] 重连的新socket准备好了！')
-    }, this.opts.reconnectTimeout)
+    }, this.repeat * 1000)
   }
 
   send (msg) {
@@ -209,6 +209,7 @@ class WebsocketHeartbeat {
     clearTimeout(this.pingTimeoutId) // ping 清零
     clearTimeout(this.pongTimeoutId) // pong 清零
     clearTimeout(this.newSocketTimeoutId) // 如果重连上，就不需要设置新的socket连接了
+    this.repeat = 0
   }
 
   close (miniprogramParam) {
