@@ -1,8 +1,10 @@
 import { uLogin } from './api/api'
+
 let isRefreshing = true
 let subscribers = []
 let that = null
 const _this = {}
+
 function onAccessTokenFetched () {
   subscribers.forEach((callback) => {
     callback()
@@ -14,7 +16,13 @@ function addSubscriber (callback) {
   subscribers.push(callback)
 }
 
-_this.request = ({ url, data = {}, method, header = 'application/json', callback = '' } = {}) => {
+_this.request = ({
+  url,
+  data = {},
+  method,
+  header = 'application/json',
+  callback = ''
+} = {}) => {
   // _this = this;
   return new Promise((resolve, reject) => {
     wx.request({
@@ -37,7 +45,12 @@ _this.request = ({ url, data = {}, method, header = 'application/json', callback
         } else if (statusCode === 401) {
           // 将需要重新执行的接口缓存到一个队列中
           addSubscriber(() => {
-            _this.request({ url: `${url}`, data, method, callback: resolve })
+            _this.request({
+              url: `${url}`,
+              data,
+              method,
+              callback: resolve
+            })
           })
 
           if (isRefreshing) {
@@ -50,12 +63,21 @@ _this.request = ({ url, data = {}, method, header = 'application/json', callback
           isRefreshing = false
         } else if (statusCode === 200) {
           if (res.data.code === '-1' || res.data.code === '500') {
-            wx.showModal({ content: res.data.message, showCancel: false })
+            wx.showModal({
+              content: res.data.message,
+              showCancel: false,
+              success (res) {
+                reject(res.data)
+              }
+            })
           } else {
             resolve(res.data)
           }
         } else if (statusCode === 500) {
-          wx.showModal({ content: '服务器错误，请刷新重试', showCancel: false })
+          wx.showModal({
+            content: '服务器错误，请刷新重试',
+            showCancel: false
+          })
         }
       }
     })
@@ -86,7 +108,7 @@ const getNewToken = () => {
         })
       },
       fail (err) {
-        reject()
+        reject(err)
         console.error('wx login fail', err)
       }
     })
@@ -94,12 +116,34 @@ const getNewToken = () => {
 }
 
 // 封装get方法
-const get = ({ url, data = {}, header = '', callback = '' } = {}) => {
-  return _this.request({ url, data, method: 'get', header, callback })
+const get = ({
+  url,
+  data = {},
+  header = '',
+  callback = ''
+} = {}) => {
+  return _this.request({
+    url,
+    data,
+    method: 'get',
+    header,
+    callback
+  })
 }
 // 封装post方法
-const post = ({ url, data = {}, header = '', callback = '' } = {}) => {
-  return _this.request({ url, data, method: 'post', header, callback })
+const post = ({
+  url,
+  data = {},
+  header = '',
+  callback = ''
+} = {}) => {
+  return _this.request({
+    url,
+    data,
+    method: 'post',
+    header,
+    callback
+  })
 }
 const init = (_this) => {
   that = _this

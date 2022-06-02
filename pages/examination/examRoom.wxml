@@ -34,4 +34,52 @@
     <image class="exam-warn-icon" src="/assets/lowest.png"></image>
     <view class="exam-warn-text">请回到正确位置，继续完成体格检查吧</view>
   </view>
+  <live-pusher style="visibility:{{bShowLivePusher?'visible':'hidden'}}"
+               class="pusher {{bSmallPusher ? 'small' : ''}} {{needBlur ? 'need-blur': ''}}"
+               url="{{pusher.url}}"
+               mode="{{pusher.mode}}"
+               autopush="{{pusher.autopush}}"
+               enable-camera="{{pusher.enableCamera}}"
+               enable-mic="{{pusher.enableMic}}"
+               muted="{{!pusher.enableMic}}"
+               enable-agc="{{pusher.enableAgc}}"
+               enable-ans="{{pusher.enableAns}}"
+               enable-ear-monitor="{{pusher.enableEarMonitor}}"
+               auto-focus="{{pusher.enableAutoFocus}}"
+               zoom="{{pusher.enableZoom}}"
+               min-bitrate="{{pusher.minBitrate}}"
+               max-bitrate="{{pusher.maxBitrate}}"
+               video-width="{{pusher.videoWidth}}"
+               video-height="{{pusher.videoHeight}}"
+               beauty="{{pusher.beautyLevel}}"
+               whiteness="{{pusher.whitenessLevel}}"
+               orientation="{{pusher.videoOrientation}}"
+               aspect="{{pusher.videoAspect}}"
+               device-position="{{pusher.frontCamera}}"
+               remote-mirror="{{pusher.enableRemoteMirror}}"
+               local-mirror="{{pusher.localMirror}}"
+               background-mute="{{pusher.enableBackgroundMute}}"
+               audio-quality="{{pusher.audioQuality}}"
+               audio-volume-type="{{pusher.audioVolumeType}}"
+               audio-reverb-type="{{pusher.audioReverbType}}"
+               waiting-image="{{pusher.waitingImage}}"
+               debug="{{debug}}"
+               beauty-style="{{pusher.beautyStyle}}"
+               filter="{{pusher.filter}}"
+               bindstatechange="_pusherStateChangeHandler"
+               bindnetstatus="_pusherNetStatusHandler"
+               binderror="_pusherErrorHandler"
+               bindbgmstart="_pusherBGMStartHandler"
+               bindbgmprogress="_pusherBGMProgressHandler"
+               bindbgmcomplete="_pusherBGMCompleteHandler"
+               bindaudiovolumenotify="_pusherAudioVolumeNotify"
+  />
+  <canvas id='debug-canvas' type="2d" class="debug-canvas small {{needBlur ? 'need-blur': ''}}"
+          style="visibility:{{bShowDebug? 'visible':'hidden'}}"></canvas>
+  <view class="main-video">
+    <video id="main-video" src="{{sVideoUrl}}" autoplay="{{false}}" style="display:{{bShowVideo?'block':'none'}}"
+           bindended="handleVideoEnded" loop="{{true}}" show-center-play-btn="{{false}}" object-fit="cover" muted="{{true}}"
+           controls="{{bShowVideoControl}}" class="main-video-content {{needBlur ? 'need-blur': ''}}"></video>
+    <view class="main-video-mask" wx:if="{{bShowVideo}}"></view>
+  </view>
 </view>

@@ -10,6 +10,7 @@ const uGetStatistic = '/session/get_session_statistic'
 const uPostFeedback = '/session/feedback'
 const uAssessStatus = '/client/assess_status'
 const uPhysicalExam = '/physical_exam'
+const uPhysicalExamStart = '/physical_exam/start'
 const uGetMedicalHistoryQT = '/client/get_medical_history_qt'
 const uRegMedicalHistoryQT = '/client/reg_medical_history_qt'
 const uGetClientStatistic = '/client/get_client_statistic'
@@ -26,6 +27,7 @@ module.exports = {
   uPostFeedback,
   uAssessStatus,
   uPhysicalExam,
+  uPhysicalExamStart,
   uGetMedicalHistoryQT,
   uRegMedicalHistoryQT,
   uGetClientStatistic
