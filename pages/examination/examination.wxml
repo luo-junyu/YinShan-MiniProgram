@@ -47,6 +47,6 @@
     </view>
   </view>
   <view class="container-bottom">
-    <button class="container-bottom-action">立即检查</button>
+    <button class="container-bottom-action" bindtap="goToExamRoom">立即检查</button>
   </view>
 </view>

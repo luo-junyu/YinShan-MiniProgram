@@ -29,20 +29,6 @@
         },
         {
           "name": "",
-          "pathName": "pages/examination/examHorizontal",
-          "query": "",
-          "launchMode": "default",
-          "scene": null
-        },
-        {
-          "name": "",
-          "pathName": "pages/examination/examVertical",
-          "query": "",
-          "launchMode": "default",
-          "scene": null
-        },
-        {
-          "name": "",
           "pathName": "pages/survey/survey",
           "query": "",
           "launchMode": "default",
@@ -79,6 +65,13 @@
         {
           "name": "",
           "pathName": "pages/assessment/assessReport",
+          "query": "",
+          "launchMode": "default",
+          "scene": null
+        },
+        {
+          "name": "",
+          "pathName": "pages/examination/examRoom",
           "query": "",
           "launchMode": "default",
           "scene": null

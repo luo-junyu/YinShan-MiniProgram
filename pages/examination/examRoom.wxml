@@ -3,16 +3,18 @@
     <text class="exam-vertical-ready-text">请参考人物框，身体左侧正对手机
       屏幕，站立，让身体进入人物框，
       并保持3s</text>
-    <image class="exam-vertical-ready-image" src="/assets/exam_vertical_mask_r.png" mode="aspectFill bottom"></image>
+    <image class="exam-vertical-ready-image" src="{{fullBodyCheck ? '/assets/exam_vertical_mask_r.png': '/assets/exam_vertical_mask.png'}}"
+           mode="aspectFill bottom"></image>
     <view class="exam-vertical-ready-mask">
-      <text class="exam-vertical-ready-mask-count">3</text>
+      <text class="exam-vertical-ready-mask-count">{{countDown}}</text>
     </view>
   </view>
   <view wx:elif="{{currentStep === 1 && pageDirection === 'horizontal'}}" class="exam-mask">
     <text class="exam-mask-hint">请参考人物框，趴到瑜伽垫上，双手、膝盖撑地，
       向后抬起右腿，让身体进入人物框，并保持3秒</text>
-    <text class="exam-mask-count">1</text>
-    <image class="exam-mask-image" src="/assets/exam_horiz_mask.png" mode="aspectFill"></image>
+    <text class="exam-mask-count">{{countDown}}</text>
+    <image class="exam-mask-image" src="{{'/assets/exam_horizontal_mask' + fullBodyCheck ? '_r': '' + '.png'}}"
+           mode="aspectFill"></image>
   </view>
   <view class="exam-vertical-topic" wx:elif="{{currentStep === 2 && pageDirection === 'vertical'}}">
     <view class="exam-vertical-topic-title">活动度测量</view>
@@ -35,7 +37,7 @@
     <view class="exam-warn-text">请回到正确位置，继续完成体格检查吧</view>
   </view>
   <live-pusher style="visibility:{{bShowLivePusher?'visible':'hidden'}}"
-               class="pusher {{bSmallPusher ? 'small' : ''}} {{needBlur ? 'need-blur': ''}}"
+               class="pusher {{bSmallPusher ? 'small' : ''}} {{needBlur ? 'need-blur': ''}} {{pageDirection}}"
                url="{{pusher.url}}"
                mode="{{pusher.mode}}"
                autopush="{{pusher.autopush}}"
@@ -53,7 +55,7 @@
                video-height="{{pusher.videoHeight}}"
                beauty="{{pusher.beautyLevel}}"
                whiteness="{{pusher.whitenessLevel}}"
-               orientation="{{pusher.videoOrientation}}"
+               orientation="{{pageDirection}}"
                aspect="{{pusher.videoAspect}}"
                device-position="{{pusher.frontCamera}}"
                remote-mirror="{{pusher.enableRemoteMirror}}"
@@ -78,7 +80,8 @@
           style="visibility:{{bShowDebug? 'visible':'hidden'}}"></canvas>
   <view class="main-video">
     <video id="main-video" src="{{sVideoUrl}}" autoplay="{{false}}" style="display:{{bShowVideo?'block':'none'}}"
-           bindended="handleVideoEnded" loop="{{true}}" show-center-play-btn="{{false}}" object-fit="cover" muted="{{true}}"
+           bindended="handleVideoEnded" loop="{{true}}" show-center-play-btn="{{false}}" object-fit="cover"
+           muted="{{true}}"
            controls="{{bShowVideoControl}}" class="main-video-content {{needBlur ? 'need-blur': ''}}"></video>
     <view class="main-video-mask" wx:if="{{bShowVideo}}"></view>
   </view>

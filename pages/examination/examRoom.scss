@@ -3,6 +3,28 @@
   @return #{$rpx * 100 / 750}vmin;
 }
 
+.pusher {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  z-index: 100;
+  top: 0;
+  right: 0;
+
+  &.small {
+    right: vmin(30);
+    top: vmin(30);
+    border-radius: vmin(10);
+    &.horizontal {
+      width: vmin(440);
+      height: vmin(250);
+    }
+    &.vertical {
+      width: vmin(250);
+      height: vmin(440);
+    }
+  }
+}
 .exam {
   width: 100%;
   height: 100%;
@@ -12,6 +34,7 @@
     width: 100%;
     height: 100%;
     position: relative;
+    z-index: 200;
     &-info {
       position: absolute;
       left: 0;
@@ -83,6 +106,7 @@
       top: 0;
       width: 100%;
       height: 100%;
+      opacity: 0.2;
     }
   }
   &-topic {
@@ -196,6 +220,7 @@
     height: 100%;
     width: 100%;
     position: relative;
+    z-index: 200;
     &-text {
       position: absolute;
       left: 0;
@@ -213,6 +238,7 @@
       left: 0;
       width: 100%;
       height: 100%;
+      opacity: 0.2;
     }
     &-mask {
       position: absolute;

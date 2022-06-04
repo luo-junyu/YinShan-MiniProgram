@@ -2,6 +2,7 @@ import { uPhysicalExamStart } from '../../utils/api/api'
 import TRTC from '../../utils/trtc-wx'
 import { genTestUserSig } from '../../utils/GenerateTestUserSig'
 import WebsocketHeartbeat from '../../utils/heart'
+import { parseData } from '../../utils/util'
 
 const app = getApp()
 Page({
@@ -21,9 +22,12 @@ Page({
     playerList: [],
     localAudio: false,
     localVideo: false,
-    bSmallPusher: true,
+    bSmallPusher: false,
     needBlur: false, // 需要高斯模糊背景
-    fullBodyCheck: true
+    fullBodyCheck: false,
+    currentActionIndex: 0,
+    countDown: 3,
+    sStep: ''
   },
   TRTC: null,
   aiServerUrl: '',
@@ -31,6 +35,8 @@ Page({
   oCanvas: null,
   oCtx: null,
   aBone: [], // 骨骼数组
+  bodyCheckFailedTimestamp: null,
+  bodyCheckSuccessTimestamp: null,
   onShow () {
     wx.setKeepScreenOn({
       keepScreenOn: true
@@ -53,7 +59,7 @@ Page({
       // 从返回中获取streamId并入_rtcConfig
       Object.assign(this.data._rtcConfig, { streamId: res.streamId })
       // 从返回中获取动作列表并存储
-      this.setData({ physicalExamList: res.pysicalExamList })
+      this.setData({ physicalExamList: res.physicalExamList })
       // 如返回中指定了AIServerUrl则使用，否则使用全局默认socketUrl
       this.aiServerUrl = res.aiServerUrl || app.globalData.wsUrl
       // 初始化腾讯实时音视频
@@ -71,9 +77,30 @@ Page({
     })
   },
   onResize (options) {
-    // TODO: need set pusher/video orientation?
     this.setData({
       pageDirection: options.size.windowHeight > options.size.windowWidth ? 'vertical' : 'horizontal'
+    })
+    this.sendResolution()
+  },
+  sendResolution () {
+    const height = wx.getSystemInfoSync().windowHeight
+    const width = wx.getSystemInfoSync().windowWidth
+    app.globalData.oWs.send({
+      data: JSON.stringify({
+        type: 'change_resolution',
+        height,
+        width
+      }),
+      success: () => {
+        this.beginTest()
+      }
+    })
+  },
+  beginTest () {
+    this.setData({
+      bShowLivePusher: true,
+      bSmallPusher: false,
+      sStep: 'test'
     })
   },
   initTrtc () {
@@ -292,8 +319,7 @@ Page({
           success: () => {
             console.log('[WebSocket] reg ai service ok!')
             // 向Socket Server注册后发送当前手机屏幕分辨率
-            // TODO: required???
-            // this.sendResolution()
+            this.sendResolution()
           }
         })
       }
@@ -313,6 +339,41 @@ Page({
     })
   },
   handleReceiveMsg (msg) {
-    console.log(msg)
+    const {
+      data,
+      type
+    } = parseData(msg)
+    if (type === 'obj') {
+      // 发送回来的是json
+      console.log('接收到的:', data)
+      if (data.type === 'update_check_info') {
+        // 分别记录最后一次的check成功/失败时间戳
+        if (!this.bodyCheckFailedTimestamp) this.bodyCheckFailedTimestamp = Date.now()
+        if (!this.bodyCheckSuccessTimestamp) this.bodyCheckSuccessTimestamp = Date.now()
+        // TEST: set full body check to true for Test step switch
+        // data.full_body_check = true
+        if (!data.full_body_check) {
+          this.bodyCheckFailedTimestamp = Date.now()
+          if (this.data.sStep === 'test') {
+            this.setData({
+              countDown: null
+            })
+          }
+        } else {
+          this.bodyCheckSuccessTimestamp = Date.now()
+          if (this.data.sStep === 'test') {
+            // 一旦检测到true，则开始倒数计时3s，当小于1时则进入下一步
+            const countDownNumber = 3 - Math.floor((Date.now() - this.bodyCheckFailedTimestamp) / 1000)
+            if (countDownNumber < 1) {
+              // TODO: 显示预加载信息界面
+            } else {
+              this.setData({
+                countDown: countDownNumber
+              })
+            }
+          }
+        }
+      }
+    }
   }
 })
