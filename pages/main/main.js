@@ -67,8 +67,8 @@ Page({
     fair: 'https://kangfu-action-video-1258481652.cos.ap-beijing.myqcloud.com/audio/sound-effect/fair.mp3'
   },
   backgroundAudioUrl: 'https://kangfu-action-video-1258481652.cos.ap-beijing.myqcloud.com/audio/background/meihaodeyitian.mp3',
+  countDownAudioUrl: 'https://kangfu-action-video-1258481652.cos.ap-beijing.myqcloud.com/audio/sound-effect/countdown.mp3',
   idxAudioUrl: ['https://kangfu-action-video-1258481652.cos.ap-beijing.myqcloud.com/audio-tts/action/aikexuhao/xuhao-2.mp3', 'https://kangfu-action-video-1258481652.cos.ap-beijing.myqcloud.com/audio-tts/action/aikexuhao/xuhao-3.mp3', 'https://kangfu-action-video-1258481652.cos.ap-beijing.myqcloud.com/audio-tts/action/aikexuhao/xuhao-4.mp3', 'https://kangfu-action-video-1258481652.cos.ap-beijing.myqcloud.com/audio-tts/action/aikexuhao/xuhao-5.mp3', 'https://kangfu-action-video-1258481652.cos.ap-beijing.myqcloud.com/audio-tts/action/aikexuhao/xuhao-6.mp3', 'https://kangfu-action-video-1258481652.cos.ap-beijing.myqcloud.com/audio-tts/action/aikexuhao/xuhao-7.mp3', 'https://kangfu-action-video-1258481652.cos.ap-beijing.myqcloud.com/audio-tts/action/aikexuhao/xuhao-8.mp3', 'https://kangfu-action-video-1258481652.cos.ap-beijing.myqcloud.com/audio-tts/action/aikexuhao/xuhao-9.mp3', 'https://kangfu-action-video-1258481652.cos.ap-beijing.myqcloud.com/audio-tts/action/aikexuhao/xuhao-10.mp3', 'https://kangfu-action-video-1258481652.cos.ap-beijing.myqcloud.com/audio-tts/action/aikexuhao/xuhao-11.mp3',],
-  // ['https://kangfu-action-video-1258481652.cos.ap-beijing.myqcloud.com/audio/xuhao/diyigedongzuo.m4a', 'https://kangfu-action-video-1258481652.cos.ap-beijing.myqcloud.com/audio/xuhao/diergedongzuo.m4a', 'https://kangfu-action-video-1258481652.cos.ap-beijing.myqcloud.com/audio/xuhao/disangedongzuo.m4a', 'https://kangfu-action-video-1258481652.cos.ap-beijing.myqcloud.com/audio/xuhao/disigedongzuo.m4a', 'https://kangfu-action-video-1258481652.cos.ap-beijing.myqcloud.com/audio/xuhao/diwugedongzuo.m4a', 'https://kangfu-action-video-1258481652.cos.ap-beijing.myqcloud.com/audio/xuhao/diliugedongzuo.m4a', 'https://kangfu-action-video-1258481652.cos.ap-beijing.myqcloud.com/audio/xuhao/diqigedongzuo.m4a', 'https://kangfu-action-video-1258481652.cos.ap-beijing.myqcloud.com/audio/xuhao/dibagedongzuo.m4a', 'https://kangfu-action-video-1258481652.cos.ap-beijing.myqcloud.com/audio/xuhao/dijiugedongzuo.m4a', 'https://kangfu-action-video-1258481652.cos.ap-beijing.myqcloud.com/audio/xuhao/dishigedongzuo.m4a'],
   finishClassEncourageAudio: 'https://kangfu-action-video-1258481652.cos.ap-beijing.myqcloud.com/audio-tts/action/aikejili/jili-15.mp3',
   unfinishClassEncourageAudio: 'https://kangfu-action-video-1258481652.cos.ap-beijing.myqcloud.com/audio-tts/action/aikejili/jili-14.mp3',
   finishActionEncourageAudio: 'https://kangfu-action-video-1258481652.cos.ap-beijing.myqcloud.com/audio-tts/action/aikejili/jili-11.mp3',
@@ -164,11 +164,28 @@ Page({
     this.initCountAudio()
     // 初始化背景音乐音频组件
     this.initBackgroundAudio()
+
+    wx.onAudioInterruptionBegin((res) => {
+      console.log('wx.onAudioInterruptionBegin')
+      this.pauseAction()
+    })
+    wx.onAudioInterruptionEnd((res) => {
+      console.log('wx.onAudioInterruptionEnd')
+      this.resumeAction()
+    })
   },
   initShortAudio () {
     this.oShortAudio = wx.createInnerAudioContext({ useWebAudioImplement: true })
+    this.oShortAudio.obeyMuteSwitch = false
     this.oShortAudio.onEnded((event) => {
       console.log('短音频结束')
+    })
+    this.oShortAudio.onError((event) => {
+      console.log('短音频播放出错')
+      log.info('短音频播放错误 ', event)
+      audioSrc = this.oShortAudio.src
+      this.oShortAudio = wx.createInnerAudioContext({ useWebAudioImplement: true })
+      this.oShortAudio.src = audioSrc
     })
   },
   initBackgroundAudio () {
@@ -176,18 +193,27 @@ Page({
     this.oBackgroundAudio.src = this.backgroundAudioUrl
     this.oBackgroundAudio.loop = true
     this.oBackgroundAudio.volume = 0.3
-    this.oBackgroundAudio.onEnded((event) => {
-      console.log('短音频结束')
+    this.oBackgroundAudio.onError((event) => {
+      console.log('背景音乐播放出错');
+      this.oBackgroundAudio = wx.createInnerAudioContext({ useWebAudioImplement: true })
+      this.oBackgroundAudio.src = this.backgroundAudioUrl
+      this.oBackgroundAudio.play()
     })
     this.oBackgroundAudio.play()
   },
   initCountAudio () {
     this.oCountAudio = wx.createInnerAudioContext({ useWebAudioImplement: true })
-    this.oCountAudio.src = 'https://kangfu-action-video-1258481652.cos.ap-beijing.myqcloud.com/audio/sound-effect/countdown.mp3'
+    this.oCountAudio.src = this.countDownAudioUrl
     this.oCountAudio.loop = true
     this.oCountAudio.onEnded((event) => {
       console.log('短音频结束')
     })
+    this.oCountAudio.onError((event) => {
+      console.log('计时音频播放出错')
+      this.oCountAudio = wx.createInnerAudioContext({ useWebAudioImplement: true })
+      this.oCountAudio.src = this.countDownAudioUrl
+      }
+    )
   },
   initSocket () {
     WebsocketHeartbeat({
@@ -312,7 +338,7 @@ Page({
     } = parseData(str)
     if (type === 'obj') {
       // 发送回来的是json
-      console.log('接收到的:', data)
+      // console.log('接收到的:', data)
       if (data.type === 'update_client_info') {
         // 分别记录最后一次的check成功/失败时间戳
         if (!this.bodyCheckFailedTimestamp) this.bodyCheckFailedTimestamp = Date.now()
@@ -378,12 +404,20 @@ Page({
               this.bFinished = true
               console.log('动作完成比例超过了100', data)
               console.log('计数', this.data.nAction, this.data.aAction)
+              // 通知后端动作结束
+              app.globalData.oWs.send({
+                data: JSON.stringify({
+                  type: 'finish_action'
+                })
+              })
+              // 播放目标达成语音
               app.globalData.oAudio.src = this.finishActionEncourageAudio
               console.log('[debug] 目标达成 finishActionEncourageAudio')
               app.globalData.oAudio.play()
+              // 自动切换动作（等待语音播放完成）
               setTimeout(() => {
                 this.nextAction()
-              }, 1000)
+              }, 2000)
             } else {
               if (this.nNowActionId !== data.action_id) {
                 this.nNowActionId = data.action_id
@@ -483,6 +517,13 @@ Page({
     app.globalData.oAudio.play()
   }, // 下一个动作
   nextAction () {
+    // 通知后端动作结束
+    app.globalData.oWs.send({
+      data: JSON.stringify({
+        type: 'finish_action'
+      })
+    })
+
     if ((this.data.nAction + 1) < this.data.aAction.length) {
       this.setData({ nAction: this.data.nAction + 1 }, () => {
         this.switchStep('ing-loading', 'ing')
@@ -883,6 +924,9 @@ Page({
   },
   handleVideoError() {
     log.info('[main page] 视频播放错误: ', this.oVideo.src)
+    this.setData({
+      sVideoUrl: this.data.sVideoUrl
+    })
     this.oVideo.play()
   }
   /* 页面事件 end */
