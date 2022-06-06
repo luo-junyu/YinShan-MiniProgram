@@ -25,5 +25,10 @@ Page({
       .catch(error => {
         console.log(error)
       })
+  },
+  goToExamRoom () {
+    wx.navigateTo({
+      url: '/pages/examination/examRoom'
+    })
   }
 })

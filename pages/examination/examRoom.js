@@ -2,12 +2,14 @@ import { uPhysicalExamStart } from '../../utils/api/api'
 import TRTC from '../../utils/trtc-wx'
 import { genTestUserSig } from '../../utils/GenerateTestUserSig'
 import WebsocketHeartbeat from '../../utils/heart'
+import { parseData } from '../../utils/util'
 
 const app = getApp()
 Page({
+  behaviors: [require('miniprogram-computed').behavior],
   data: {
     pageDirection: 'vertical',
-    currentStep: 1,
+    currentStep: 1, // 1=TEST 2=LOADING 3=EXAMINING 4=OUTSIDE
     startLoading: false,
     physicalExamList: [],
     _rtcConfig: {
@@ -17,13 +19,28 @@ Page({
     },
     bShowLivePusher: true, // 是否有推流图
     bShowVideo: true,
+    bShowVideoControl: true,
+    sVideoUrl: null,
     pusher: null,
     playerList: [],
     localAudio: false,
     localVideo: false,
-    bSmallPusher: true,
+    bSmallPusher: false,
     needBlur: false, // 需要高斯模糊背景
-    fullBodyCheck: true
+    fullBodyCheck: false,
+    currentActionIndex: 0,
+    countDown: null
+  },
+  computed: {
+    currentAction (data) {
+      if (data.physicalExamList.length > 0 && data.currentActionIndex < data.physicalExamList.length) {
+        return data.physicalExamList[data.currentActionIndex]
+      }
+      return {
+        name: '',
+        script: ''
+      }
+    }
   },
   TRTC: null,
   aiServerUrl: '',
@@ -31,6 +48,8 @@ Page({
   oCanvas: null,
   oCtx: null,
   aBone: [], // 骨骼数组
+  bodyCheckFailedTimestamp: null,
+  bodyCheckSuccessTimestamp: null,
   onShow () {
     wx.setKeepScreenOn({
       keepScreenOn: true
@@ -53,7 +72,7 @@ Page({
       // 从返回中获取streamId并入_rtcConfig
       Object.assign(this.data._rtcConfig, { streamId: res.streamId })
       // 从返回中获取动作列表并存储
-      this.setData({ physicalExamList: res.pysicalExamList })
+      this.setData({ physicalExamList: res.physicalExamList })
       // 如返回中指定了AIServerUrl则使用，否则使用全局默认socketUrl
       this.aiServerUrl = res.aiServerUrl || app.globalData.wsUrl
       // 初始化腾讯实时音视频
@@ -70,10 +89,131 @@ Page({
       wx.navigateBack()
     })
   },
+  onUnload () {
+    if (this.oVideo) {
+      this.oVideo.stop()
+    }
+    app.globalData.oWs.send({
+      data: JSON.stringify({
+        type: 'finish_class'
+      })
+    })
+    if (app.globalData.oWs.status === 'loss') {
+      app.globalData.oWs.forbidConnect()
+      app.globalData.oWs.close()
+      this.exitRoom()
+      wx.navigateBack()
+    }
+  },
   onResize (options) {
-    // TODO: need set pusher/video orientation?
+    const direction = options.size.windowHeight > options.size.windowWidth ? 'vertical' : 'horizontal'
     this.setData({
-      pageDirection: options.size.windowHeight > options.size.windowWidth ? 'vertical' : 'horizontal'
+      pageDirection: direction
+    })
+    if (this.data.physicalExamList.length > 0 && this.data.currentActionIndex < this.data.physicalExamList.length) {
+      const currentAction = this.data.physicalExamList[this.data.currentActionIndex]
+      if (currentAction.type === 'flexibility') {
+        direction === 'horizontal' ? this.pauseAction() : this.resumeAction()
+      } else if (currentAction.type === 'strength') {
+        direction === 'vertical' ? this.pauseAction() : this.resumeAction()
+      }
+    }
+  },
+  sendResolution () {
+    const height = wx.getSystemInfoSync().windowHeight
+    const width = wx.getSystemInfoSync().windowWidth
+    app.globalData.oWs.send({
+      data: JSON.stringify({
+        type: 'change_resolution',
+        height,
+        width
+      }),
+      success: () => {
+        this.beginTest()
+      }
+    })
+  },
+  pauseAction () {
+    if (this.oVideo) {
+      this.oVideo.pause()
+    }
+    app.globalData.oWs.send({
+      data: JSON.stringify({
+        type: 'pause_class'
+      })
+    })
+    this.setData({
+      needBlur: true
+    })
+  },
+  resumeAction () {
+    app.globalData.oWs.send({
+      data: JSON.stringify({
+        type: 'resume_class'
+      })
+    })
+    this.setData({
+      needBlur: false
+    })
+    if (this.oVideo) {
+      this.oVideo.play()
+    }
+  },
+  beginTest () {
+    this.setData({
+      bShowLivePusher: true,
+      bSmallPusher: false,
+      currentStep: 1
+    })
+  },
+  beginLoading () {
+    const currentVideoUrl = this.data.physicalExamList[this.data.currentActionIndex].videoUrl
+    console.log(currentVideoUrl)
+    this.setData({
+      currentStep: 2,
+      needBlur: true,
+      bShowVideo: true,
+      bShowLivePusher: true,
+      bSmallPusher: true,
+      bShowDebug: true,
+      sVideoUrl: currentVideoUrl
+    }, () => {
+      this.setData({
+        startLoading: true
+      })
+    })
+  },
+  beginExamining () {
+    this.setData({
+      startLoading: false,
+      needBlur: false,
+      bShowVideoControl: false,
+      currentStep: 3
+    }, () => {
+      this.oVideo.play()
+      const currentAction = this.data.physicalExamList[this.data.currentActionIndex]
+      app.globalData.oWs.send({
+        data: JSON.stringify({
+          type: 'resume_class'
+        })
+      })
+      console.log('send change action:' + currentAction.id)
+      app.globalData.oWs.send({
+        data: JSON.stringify({
+          type: 'change_action', // action_name: 'tunqiao',//qtemp
+          action_id: currentAction.id
+        })
+      })
+    })
+  },
+  handleTransEnd (e) {
+    this.beginExamining()
+  },
+  handleVideoError (error) {
+    // 尝试加入加载错误处理，并重新设置视频播放地址
+    console.log(error)
+    this.setData({
+      sVideoUrl: this.data.sVideoUrl
     })
   },
   initTrtc () {
@@ -292,8 +432,7 @@ Page({
           success: () => {
             console.log('[WebSocket] reg ai service ok!')
             // 向Socket Server注册后发送当前手机屏幕分辨率
-            // TODO: required???
-            // this.sendResolution()
+            this.sendResolution()
           }
         })
       }
@@ -313,6 +452,51 @@ Page({
     })
   },
   handleReceiveMsg (msg) {
-    console.log(msg)
+    const {
+      data,
+      type
+    } = parseData(msg)
+    if (type === 'obj') {
+      // 发送回来的是json
+      console.log('接收到的:', data)
+      if (data.type === 'update_check_info') {
+        // 分别记录最后一次的check成功/失败时间戳
+        if (!this.bodyCheckFailedTimestamp) this.bodyCheckFailedTimestamp = Date.now()
+        if (!this.bodyCheckSuccessTimestamp) this.bodyCheckSuccessTimestamp = Date.now()
+        // TEST: set full body check to true for Test step switch
+        // data.full_body_check = true
+        if (!data.full_body_check) {
+          this.bodyCheckFailedTimestamp = Date.now()
+          // 检测false时，如果当前时间离上次最后true时间的间隔大于3s，则显示全屏提示
+          const isFailedCheckTimeout = Date.now() - this.bodyCheckSuccessTimestamp > 3000
+          if (this.data.currentStep === 3) {
+            this.setData({
+              fullBodyCheck: !isFailedCheckTimeout,
+              needBlur: isFailedCheckTimeout
+            })
+          }
+          if (this.data.currentStep === 1) {
+            this.setData({
+              fullBodyCheck: false,
+              countDown: null
+            })
+          }
+        } else {
+          this.bodyCheckSuccessTimestamp = Date.now()
+          if (this.data.currentStep === 1) {
+            // 一旦检测到true，则开始倒数计时3s，当小于1时则进入下一步
+            const countDownNumber = 3 - Math.floor((Date.now() - this.bodyCheckFailedTimestamp) / 1000)
+            if (countDownNumber < 1) {
+              this.beginLoading()
+            } else {
+              this.setData({
+                fullBodyCheck: true,
+                countDown: countDownNumber
+              })
+            }
+          }
+        }
+      }
+    }
   }
 })
