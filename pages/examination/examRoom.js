@@ -26,6 +26,8 @@ Page({
     localAudio: false,
     localVideo: false,
     bSmallPusher: false,
+    bFinished: false,
+    nNowActionId: '',
     needBlur: false, // 需要高斯模糊背景
     fullBodyCheck: false,
     currentActionIndex: 0,
@@ -74,7 +76,8 @@ Page({
       // 从返回中获取动作列表并存储
       this.setData({ physicalExamList: res.physicalExamList })
       // 如返回中指定了AIServerUrl则使用，否则使用全局默认socketUrl
-      this.aiServerUrl = res.aiServerUrl || app.globalData.wsUrl
+      this.aiServerUrl = res.aiServerUrl
+      // || app.globalData.wsUrl
       // 初始化腾讯实时音视频
       this.initTrtc()
       // 绑定实时音视频事件
@@ -120,13 +123,13 @@ Page({
     }
   },
   sendResolution () {
-    const height = wx.getSystemInfoSync().windowHeight
-    const width = wx.getSystemInfoSync().windowWidth
+    // const height = wx.getSystemInfoSync().windowHeight
+    // const width = wx.getSystemInfoSync().windowWidth
     app.globalData.oWs.send({
       data: JSON.stringify({
         type: 'change_resolution',
-        height,
-        width
+        height: that.oCanvas.height,
+        width: that.oCanvas.width
       }),
       success: () => {
         this.beginTest()
@@ -157,6 +160,15 @@ Page({
     })
     if (this.oVideo) {
       this.oVideo.play()
+    }
+  },
+  nextAction() {
+    if ((this.data.currentActionIndex + 1) < this.data.physicalExamList.length) {
+      this.setData({ currentActionIndex: this.data.currentActionIndex + 1}, () => {
+        this.beginExamining()
+      })
+    } else {
+  
     }
   },
   beginTest () {
@@ -197,15 +209,32 @@ Page({
           type: 'resume_class'
         })
       })
-      console.log('send change action:' + currentAction.id)
+      console.log('send change action: ' + currentAction)
       app.globalData.oWs.send({
         data: JSON.stringify({
-          type: 'change_action', // action_name: 'tunqiao',//qtemp
-          action_id: currentAction.id
+          type: 'change_check',
+          action_id: currentAction.id,
+          screen_toward: this.data.pageDirection
         })
       })
     })
   },
+  endRoom () {
+    this.oVideo.stop()
+    app.globalData.oAudio.pause()
+    console.log('结束课程')
+    app.globalData.oWs.send({
+      data: JSON.stringify({
+        type: 'finish_check'
+      })
+    })
+    if (app.globalData.oWs.status === 'loss') {
+      app.globalData.oWs.forbidConnect()
+      app.globalData.oWs.close()
+      this.exitRoom()
+      wx.navigateBack()
+    }
+  }, 
   handleTransEnd (e) {
     this.beginExamining()
   },
@@ -496,7 +525,65 @@ Page({
             }
           }
         }
+        this.drawDebug(data.cur_pose)
+        if (data.action_id !== this.data.nNowActionId && this.data.bFinished) {
+          // 已经切换到下一个动作了，更换状态到下一个动作
+          this.setData({
+            nNowActionId: data.action_id,
+            bFinished: false
+          })
+          
+        } else if (data.cur_finish_ratio >= 100 && !this.data.bFinished) {
+          // 第一次完成该动作
+          this.setData({
+            bFinished: true
+          })
+          // 告知后端该动作完成
+          app.globalData.oWs.send({
+            data: JSON.stringify({
+              type: 'finish_check_action'
+            })
+          })
+          // 更换到下一个动作
+          setTimeout(() => {
+            this.nextAction()
+          }, 1000);
+        }
+      } else if (data.type === 'finish_class_confirm') {
+        console.log('收到结束课程确认消息')
+        app.globalData.oWs.forbidConnect()
+        app.globalData.oWs.close()
+        this.exitRoom()
+        wx.navigateBack()
       }
     }
-  }
+  },
+  // 骨骼图绘制
+  drawDebug (aBone) {
+    const ctx = this.oCtx
+    this.oCanvas.width = this.oCanvas.width // Warning: This line can not be removed (by junyu)
+    const drawLine = (aTwoP = [[], []]) => {
+      ctx.beginPath()
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.5)'
+      ctx.moveTo(aTwoP[0][0], aTwoP[0][1])
+      ctx.lineTo(aTwoP[1][0], aTwoP[1][1])
+      ctx.stroke()
+      ctx.closePath()
+    }
+    this.skeleton.forEach((item, index) => {
+      if (aBone[item[0]][2] >= 0.2 && aBone[item[1]][2] >= 0.2) {
+        drawLine([aBone[item[0]], aBone[item[1]]])
+      }
+    })
+    ctx.fillStyle = 'rgba(255,255,255)'
+    for (let index = 0; index < aBone.length; index++) {
+      if (aBone[index][2] < 0.2) {
+        continue
+      }
+      ctx.beginPath()
+      ctx.arc(aBone[index][0], aBone[index][1], 2, 0, Math.PI * 2, false)
+      ctx.fill()
+    }
+  },
+
 })
