@@ -1,5 +1,6 @@
 {
   "usingComponents": {
   },
-  "pageOrientation": "auto"
+  "pageOrientation": "auto",
+  "disableScroll": true
 }

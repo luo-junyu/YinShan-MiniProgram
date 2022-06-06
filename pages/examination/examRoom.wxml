@@ -30,8 +30,8 @@
   </view>
   <view wx:elif="{{currentStep === 2 && pageDirection === 'horizontal'}}" class="exam-topic">
     <view class="exam-topic-title">肌肉力量测试</view>
-    <view class="exam-topic-text">第1项：仰卧举腿</view>
-    <view class="exam-topic-text">测试动态腹部肌肉（屈肌）耐力</view>
+    <view class="exam-topic-text">{{currentAction.name}}</view>
+    <view class="exam-topic-text">{{currentAction.script}}</view>
     <view class="loading-bar {{startLoading ? 'loaded-bar' : 'empty-bar'}}" bindtransitionend="handleTransEnd"></view>
   </view>
   <view wx:elif="{{currentStep === 3 && !fullBodyCheck && pageDirection === 'vertical'}}" class="exam-vertical-warn">
@@ -42,7 +42,7 @@
     <image class="exam-warn-icon" src="/assets/lowest.png"></image>
     <view class="exam-warn-text">请回到正确位置，继续完成体格检查吧</view>
   </view>
-  <live-pusher style="visibility:{{bShowLivePusher?'visible':'hidden'}}"
+  <live-pusher style="visibility:{{bShowLivePusher?'visible':'hidden'}}; top: {{pageDirection === 'vertical' && bSmallPusher ? navHeight+'px': '30rpx'}}"
                class="pusher {{bSmallPusher ? 'small' : ''}} {{needBlur ? 'need-blur': ''}} {{pageDirection}}"
                url="{{pusher.url}}"
                mode="{{pusher.mode}}"
@@ -82,8 +82,8 @@
                bindbgmcomplete="_pusherBGMCompleteHandler"
                bindaudiovolumenotify="_pusherAudioVolumeNotify"
   />
-  <canvas id='debug-canvas' type="2d" class="debug-canvas small {{needBlur ? 'need-blur': ''}}"
-          style="visibility:{{bShowDebug? 'visible':'hidden'}}"></canvas>
+  <canvas id='debug-canvas' type="2d" class="debug-canvas small {{needBlur ? 'need-blur': ''}} {{pageDirection}}"
+          style="visibility:{{bShowDebug? 'visible':'hidden'}}; top: {{pageDirection === 'vertical' ? navHeight+'px': '30rpx'}}"></canvas>
   <video id="main-video" src="{{sVideoUrl}}" autoplay="{{false}}" style="display:{{bShowVideo?'block':'none'}}"
          binderror="handleVideoError" loop="{{true}}" show-center-play-btn="{{false}}" object-fit="cover"
          muted="{{true}}"

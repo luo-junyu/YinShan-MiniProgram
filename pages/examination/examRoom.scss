@@ -6,6 +6,31 @@
 .need-blur {
   filter: blur(10rpx);
 }
+.debug-canvas {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  z-index: 101;
+  top: 0;
+  right: 0;
+  background: rgba(0, 0, 0, .5);
+
+  &.small {
+    border-radius: vmin(10);
+    &.horizontal {
+      right: vmin(30);
+      top: vmin(30);
+      width: vmin(440);
+      height: vmin(250);
+    }
+    &.vertical {
+      top: vmin(0);
+      right: vmin(0);
+      width: vmin(250);
+      height: vmin(440);
+    }
+  }
+}
 
 .pusher {
   position: absolute;

@@ -8,6 +8,7 @@ const app = getApp()
 Page({
   behaviors: [require('miniprogram-computed').behavior],
   data: {
+    navHeight: wx.getSystemInfoSync().statusBarHeight + 44,
     pageDirection: 'vertical',
     currentStep: 1, // 1=TEST 2=LOADING 3=EXAMINING 4=OUTSIDE
     startLoading: false,
@@ -20,13 +21,13 @@ Page({
     bShowLivePusher: true, // 是否有推流图
     bShowVideo: true,
     bShowVideoControl: true,
+    bShowDebug: false,
     sVideoUrl: null,
     pusher: null,
     playerList: [],
     localAudio: false,
     localVideo: false,
     bSmallPusher: false,
-    bFinished: false,
     nNowActionId: '',
     needBlur: false, // 需要高斯模糊背景
     fullBodyCheck: false,
@@ -47,6 +48,7 @@ Page({
   TRTC: null,
   aiServerUrl: '',
   oVideo: null,
+  skeleton: [[22, 20], [20, 18], [18, 16], [21, 19], [19, 17], [17, 15], [15, 16], [15, 14], [16, 14], [14, 13], [13, 12], [12, 4], [12, 5], [4, 5], [11, 9], [9, 7], [7, 5], [10, 8], [8, 6], [6, 4], [4, 1], [1, 2], [1, 3], [2, 0], [3, 0], [4, 15], [5, 16]],
   oCanvas: null,
   oCtx: null,
   aBone: [], // 骨骼数组
@@ -122,17 +124,20 @@ Page({
       }
     }
   },
-  sendResolution () {
-    // const height = wx.getSystemInfoSync().windowHeight
-    // const width = wx.getSystemInfoSync().windowWidth
+  sendResolution (needStartTest = false) {
+    console.log(this.oCanvas)
+    console.log(this.oCanvas.height)
+    console.log(this.oCanvas.width)
     app.globalData.oWs.send({
       data: JSON.stringify({
         type: 'change_resolution',
-        height: that.oCanvas.height,
-        width: that.oCanvas.width
+        height: this.oCanvas.height,
+        width: this.oCanvas.width
       }),
       success: () => {
-        this.beginTest()
+        if (needStartTest) {
+          this.beginTest()
+        }
       }
     })
   },
@@ -150,6 +155,7 @@ Page({
     })
   },
   resumeAction () {
+    this.sendResolution()
     app.globalData.oWs.send({
       data: JSON.stringify({
         type: 'resume_class'
@@ -162,13 +168,13 @@ Page({
       this.oVideo.play()
     }
   },
-  nextAction() {
+  nextAction () {
     if ((this.data.currentActionIndex + 1) < this.data.physicalExamList.length) {
-      this.setData({ currentActionIndex: this.data.currentActionIndex + 1}, () => {
+      this.setData({ currentActionIndex: this.data.currentActionIndex + 1 }, () => {
         this.beginExamining()
       })
     } else {
-  
+      this.endRoom()
     }
   },
   beginTest () {
@@ -187,7 +193,6 @@ Page({
       bShowVideo: true,
       bShowLivePusher: true,
       bSmallPusher: true,
-      bShowDebug: true,
       sVideoUrl: currentVideoUrl
     }, () => {
       this.setData({
@@ -200,6 +205,7 @@ Page({
       startLoading: false,
       needBlur: false,
       bShowVideoControl: false,
+      bShowDebug: true,
       currentStep: 3
     }, () => {
       this.oVideo.play()
@@ -222,7 +228,6 @@ Page({
   endRoom () {
     this.oVideo.stop()
     app.globalData.oAudio.pause()
-    console.log('结束课程')
     app.globalData.oWs.send({
       data: JSON.stringify({
         type: 'finish_check'
@@ -234,7 +239,7 @@ Page({
       this.exitRoom()
       wx.navigateBack()
     }
-  }, 
+  },
   handleTransEnd (e) {
     this.beginExamining()
   },
@@ -432,6 +437,7 @@ Page({
         boundingClientRect: true
       })
       .exec((res) => {
+        console.log(res)
         that.oCanvas = res[0].node
         that.oCtx = that.oCanvas.getContext('2d')
         // const dpr = wx.getSystemInfoSync().pixelRatio
@@ -461,7 +467,7 @@ Page({
           success: () => {
             console.log('[WebSocket] reg ai service ok!')
             // 向Socket Server注册后发送当前手机屏幕分辨率
-            this.sendResolution()
+            this.sendResolution(true)
           }
         })
       }
@@ -526,18 +532,7 @@ Page({
           }
         }
         this.drawDebug(data.cur_pose)
-        if (data.action_id !== this.data.nNowActionId && this.data.bFinished) {
-          // 已经切换到下一个动作了，更换状态到下一个动作
-          this.setData({
-            nNowActionId: data.action_id,
-            bFinished: false
-          })
-          
-        } else if (data.cur_finish_ratio >= 100 && !this.data.bFinished) {
-          // 第一次完成该动作
-          this.setData({
-            bFinished: true
-          })
+        if (data.curSuccessRatio >= 100) {
           // 告知后端该动作完成
           app.globalData.oWs.send({
             data: JSON.stringify({
@@ -547,7 +542,7 @@ Page({
           // 更换到下一个动作
           setTimeout(() => {
             this.nextAction()
-          }, 1000);
+          }, 1000)
         }
       } else if (data.type === 'finish_class_confirm') {
         console.log('收到结束课程确认消息')
@@ -584,6 +579,6 @@ Page({
       ctx.arc(aBone[index][0], aBone[index][1], 2, 0, Math.PI * 2, false)
       ctx.fill()
     }
-  },
+  }
 
 })
