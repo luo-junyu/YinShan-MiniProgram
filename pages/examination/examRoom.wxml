@@ -1,4 +1,10 @@
 <view class="exam">
+  <view class="exam-wrong-direction" wx:if="{{currentAction.type === 'flexibility' && pageDirection === 'horizontal'}}">
+    <view class="exam-wrong-direction-hint">请将屏幕竖过来</view>
+  </view>
+  <view class="exam-wrong-direction" wx:if="{{currentAction.type === 'strength' && pageDirection === 'vertical'}}">
+    <view class="exam-wrong-direction-hint">请将屏幕横过来</view>
+  </view>
   <view class="exam-vertical-ready" wx:if="{{currentStep === 1 && pageDirection === 'vertical'}}">
     <text class="exam-vertical-ready-text">请参考人物框，身体左侧正对手机
       屏幕，站立，让身体进入人物框，
@@ -6,20 +12,20 @@
     <image class="exam-vertical-ready-image" src="{{fullBodyCheck ? '/assets/exam_vertical_mask_r.png': '/assets/exam_vertical_mask.png'}}"
            mode="aspectFill bottom"></image>
     <view class="exam-vertical-ready-mask">
-      <text class="exam-vertical-ready-mask-count">{{countDown}}</text>
+      <text class="exam-vertical-ready-mask-count">{{countDown || ''}}</text>
     </view>
   </view>
   <view wx:elif="{{currentStep === 1 && pageDirection === 'horizontal'}}" class="exam-mask">
     <text class="exam-mask-hint">请参考人物框，趴到瑜伽垫上，双手、膝盖撑地，
       向后抬起右腿，让身体进入人物框，并保持3秒</text>
-    <text class="exam-mask-count">{{countDown}}</text>
+    <text class="exam-mask-count">{{countDown || ''}}</text>
     <image class="exam-mask-image" src="{{'/assets/exam_horizontal_mask' + fullBodyCheck ? '_r': '' + '.png'}}"
            mode="aspectFill"></image>
   </view>
   <view class="exam-vertical-topic" wx:elif="{{currentStep === 2 && pageDirection === 'vertical'}}">
     <view class="exam-vertical-topic-title">活动度测量</view>
-    <view class="exam-vertical-topic-text">第1项：前屈</view>
-    <view class="exam-vertical-topic-text">请身体左侧正对手机屏幕，测量躯干向前屈曲的角度</view>
+    <view class="exam-vertical-topic-text">{{currentAction.name}}</view>
+    <view class="exam-vertical-topic-text">{{currentAction.script}}</view>
     <view class="loading-bar {{startLoading ? 'loaded-bar' : 'empty-bar'}}" bindtransitionend="handleTransEnd"></view>
   </view>
   <view wx:elif="{{currentStep === 2 && pageDirection === 'horizontal'}}" class="exam-topic">
@@ -28,11 +34,11 @@
     <view class="exam-topic-text">测试动态腹部肌肉（屈肌）耐力</view>
     <view class="loading-bar {{startLoading ? 'loaded-bar' : 'empty-bar'}}" bindtransitionend="handleTransEnd"></view>
   </view>
-  <view wx:elif="{{currentStep === 4 && pageDirection === 'vertical'}}" class="exam-vertical-warn">
+  <view wx:elif="{{currentStep === 3 && !fullBodyCheck && pageDirection === 'vertical'}}" class="exam-vertical-warn">
     <image class="exam-vertical-warn-icon" src="/assets/lowest.png"></image>
     <view class="exam-vertical-warn-text">请回到正确位置，继续完成体格检查吧</view>
   </view>
-  <view wx:elif="{{currentStep === 4 && pageDirection === 'horizontal'}}" class="exam-warn">
+  <view wx:elif="{{currentStep === 3 && !fullBodyCheck && pageDirection === 'horizontal'}}" class="exam-warn">
     <image class="exam-warn-icon" src="/assets/lowest.png"></image>
     <view class="exam-warn-text">请回到正确位置，继续完成体格检查吧</view>
   </view>
@@ -78,11 +84,9 @@
   />
   <canvas id='debug-canvas' type="2d" class="debug-canvas small {{needBlur ? 'need-blur': ''}}"
           style="visibility:{{bShowDebug? 'visible':'hidden'}}"></canvas>
-  <view class="main-video">
-    <video id="main-video" src="{{sVideoUrl}}" autoplay="{{false}}" style="display:{{bShowVideo?'block':'none'}}"
-           bindended="handleVideoEnded" loop="{{true}}" show-center-play-btn="{{false}}" object-fit="cover"
-           muted="{{true}}"
-           controls="{{bShowVideoControl}}" class="main-video-content {{needBlur ? 'need-blur': ''}}"></video>
-    <view class="main-video-mask" wx:if="{{bShowVideo}}"></view>
-  </view>
+  <video id="main-video" src="{{sVideoUrl}}" autoplay="{{false}}" style="display:{{bShowVideo?'block':'none'}}"
+         binderror="handleVideoError" loop="{{true}}" show-center-play-btn="{{false}}" object-fit="cover"
+         muted="{{true}}"
+         controls="{{bShowVideoControl}}" class="main-video-content {{needBlur ? 'need-blur': ''}}"></video>
+  <view class="main-video-mask" wx:if="{{bShowVideo}}"></view>
 </view>

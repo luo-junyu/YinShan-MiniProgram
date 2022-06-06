@@ -6,9 +6,10 @@ import { parseData } from '../../utils/util'
 
 const app = getApp()
 Page({
+  behaviors: [require('miniprogram-computed').behavior],
   data: {
     pageDirection: 'vertical',
-    currentStep: 1,
+    currentStep: 1, // 1=TEST 2=LOADING 3=EXAMINING 4=OUTSIDE
     startLoading: false,
     physicalExamList: [],
     _rtcConfig: {
@@ -18,6 +19,8 @@ Page({
     },
     bShowLivePusher: true, // 是否有推流图
     bShowVideo: true,
+    bShowVideoControl: true,
+    sVideoUrl: null,
     pusher: null,
     playerList: [],
     localAudio: false,
@@ -26,8 +29,18 @@ Page({
     needBlur: false, // 需要高斯模糊背景
     fullBodyCheck: false,
     currentActionIndex: 0,
-    countDown: 3,
-    sStep: ''
+    countDown: null
+  },
+  computed: {
+    currentAction (data) {
+      if (data.physicalExamList.length > 0 && data.currentActionIndex < data.physicalExamList.length) {
+        return data.physicalExamList[data.currentActionIndex]
+      }
+      return {
+        name: '',
+        script: ''
+      }
+    }
   },
   TRTC: null,
   aiServerUrl: '',
@@ -76,11 +89,35 @@ Page({
       wx.navigateBack()
     })
   },
-  onResize (options) {
-    this.setData({
-      pageDirection: options.size.windowHeight > options.size.windowWidth ? 'vertical' : 'horizontal'
+  onUnload () {
+    if (this.oVideo) {
+      this.oVideo.stop()
+    }
+    app.globalData.oWs.send({
+      data: JSON.stringify({
+        type: 'finish_class'
+      })
     })
-    this.sendResolution()
+    if (app.globalData.oWs.status === 'loss') {
+      app.globalData.oWs.forbidConnect()
+      app.globalData.oWs.close()
+      this.exitRoom()
+      wx.navigateBack()
+    }
+  },
+  onResize (options) {
+    const direction = options.size.windowHeight > options.size.windowWidth ? 'vertical' : 'horizontal'
+    this.setData({
+      pageDirection: direction
+    })
+    if (this.data.physicalExamList.length > 0 && this.data.currentActionIndex < this.data.physicalExamList.length) {
+      const currentAction = this.data.physicalExamList[this.data.currentActionIndex]
+      if (currentAction.type === 'flexibility') {
+        direction === 'horizontal' ? this.pauseAction() : this.resumeAction()
+      } else if (currentAction.type === 'strength') {
+        direction === 'vertical' ? this.pauseAction() : this.resumeAction()
+      }
+    }
   },
   sendResolution () {
     const height = wx.getSystemInfoSync().windowHeight
@@ -96,11 +133,87 @@ Page({
       }
     })
   },
+  pauseAction () {
+    if (this.oVideo) {
+      this.oVideo.pause()
+    }
+    app.globalData.oWs.send({
+      data: JSON.stringify({
+        type: 'pause_class'
+      })
+    })
+    this.setData({
+      needBlur: true
+    })
+  },
+  resumeAction () {
+    app.globalData.oWs.send({
+      data: JSON.stringify({
+        type: 'resume_class'
+      })
+    })
+    this.setData({
+      needBlur: false
+    })
+    if (this.oVideo) {
+      this.oVideo.play()
+    }
+  },
   beginTest () {
     this.setData({
       bShowLivePusher: true,
       bSmallPusher: false,
-      sStep: 'test'
+      currentStep: 1
+    })
+  },
+  beginLoading () {
+    const currentVideoUrl = this.data.physicalExamList[this.data.currentActionIndex].videoUrl
+    console.log(currentVideoUrl)
+    this.setData({
+      currentStep: 2,
+      needBlur: true,
+      bShowVideo: true,
+      bShowLivePusher: true,
+      bSmallPusher: true,
+      bShowDebug: true,
+      sVideoUrl: currentVideoUrl
+    }, () => {
+      this.setData({
+        startLoading: true
+      })
+    })
+  },
+  beginExamining () {
+    this.setData({
+      startLoading: false,
+      needBlur: false,
+      bShowVideoControl: false,
+      currentStep: 3
+    }, () => {
+      this.oVideo.play()
+      const currentAction = this.data.physicalExamList[this.data.currentActionIndex]
+      app.globalData.oWs.send({
+        data: JSON.stringify({
+          type: 'resume_class'
+        })
+      })
+      console.log('send change action:' + currentAction.id)
+      app.globalData.oWs.send({
+        data: JSON.stringify({
+          type: 'change_action', // action_name: 'tunqiao',//qtemp
+          action_id: currentAction.id
+        })
+      })
+    })
+  },
+  handleTransEnd (e) {
+    this.beginExamining()
+  },
+  handleVideoError (error) {
+    // 尝试加入加载错误处理，并重新设置视频播放地址
+    console.log(error)
+    this.setData({
+      sVideoUrl: this.data.sVideoUrl
     })
   },
   initTrtc () {
@@ -354,20 +467,30 @@ Page({
         // data.full_body_check = true
         if (!data.full_body_check) {
           this.bodyCheckFailedTimestamp = Date.now()
-          if (this.data.sStep === 'test') {
+          // 检测false时，如果当前时间离上次最后true时间的间隔大于3s，则显示全屏提示
+          const isFailedCheckTimeout = Date.now() - this.bodyCheckSuccessTimestamp > 3000
+          if (this.data.currentStep === 3) {
             this.setData({
+              fullBodyCheck: !isFailedCheckTimeout,
+              needBlur: isFailedCheckTimeout
+            })
+          }
+          if (this.data.currentStep === 1) {
+            this.setData({
+              fullBodyCheck: false,
               countDown: null
             })
           }
         } else {
           this.bodyCheckSuccessTimestamp = Date.now()
-          if (this.data.sStep === 'test') {
+          if (this.data.currentStep === 1) {
             // 一旦检测到true，则开始倒数计时3s，当小于1时则进入下一步
             const countDownNumber = 3 - Math.floor((Date.now() - this.bodyCheckFailedTimestamp) / 1000)
             if (countDownNumber < 1) {
-              // TODO: 显示预加载信息界面
+              this.beginLoading()
             } else {
               this.setData({
+                fullBodyCheck: true,
                 countDown: countDownNumber
               })
             }
