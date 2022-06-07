@@ -19,7 +19,7 @@
     <text class="exam-mask-hint">请参考人物框，趴到瑜伽垫上，双手、膝盖撑地，
       向后抬起右腿，让身体进入人物框，并保持3秒</text>
     <text class="exam-mask-count">{{countDown || ''}}</text>
-    <image class="exam-mask-image" src="{{'/assets/exam_horizontal_mask' + fullBodyCheck ? '_r': '' + '.png'}}"
+    <image class="exam-mask-image" src="{{fullBodyCheck ? '/assets/exam_horizontal_mask_r.png': '/assets/exam_horizontal_mask.png'}}"
            mode="aspectFill"></image>
   </view>
   <view class="exam-vertical-topic" wx:elif="{{currentStep === 2 && pageDirection === 'vertical'}}">

@@ -36,7 +36,7 @@ Page({
     nAction: 0, // 当前动作,
     showCircle: true, // 展示两个圈
     needBlur: false, // 需要高斯模糊背景
-    fullBodyCheck: true,
+    fullBodyCheck: false,
     countDown: null
   },
   bFinished: true, // 一组动作是否结束
@@ -325,6 +325,7 @@ Page({
           }
           if (this.data.sStep === 'test') {
             this.setData({
+              fullBodyCheck: false,
               countDown: null
             })
           }
@@ -337,6 +338,7 @@ Page({
               this.switchStep('ing-loading', 'test')
             } else {
               this.setData({
+                fullBodyCheck: true,
                 countDown: countDownNumber
               })
             }
