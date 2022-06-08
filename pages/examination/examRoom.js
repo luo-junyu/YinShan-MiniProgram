@@ -28,6 +28,7 @@ Page({
     localAudio: false,
     localVideo: false,
     bSmallPusher: false,
+    bFinished: true,
     nNowActionId: '',
     needBlur: false, // 需要高斯模糊背景
     fullBodyCheck: false,
@@ -215,11 +216,10 @@ Page({
           type: 'resume_class'
         })
       })
-      console.log('send change action: ' + currentAction)
       app.globalData.oWs.send({
         data: JSON.stringify({
           type: 'change_check',
-          action_id: currentAction.id,
+          action_id: currentAction.ruleIndex,
           screen_toward: this.data.pageDirection
         })
       })
@@ -532,17 +532,30 @@ Page({
           }
         }
         this.drawDebug(data.cur_pose)
-        if (data.curSuccessRatio >= 100) {
-          // 告知后端该动作完成
+        if (data.cur_action !== this.data.nNowActionId && this.data.bFinished) {
+          // 已经切换到下一个动作了，更换状态到下一个动作
+          this.setData({
+            nNowActionId: data.cur_action,
+            bFinished: false
+          })
+        } else if (data.curSuccessRatio >= 100 && !this.data.bFinished) {
+          // 第一次完成该动作
+          this.setData({
+            bFinished: true
+          })
           app.globalData.oWs.send({
             data: JSON.stringify({
               type: 'finish_check_action'
             })
           })
-          // 更换到下一个动作
           setTimeout(() => {
             this.nextAction()
           }, 1000)
+        }
+        if (this.nNowActionId !== data.cur_action) {
+          this.setData({
+            nNowActionId: data.cur_action,
+          })
         }
       } else if (data.type === 'finish_class_confirm') {
         console.log('收到结束课程确认消息')
