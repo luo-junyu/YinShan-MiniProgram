@@ -49,10 +49,10 @@ Page({
   TRTC: null,
   aiServerUrl: '',
   oVideo: null,
-  // skeleton: [[22, 20], [20, 18], [18, 16], [21, 19], [19, 17], [17, 15], [15, 16], [15, 14], [16, 14], [14, 13], [13, 12], [12, 4], [12, 5], [4, 5], [11, 9], [9, 7], [7, 5], [10, 8], [8, 6], [6, 4], [4, 1], [1, 2], [1, 3], [2, 0], [3, 0], [4, 15], [5, 16]],
-  // oCanvas: null,
-  // oCtx: null,
-  // aBone: [], // 骨骼数组
+  skeleton: [[22, 20], [20, 18], [18, 16], [21, 19], [19, 17], [17, 15], [15, 16], [15, 14], [16, 14], [14, 13], [13, 12], [12, 4], [12, 5], [4, 5], [11, 9], [9, 7], [7, 5], [10, 8], [8, 6], [6, 4], [4, 1], [1, 2], [1, 3], [2, 0], [3, 0], [4, 15], [5, 16]],
+  oCanvas: null,
+  oCtx: null,
+  aBone: [], // 骨骼数组
   bodyCheckFailedTimestamp: null,
   bodyCheckSuccessTimestamp: null,
   onShow () {
@@ -87,9 +87,8 @@ Page({
       this.bindTRTCRoomEvent()
       // 进入房间开始推流
       this.enterRoom()
-      this.initSocket()
       // 绘图canvas相关初始化
-      // this.initDrawDebug()
+      this.initDrawDebug()
       // 媒体播放相关初始化
       this.initMedia()
     }).catch(_ => {
@@ -127,27 +126,21 @@ Page({
     }
   },
   sendResolution (needStartTest = false) {
-    wx.createSelectorQuery().select('#live-pusher').boundingClientRect(rect => {
-      const clientHeight = rect.height
-      const clientWidth = rect.width
-      // const ratio = 750 / rect.width
-      // console.log(ratio)
-      // const height = clientHeight * ratio
-      // const width = clientWidth * ratio
-      console.log('height:' + clientHeight + ', width:' + clientWidth)
-      app.globalData.oWs.send({
-        data: JSON.stringify({
-          type: 'change_resolution',
-          height: clientHeight,
-          width: clientWidth
-        }),
-        success: () => {
-          if (needStartTest) {
-            this.beginTest()
-          }
+    console.log(this.oCanvas)
+    console.log(this.oCanvas.height)
+    console.log(this.oCanvas.width)
+    app.globalData.oWs.send({
+      data: JSON.stringify({
+        type: 'change_resolution',
+        height: this.oCanvas.height,
+        width: this.oCanvas.width
+      }),
+      success: () => {
+        if (needStartTest) {
+          this.beginTest()
         }
-      })
-    }).exec()
+      }
+    })
   },
   pauseAction () {
     if (this.oVideo) {
@@ -200,6 +193,7 @@ Page({
   },
   beginLoading () {
     const currentVideoUrl = this.data.physicalExamList[this.data.currentActionIndex].videoUrl
+    console.log(currentVideoUrl)
     this.setData({
       currentStep: 2,
       needBlur: true,
@@ -218,7 +212,7 @@ Page({
       startLoading: false,
       needBlur: false,
       bShowVideoControl: false,
-      // bShowDebug: true,
+      bShowDebug: true,
       currentStep: 3
     }, () => {
       this.oVideo.play()
@@ -439,27 +433,27 @@ Page({
     // 获取video标签
     this.oVideo = wx.createVideoContext('main-video')
   },
-  // initDrawDebug () {
-  //   const that = this
-  //   const query = wx.createSelectorQuery()
-  //   query.select('#debug-canvas')
-  //     .fields({
-  //       node: true,
-  //       size: true,
-  //       boundingClientRect: true
-  //     })
-  //     .exec((res) => {
-  //       console.log(res)
-  //       that.oCanvas = res[0].node
-  //       that.oCtx = that.oCanvas.getContext('2d')
-  //       // const dpr = wx.getSystemInfoSync().pixelRatio
-  //       that.oCanvas.width = res[0].width
-  //       that.oCanvas.height = res[0].height
-  //       that.oCtx.lineWidth = '6'
-  //       // 初始化Socket连接
-  //       this.initSocket()
-  //     })
-  // },
+  initDrawDebug () {
+    const that = this
+    const query = wx.createSelectorQuery()
+    query.select('#debug-canvas')
+      .fields({
+        node: true,
+        size: true,
+        boundingClientRect: true
+      })
+      .exec((res) => {
+        console.log(res)
+        that.oCanvas = res[0].node
+        that.oCtx = that.oCanvas.getContext('2d')
+        // const dpr = wx.getSystemInfoSync().pixelRatio
+        that.oCanvas.width = res[0].width
+        that.oCanvas.height = res[0].height
+        that.oCtx.lineWidth = '6'
+        // 初始化Socket连接
+        this.initSocket()
+      })
+  },
   initSocket () {
     WebsocketHeartbeat({
       miniprogram: wx,
@@ -543,7 +537,9 @@ Page({
             }
           }
         }
-        // this.drawDebug(data.cur_pose)
+        if (this.data.currentStep === 3) {
+          this.drawDebug(data.cur_pose)
+        }
         if (data.cur_action !== this.data.nNowActionId && this.data.bFinished) {
           // 已经切换到下一个动作了，更换状态到下一个动作
           this.setData({
@@ -566,7 +562,7 @@ Page({
         }
         if (this.nNowActionId !== data.cur_action) {
           this.setData({
-            nNowActionId: data.cur_action
+            nNowActionId: data.cur_action,
           })
         }
       } else if (data.type === 'finish_class_confirm') {
@@ -577,33 +573,33 @@ Page({
         wx.navigateBack()
       }
     }
-  }
+  },
   // 骨骼图绘制
-  // drawDebug (aBone) {
-  //   const ctx = this.oCtx
-  //   this.oCanvas.width = this.oCanvas.width // Warning: This line can not be removed (by junyu)
-  //   const drawLine = (aTwoP = [[], []]) => {
-  //     ctx.beginPath()
-  //     ctx.strokeStyle = 'rgba(255, 255, 255, 0.5)'
-  //     ctx.moveTo(aTwoP[0][0], aTwoP[0][1])
-  //     ctx.lineTo(aTwoP[1][0], aTwoP[1][1])
-  //     ctx.stroke()
-  //     ctx.closePath()
-  //   }
-  //   this.skeleton.forEach((item, index) => {
-  //     if (aBone[item[0]][2] >= 0.2 && aBone[item[1]][2] >= 0.2) {
-  //       drawLine([aBone[item[0]], aBone[item[1]]])
-  //     }
-  //   })
-  //   ctx.fillStyle = 'rgba(255,255,255)'
-  //   for (let index = 0; index < aBone.length; index++) {
-  //     if (aBone[index][2] < 0.2) {
-  //       continue
-  //     }
-  //     ctx.beginPath()
-  //     ctx.arc(aBone[index][0], aBone[index][1], 2, 0, Math.PI * 2, false)
-  //     ctx.fill()
-  //   }
-  // }
+  drawDebug (aBone) {
+    const ctx = this.oCtx
+    this.oCanvas.width = this.oCanvas.width // Warning: This line can not be removed (by junyu)
+    const drawLine = (aTwoP = [[], []]) => {
+      ctx.beginPath()
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.5)'
+      ctx.moveTo(aTwoP[0][0], aTwoP[0][1])
+      ctx.lineTo(aTwoP[1][0], aTwoP[1][1])
+      ctx.stroke()
+      ctx.closePath()
+    }
+    this.skeleton.forEach((item, index) => {
+      if (aBone[item[0]][2] >= 0.2 && aBone[item[1]][2] >= 0.2) {
+        drawLine([aBone[item[0]], aBone[item[1]]])
+      }
+    })
+    ctx.fillStyle = 'rgba(255,255,255)'
+    for (let index = 0; index < aBone.length; index++) {
+      if (aBone[index][2] < 0.2) {
+        continue
+      }
+      ctx.beginPath()
+      ctx.arc(aBone[index][0], aBone[index][1], 2, 0, Math.PI * 2, false)
+      ctx.fill()
+    }
+  }
 
 })

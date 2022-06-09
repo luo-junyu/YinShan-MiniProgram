@@ -89,8 +89,8 @@
     bindbgmcomplete="_pusherBGMCompleteHandler"
     bindaudiovolumenotify="_pusherAudioVolumeNotify"
   />
-  <!--  <canvas id='debug-canvas' type="2d" class="debug-canvas small {{needBlur ? 'need-blur': ''}} {{pageDirection}}"-->
-  <!--          style="visibility:{{bShowDebug? 'visible':'hidden'}}; top: {{pageDirection === 'vertical' ? navHeight+'px': '30rpx'}}"></canvas>-->
+  <canvas id='debug-canvas' type="2d" class="debug-canvas small {{needBlur ? 'need-blur': ''}} {{pageDirection}}"
+          style="visibility:{{bShowDebug? 'visible':'hidden'}}; top: {{pageDirection === 'vertical' ? navHeight+'px': '30rpx'}}"></canvas>
   <video id="main-video" src="{{sVideoUrl}}" autoplay="{{false}}" style="display:{{bShowVideo?'block':'none'}}"
          binderror="handleVideoError" loop="{{true}}" show-center-play-btn="{{false}}" object-fit="cover"
          muted="{{true}}"
