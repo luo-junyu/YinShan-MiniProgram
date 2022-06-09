@@ -9,7 +9,8 @@
     <text class="exam-vertical-ready-text">请参考人物框，身体左侧正对手机
       屏幕，站立，让身体进入人物框，
       并保持3s</text>
-    <image class="exam-vertical-ready-image" src="{{fullBodyCheck ? '/assets/exam_vertical_mask_r.png': '/assets/exam_vertical_mask.png'}}"
+    <image class="exam-vertical-ready-image"
+           src="{{fullBodyCheck ? '/assets/exam_vertical_mask_r.png': '/assets/exam_vertical_mask.png'}}"
            mode="aspectFill bottom"></image>
     <view class="exam-vertical-ready-mask">
       <text class="exam-vertical-ready-mask-count">{{countDown || ''}}</text>
@@ -19,16 +20,20 @@
     <text class="exam-mask-hint">请参考人物框，趴到瑜伽垫上，双手、膝盖撑地，
       向后抬起右腿，让身体进入人物框，并保持3秒</text>
     <text class="exam-mask-count">{{countDown || ''}}</text>
-    <image class="exam-mask-image" src="{{fullBodyCheck ? '/assets/exam_horizontal_mask_r.png': '/assets/exam_horizontal_mask.png'}}"
+    <image class="exam-mask-image"
+           src="{{fullBodyCheck ? '/assets/exam_horizontal_mask_r.png': '/assets/exam_horizontal_mask.png'}}"
            mode="aspectFill"></image>
   </view>
-  <view class="exam-vertical-topic" wx:elif="{{currentStep === 2 && pageDirection === 'vertical'}}">
+  <view
+    class="exam-vertical-topic {{(currentAction.type === 'flexibility' && pageDirection === 'horizontal') || (currentAction.type === 'strength' && pageDirection === 'vertical') ? 'need-blur': ''}}"
+    wx:elif="{{currentStep === 2 && pageDirection === 'vertical'}}">
     <view class="exam-vertical-topic-title">活动度测量</view>
     <view class="exam-vertical-topic-text">{{currentAction.name}}</view>
     <view class="exam-vertical-topic-text">{{currentAction.script}}</view>
     <view class="loading-bar {{startLoading ? 'loaded-bar' : 'empty-bar'}}" bindtransitionend="handleTransEnd"></view>
   </view>
-  <view wx:elif="{{currentStep === 2 && pageDirection === 'horizontal'}}" class="exam-topic">
+  <view wx:elif="{{currentStep === 2 && pageDirection === 'horizontal'}}"
+        class="exam-topic {{needBlur ? 'need-blur': ''}}">
     <view class="exam-topic-title">肌肉力量测试</view>
     <view class="exam-topic-text">{{currentAction.name}}</view>
     <view class="exam-topic-text">{{currentAction.script}}</view>
@@ -42,48 +47,50 @@
     <image class="exam-warn-icon" src="/assets/lowest.png"></image>
     <view class="exam-warn-text">请回到正确位置，继续完成体格检查吧</view>
   </view>
-  <live-pusher style="visibility:{{bShowLivePusher?'visible':'hidden'}}; top: {{pageDirection === 'vertical' && bSmallPusher ? navHeight+'px': '30rpx'}}"
-               class="pusher {{bSmallPusher ? 'small' : ''}} {{needBlur ? 'need-blur': ''}} {{pageDirection}}"
-               url="{{pusher.url}}"
-               mode="{{pusher.mode}}"
-               autopush="{{pusher.autopush}}"
-               enable-camera="{{pusher.enableCamera}}"
-               enable-mic="{{pusher.enableMic}}"
-               muted="{{!pusher.enableMic}}"
-               enable-agc="{{pusher.enableAgc}}"
-               enable-ans="{{pusher.enableAns}}"
-               enable-ear-monitor="{{pusher.enableEarMonitor}}"
-               auto-focus="{{pusher.enableAutoFocus}}"
-               zoom="{{pusher.enableZoom}}"
-               min-bitrate="{{pusher.minBitrate}}"
-               max-bitrate="{{pusher.maxBitrate}}"
-               video-width="{{pusher.videoWidth}}"
-               video-height="{{pusher.videoHeight}}"
-               beauty="{{pusher.beautyLevel}}"
-               whiteness="{{pusher.whitenessLevel}}"
-               orientation="{{pageDirection}}"
-               aspect="{{pusher.videoAspect}}"
-               device-position="{{pusher.frontCamera}}"
-               remote-mirror="{{pusher.enableRemoteMirror}}"
-               local-mirror="{{pusher.localMirror}}"
-               background-mute="{{pusher.enableBackgroundMute}}"
-               audio-quality="{{pusher.audioQuality}}"
-               audio-volume-type="{{pusher.audioVolumeType}}"
-               audio-reverb-type="{{pusher.audioReverbType}}"
-               waiting-image="{{pusher.waitingImage}}"
-               debug="{{debug}}"
-               beauty-style="{{pusher.beautyStyle}}"
-               filter="{{pusher.filter}}"
-               bindstatechange="_pusherStateChangeHandler"
-               bindnetstatus="_pusherNetStatusHandler"
-               binderror="_pusherErrorHandler"
-               bindbgmstart="_pusherBGMStartHandler"
-               bindbgmprogress="_pusherBGMProgressHandler"
-               bindbgmcomplete="_pusherBGMCompleteHandler"
-               bindaudiovolumenotify="_pusherAudioVolumeNotify"
+  <live-pusher
+    style="visibility:{{bShowLivePusher?'visible':'hidden'}}; top: {{pageDirection === 'vertical' && bSmallPusher ? navHeight+'px': '30rpx'}}"
+    class="pusher {{bSmallPusher ? 'small' : ''}} {{needBlur ? 'need-blur': ''}} {{pageDirection}}"
+    id="live-pusher"
+    url="{{pusher.url}}"
+    mode="{{pusher.mode}}"
+    autopush="{{pusher.autopush}}"
+    enable-camera="{{pusher.enableCamera}}"
+    enable-mic="{{pusher.enableMic}}"
+    muted="{{!pusher.enableMic}}"
+    enable-agc="{{pusher.enableAgc}}"
+    enable-ans="{{pusher.enableAns}}"
+    enable-ear-monitor="{{pusher.enableEarMonitor}}"
+    auto-focus="{{pusher.enableAutoFocus}}"
+    zoom="{{pusher.enableZoom}}"
+    min-bitrate="{{pusher.minBitrate}}"
+    max-bitrate="{{pusher.maxBitrate}}"
+    video-width="{{pusher.videoWidth}}"
+    video-height="{{pusher.videoHeight}}"
+    beauty="{{pusher.beautyLevel}}"
+    whiteness="{{pusher.whitenessLevel}}"
+    orientation="{{pageDirection}}"
+    aspect="{{pusher.videoAspect}}"
+    device-position="{{pusher.frontCamera}}"
+    remote-mirror="{{pusher.enableRemoteMirror}}"
+    local-mirror="{{pusher.localMirror}}"
+    background-mute="{{pusher.enableBackgroundMute}}"
+    audio-quality="{{pusher.audioQuality}}"
+    audio-volume-type="{{pusher.audioVolumeType}}"
+    audio-reverb-type="{{pusher.audioReverbType}}"
+    waiting-image="{{pusher.waitingImage}}"
+    debug="{{debug}}"
+    beauty-style="{{pusher.beautyStyle}}"
+    filter="{{pusher.filter}}"
+    bindstatechange="_pusherStateChangeHandler"
+    bindnetstatus="_pusherNetStatusHandler"
+    binderror="_pusherErrorHandler"
+    bindbgmstart="_pusherBGMStartHandler"
+    bindbgmprogress="_pusherBGMProgressHandler"
+    bindbgmcomplete="_pusherBGMCompleteHandler"
+    bindaudiovolumenotify="_pusherAudioVolumeNotify"
   />
-  <canvas id='debug-canvas' type="2d" class="debug-canvas small {{needBlur ? 'need-blur': ''}} {{pageDirection}}"
-          style="visibility:{{bShowDebug? 'visible':'hidden'}}; top: {{pageDirection === 'vertical' ? navHeight+'px': '30rpx'}}"></canvas>
+  <!--  <canvas id='debug-canvas' type="2d" class="debug-canvas small {{needBlur ? 'need-blur': ''}} {{pageDirection}}"-->
+  <!--          style="visibility:{{bShowDebug? 'visible':'hidden'}}; top: {{pageDirection === 'vertical' ? navHeight+'px': '30rpx'}}"></canvas>-->
   <video id="main-video" src="{{sVideoUrl}}" autoplay="{{false}}" style="display:{{bShowVideo?'block':'none'}}"
          binderror="handleVideoError" loop="{{true}}" show-center-play-btn="{{false}}" object-fit="cover"
          muted="{{true}}"

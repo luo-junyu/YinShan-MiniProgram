@@ -20,7 +20,10 @@
     "pages/rehabData/rehabData",
     "pages/schedule/schedule",
     "pages/examination/examRoom",
-    "pages/assessment/assessReport"
+    "pages/assessment/assessReport",
+    "pages/agreement/agreement",
+    "pages/agreement/privacy",
+    "pages/agreement/category"
   ],
   "window":{
     "backgroundTextStyle":"light",
