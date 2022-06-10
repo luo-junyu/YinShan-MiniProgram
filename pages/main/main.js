@@ -175,6 +175,7 @@ Page({
     })
   },
   initShortAudio () {
+    wx.setInnerAudioOption({ obeyMuteSwitch: false })
     this.oShortAudio = wx.createInnerAudioContext({ useWebAudioImplement: true })
     this.oShortAudio.obeyMuteSwitch = false
     this.oShortAudio.onEnded((event) => {
@@ -182,6 +183,7 @@ Page({
     })
     this.oShortAudio.onError((event) => {
       console.log('短音频播放出错')
+      console.log(event)
       log.info('短音频播放错误 ', event)
       audioSrc = this.oShortAudio.src
       this.oShortAudio = wx.createInnerAudioContext({ useWebAudioImplement: true })
@@ -195,6 +197,7 @@ Page({
     this.oBackgroundAudio.volume = 0.3
     this.oBackgroundAudio.onError((event) => {
       console.log('背景音乐播放出错');
+      console.log(event);
       this.oBackgroundAudio = wx.createInnerAudioContext({ useWebAudioImplement: true })
       this.oBackgroundAudio.src = this.backgroundAudioUrl
       this.oBackgroundAudio.play()
@@ -210,6 +213,7 @@ Page({
     })
     this.oCountAudio.onError((event) => {
       console.log('计时音频播放出错')
+      console.log(event)
       this.oCountAudio = wx.createInnerAudioContext({ useWebAudioImplement: true })
       this.oCountAudio.src = this.countDownAudioUrl
       }
@@ -922,8 +926,9 @@ Page({
     // this.switchStep('test','test-explain')
     this.switchStep('ing-loading', 'test-explain') // qtemp
   },
-  handleVideoError() {
-    log.info('[main page] 视频播放错误: ', this.oVideo.src)
+  handleVideoError(msg) {
+    log.info('[main page] 视频播放错误: ', msg["detail"]["errMsg"])
+    console.log('[main page] 视频播放错误: ', msg["detail"]["errMsg"])
     this.setData({
       sVideoUrl: this.data.sVideoUrl
     })
