@@ -151,6 +151,7 @@
     width: 100%;
     height: 100%;
     position: relative;
+    z-index: 200;
     &-hint {
       position: absolute;
       top: vmin(70);

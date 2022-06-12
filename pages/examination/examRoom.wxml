@@ -1,8 +1,8 @@
 <view class="exam">
-  <view class="exam-wrong-direction" wx:if="{{currentAction.type === 'flexibility' && pageDirection === 'horizontal'}}">
+  <view class="exam-wrong-direction" wx:if="{{!currentAction.isHorizontal && pageDirection === 'horizontal'}}">
     <view class="exam-wrong-direction-hint">请将屏幕竖过来</view>
   </view>
-  <view class="exam-wrong-direction" wx:if="{{currentAction.type === 'strength' && pageDirection === 'vertical'}}">
+  <view class="exam-wrong-direction" wx:if="{{currentAction.isHorizontal && pageDirection === 'vertical'}}">
     <view class="exam-wrong-direction-hint">请将屏幕横过来</view>
   </view>
   <view class="exam-vertical-ready" wx:if="{{currentStep === 1 && pageDirection === 'vertical'}}">
@@ -25,19 +25,19 @@
            mode="aspectFill"></image>
   </view>
   <view
-    class="exam-vertical-topic {{(currentAction.type === 'flexibility' && pageDirection === 'horizontal') || (currentAction.type === 'strength' && pageDirection === 'vertical') ? 'need-blur': ''}}"
+    class="exam-vertical-topic {{currentAction.isHorizontal ? 'need-blur': ''}}"
     wx:elif="{{currentStep === 2 && pageDirection === 'vertical'}}">
     <view class="exam-vertical-topic-title">活动度测量</view>
     <view class="exam-vertical-topic-text">{{currentAction.name}}</view>
     <view class="exam-vertical-topic-text">{{currentAction.script}}</view>
-    <view class="loading-bar {{startLoading ? 'loaded-bar' : 'empty-bar'}}" bindtransitionend="handleTransEnd"></view>
+    <view class="loading-bar {{startLoading ? 'loaded-bar' : 'empty-bar'}}"></view>
   </view>
   <view wx:elif="{{currentStep === 2 && pageDirection === 'horizontal'}}"
-        class="exam-topic {{needBlur ? 'need-blur': ''}}">
+        class="exam-topic {{!currentAction.isHorizontal ? 'need-blur': ''}}">
     <view class="exam-topic-title">肌肉力量测试</view>
     <view class="exam-topic-text">{{currentAction.name}}</view>
     <view class="exam-topic-text">{{currentAction.script}}</view>
-    <view class="loading-bar {{startLoading ? 'loaded-bar' : 'empty-bar'}}" bindtransitionend="handleTransEnd"></view>
+    <view class="loading-bar {{startLoading ? 'loaded-bar' : 'empty-bar'}}"></view>
   </view>
   <view wx:elif="{{currentStep === 3 && !fullBodyCheck && pageDirection === 'vertical'}}" class="exam-vertical-warn">
     <image class="exam-vertical-warn-icon" src="/assets/lowest.png"></image>
@@ -48,7 +48,7 @@
     <view class="exam-warn-text">请回到正确位置，继续完成体格检查吧</view>
   </view>
   <live-pusher
-    style="visibility:{{bShowLivePusher?'visible':'hidden'}}; top: {{pageDirection === 'vertical' && bSmallPusher ? navHeight+'px': '30rpx'}}"
+    style="visibility:{{bShowLivePusher?'visible':'hidden'}}; top: {{bSmallPusher ? pageDirection === 'vertical' ? navHeight+'px': '30rpx' : '0'}}"
     class="pusher {{bSmallPusher ? 'small' : ''}} {{needBlur ? 'need-blur': ''}} {{pageDirection}}"
     id="live-pusher"
     url="{{pusher.url}}"

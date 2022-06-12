@@ -6,11 +6,10 @@ import { parseData } from '../../utils/util'
 
 const app = getApp()
 Page({
-  behaviors: [require('miniprogram-computed').behavior],
   data: {
     navHeight: wx.getSystemInfoSync().statusBarHeight + 44,
     pageDirection: 'vertical',
-    currentStep: 1, // 1=TEST 2=LOADING 3=EXAMINING 4=OUTSIDE
+    currentStep: 0, // 1=TEST 2=LOADING 3=EXAMINING 4=OUTSIDE
     startLoading: false,
     physicalExamList: [],
     _rtcConfig: {
@@ -32,19 +31,9 @@ Page({
     nNowActionId: '',
     needBlur: false, // 需要高斯模糊背景
     fullBodyCheck: false,
-    currentActionIndex: 0,
-    countDown: null
-  },
-  computed: {
-    currentAction (data) {
-      if (data.physicalExamList.length > 0 && data.currentActionIndex < data.physicalExamList.length) {
-        return data.physicalExamList[data.currentActionIndex]
-      }
-      return {
-        name: '',
-        script: ''
-      }
-    }
+    currentActionIndex: -1,
+    countDown: null,
+    currentAction: null
   },
   TRTC: null,
   aiServerUrl: '',
@@ -77,7 +66,24 @@ Page({
       // 从返回中获取streamId并入_rtcConfig
       Object.assign(this.data._rtcConfig, { streamId: res.streamId })
       // 从返回中获取动作列表并存储
-      this.setData({ physicalExamList: res.physicalExamList })
+      // 增加是否横屏属性，并插入id为0的横屏检测动作方便判断
+      res.physicalExamList.forEach((item, index) => {
+        item.isHorizontal = item.type === 'strength'
+      })
+      const horizontalIndex = res.physicalExamList.findIndex(item => item.isHorizontal)
+      if (horizontalIndex > -1) {
+        res.physicalExamList.splice(horizontalIndex, 0, {
+          ruleIndex: 0,
+          isHorizontal: true
+        })
+      }
+      res.physicalExamList.unshift({
+        ruleIndex: 0,
+        isHorizontal: false
+      })
+      this.setData({
+        physicalExamList: res.physicalExamList
+      })
       // 如返回中指定了AIServerUrl则使用，否则使用全局默认socketUrl
       this.aiServerUrl = res.aiServerUrl
       // || app.globalData.wsUrl
@@ -91,6 +97,8 @@ Page({
       this.initDrawDebug()
       // 媒体播放相关初始化
       this.initMedia()
+      // 初始化Socket连接
+      this.initSocket()
     }).catch(_ => {
       wx.navigateBack()
     })
@@ -99,16 +107,18 @@ Page({
     if (this.oVideo) {
       this.oVideo.stop()
     }
-    app.globalData.oWs.send({
-      data: JSON.stringify({
-        type: 'finish_class'
-      })
-    })
+    // app.globalData.oWs.send({
+    //   data: JSON.stringify({
+    //     type: 'finish_class'
+    //   })
+    // })
     if (app.globalData.oWs.status === 'loss') {
       app.globalData.oWs.forbidConnect()
       app.globalData.oWs.close()
       this.exitRoom()
-      wx.navigateBack()
+      wx.navigateBack({
+        delta: 2
+      })
     }
   },
   onResize (options) {
@@ -116,19 +126,14 @@ Page({
     this.setData({
       pageDirection: direction
     })
-    if (this.data.physicalExamList.length > 0 && this.data.currentActionIndex < this.data.physicalExamList.length) {
-      const currentAction = this.data.physicalExamList[this.data.currentActionIndex]
-      if (currentAction.type === 'flexibility') {
-        direction === 'horizontal' ? this.pauseAction() : this.resumeAction()
-      } else if (currentAction.type === 'strength') {
-        direction === 'vertical' ? this.pauseAction() : this.resumeAction()
-      }
+    // 只在test和exam阶段进行屏幕方向不正确提示
+    if (this.data.currentStep === 1 || this.data.currentStep === 3) {
+      console.log(this.data.currentAction.isHorizontal)
+      console.log(direction === 'vertical')
+      this.data.currentAction.isHorizontal === (direction === 'vertical') ? this.pauseAction() : this.resumeAction()
     }
   },
-  sendResolution (needStartTest = false) {
-    console.log(this.oCanvas)
-    console.log(this.oCanvas.height)
-    console.log(this.oCanvas.width)
+  sendResolution () {
     app.globalData.oWs.send({
       data: JSON.stringify({
         type: 'change_resolution',
@@ -136,14 +141,16 @@ Page({
         width: this.oCanvas.width
       }),
       success: () => {
-        if (needStartTest) {
-          this.beginTest()
-        }
       }
     })
   },
   pauseAction () {
-    if (this.oVideo) {
+    console.log('pauseAction')
+    this.setData({
+      needBlur: true
+    })
+    // 有检测中的动作，暂停视频播放
+    if (this.data.currentAction.ruleIndex && this.oVideo) {
       this.oVideo.pause()
     }
     app.globalData.oWs.send({
@@ -151,31 +158,41 @@ Page({
         type: 'pause_class'
       })
     })
-    this.setData({
-      needBlur: true
-    })
   },
   resumeAction () {
-    this.sendResolution()
+    console.log('resumeAction')
+    this.setData({
+      needBlur: false
+    })
     app.globalData.oWs.send({
       data: JSON.stringify({
         type: 'resume_class'
       })
     })
-    this.setData({
-      needBlur: false
-    })
-    if (this.oVideo) {
+    // 有检测中的动作，恢复视频播放
+    if (this.data.currentAction.ruleIndex && this.oVideo) {
       this.oVideo.play()
+    }
+    // 需要继续测试动作
+    if (this.data.currentAction.ruleIndex === 0) {
+      this.initDrawDebug()
+      this.beginTest()
     }
   },
   nextAction () {
     if ((this.data.currentActionIndex + 1) < this.data.physicalExamList.length) {
-      this.setData({ currentActionIndex: this.data.currentActionIndex + 1 }, () => {
-        const currentActionType = this.data.physicalExamList[this.data.currentActionIndex].type
-        const lastActionType = this.data.physicalExamList[this.data.currentActionIndex - 1].type
-        if (currentActionType !== lastActionType) {
-          this.pauseAction()
+      const newIndex = this.data.currentActionIndex + 1
+      this.setData({
+        currentActionIndex: newIndex,
+        currentAction: this.data.physicalExamList[newIndex]
+      }, () => {
+        if (this.data.currentAction.ruleIndex === 0) {
+          // 进入横屏检测, 先暂停
+          if (this.data.currentAction.isHorizontal && this.data.pageDirection === 'vertical') {
+            this.pauseAction()
+          } else {
+            this.beginTest()
+          }
         } else {
           this.beginLoading()
         }
@@ -185,15 +202,34 @@ Page({
     }
   },
   beginTest () {
+    this.bodyCheckFailedTimestamp = null
+    this.bodyCheckSuccessTimestamp = null
     this.setData({
+      countDown: null,
+      fullBodyCheck: false,
       bShowLivePusher: true,
       bSmallPusher: false,
       currentStep: 1
+    }, () => {
+      app.globalData.oWs.send({
+        data: JSON.stringify({
+          type: 'resume_class'
+        })
+      })
+      app.globalData.oWs.send({
+        data: JSON.stringify({
+          type: 'change_check',
+          action_id: 0,
+          screen_toward: this.data.pageDirection
+        })
+      })
     })
   },
   beginLoading () {
-    const currentVideoUrl = this.data.physicalExamList[this.data.currentActionIndex].videoUrl
-    console.log(currentVideoUrl)
+    if (this.oVideo) {
+      this.oVideo.stop()
+    }
+    const currentVideoUrl = this.data.currentAction.videoUrl
     this.setData({
       currentStep: 2,
       needBlur: true,
@@ -204,6 +240,10 @@ Page({
     }, () => {
       this.setData({
         startLoading: true
+      }, () => {
+        setTimeout(() => {
+          this.beginExamining()
+        }, 5000)
       })
     })
   },
@@ -216,42 +256,37 @@ Page({
       currentStep: 3
     }, () => {
       this.oVideo.play()
-      const currentAction = this.data.physicalExamList[this.data.currentActionIndex]
-      app.globalData.oWs.send({
-        data: JSON.stringify({
-          type: 'resume_class'
-        })
-      })
       app.globalData.oWs.send({
         data: JSON.stringify({
           type: 'change_check',
-          action_id: currentAction.ruleIndex,
+          action_id: this.data.currentAction.ruleIndex,
           screen_toward: this.data.pageDirection
         })
       })
     })
+    // TEST: add auto jump to next action
+    // setTimeout(() => {
+    //   this.nextAction()
+    // }, 5000)
   },
   endRoom () {
     this.oVideo.stop()
-    app.globalData.oAudio.pause()
     app.globalData.oWs.send({
       data: JSON.stringify({
         type: 'finish_check'
       })
     })
-    if (app.globalData.oWs.status === 'loss') {
-      app.globalData.oWs.forbidConnect()
-      app.globalData.oWs.close()
-      this.exitRoom()
-      wx.navigateBack()
-    }
+    // if (app.globalData.oWs.status === 'loss') {
+    // }
+    app.globalData.oWs.forbidConnect()
+    app.globalData.oWs.close()
+    this.exitRoom()
+    wx.navigateBack({
+      delta: 2
+    })
   },
-  handleTransEnd (e) {
-    this.beginExamining()
-  },
-  handleVideoError (error) {
+  handleVideoError () {
     // 尝试加入加载错误处理，并重新设置视频播放地址
-    console.log(error)
     this.setData({
       sVideoUrl: this.data.sVideoUrl
     })
@@ -450,8 +485,7 @@ Page({
         that.oCanvas.width = res[0].width
         that.oCanvas.height = res[0].height
         that.oCtx.lineWidth = '6'
-        // 初始化Socket连接
-        this.initSocket()
+        this.sendResolution()
       })
   },
   initSocket () {
@@ -473,7 +507,7 @@ Page({
           success: () => {
             console.log('[WebSocket] reg ai service ok!')
             // 向Socket Server注册后发送当前手机屏幕分辨率
-            this.sendResolution(true)
+            this.nextAction()
           }
         })
       }
@@ -528,7 +562,7 @@ Page({
             // 一旦检测到true，则开始倒数计时3s，当小于1时则进入下一步
             const countDownNumber = 3 - Math.floor((Date.now() - this.bodyCheckFailedTimestamp) / 1000)
             if (countDownNumber < 1) {
-              this.beginLoading()
+              this.nextAction()
             } else {
               this.setData({
                 fullBodyCheck: true,
@@ -562,7 +596,7 @@ Page({
         }
         if (this.nNowActionId !== data.cur_action) {
           this.setData({
-            nNowActionId: data.cur_action,
+            nNowActionId: data.cur_action
           })
         }
       } else if (data.type === 'finish_class_confirm') {
@@ -570,13 +604,16 @@ Page({
         app.globalData.oWs.forbidConnect()
         app.globalData.oWs.close()
         this.exitRoom()
-        wx.navigateBack()
+        wx.navigateBack({
+          delta: 2
+        })
       }
     }
   },
   // 骨骼图绘制
   drawDebug (aBone) {
     const ctx = this.oCtx
+    // eslint-disable-next-line no-self-assign
     this.oCanvas.width = this.oCanvas.width // Warning: This line can not be removed (by junyu)
     const drawLine = (aTwoP = [[], []]) => {
       ctx.beginPath()
