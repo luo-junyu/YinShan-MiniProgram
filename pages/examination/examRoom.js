@@ -9,7 +9,7 @@ Page({
   data: {
     navHeight: wx.getSystemInfoSync().statusBarHeight + 44,
     pageDirection: 'vertical',
-    currentStep: 0, // 1=TEST 2=LOADING 3=EXAMINING 4=OUTSIDE
+    currentStep: 4, // 1=TEST 2=LOADING 3=EXAMINING 4=BREAK
     startLoading: false,
     physicalExamList: [],
     _rtcConfig: {
@@ -33,8 +33,10 @@ Page({
     fullBodyCheck: false,
     currentActionIndex: -1,
     countDown: null,
-    currentAction: null
+    currentAction: null,
+    breakCountDown: 10
   },
+  breakCountDownTimer: null,
   TRTC: null,
   aiServerUrl: '',
   oVideo: null,
@@ -99,6 +101,8 @@ Page({
       this.initMedia()
       // 初始化Socket连接
       this.initSocket()
+      // TEST: test break countdown timer
+      // this.beginBreak()
     }).catch(_ => {
       wx.navigateBack()
     })
@@ -268,6 +272,26 @@ Page({
     // setTimeout(() => {
     //   this.nextAction()
     // }, 5000)
+  },
+  beginBreak () {
+    this.setData({
+      needBlur: true,
+      currentStep: 4
+    })
+    // TODO: 确认是否需要暂停当前检测
+    // this.pauseAction()
+    this.breakCountDownTimer = setInterval(() => {
+      const newNum = this.data.breakCountDown - 1
+      if (newNum < 1) {
+        clearInterval(this.breakCountDownTimer)
+        // TODO: 根据业务逻辑跳转不同情况
+        // this.resumeAction()
+      } else {
+        this.setData({
+          breakCountDown: newNum
+        })
+      }
+    }, 1000)
   },
   endRoom () {
     this.oVideo.stop()
