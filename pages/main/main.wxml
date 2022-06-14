@@ -14,12 +14,13 @@
   <text class="exam-mask-hint">请参考人物框，趴到瑜伽垫上，双手、膝盖撑地，
     向后抬起右腿，让身体进入人物框，并保持3秒</text>
   <text class="exam-mask-count">{{countDown || ''}}</text>
-  <image class="exam-mask-image" src="/assets/exam_horiz_mask.png" mode="aspectFill"></image>
+  <image class="exam-mask-image" src="{{fullBodyCheck ? '/assets/exam_horizontal_mask_r.png': '/assets/exam_horizontal_mask.png'}}"
+         mode="aspectFill"></image>
 </view>
-<view wx:if="{{sStep === 'ing' && !fullBodyCheck}}" class="exam-warn">
+<!-- <view wx:if="{{sStep === 'ing' && !fullBodyCheck}}" class="exam-warn">
   <image class="exam-warn-icon" src="/assets/lowest.png"></image>
   <view class="exam-warn-text">请回到正确位置，继续完成课程吧</view>
-</view>
+</view> -->
 <view class="ing-container" style="visibility :{{Utils.qIndexOf(sStep,'ing') !== -1 ?  'visible':'hidden'}}">
   <!--加载信息 采用start接口返回的信息 -->
   <view class="ing-loading" style="visibility :{{sStep === 'ing-loading'? 'visible':'hidden'}}">
@@ -48,6 +49,7 @@
             current="{{oExeing.finish_count}}" total="{{oExeing.all_count}}"
             ratio="{{oExeing.cur_finish_ratio}}"></circle>
   </view>
+  <image class="pkjx-plus pkjx-plus" wx:if="{{sEncourage === 'excellent' || sEncourage === 'well' || sEncourage === 'fair'}}" src="../../assets/training_plus1.png"></image>
   <image class="pkjx-good pkjx-image" wx:if="{{sEncourage === 'excellent'}}" src="../../assets/good.png"></image>
   <image class="pkjx-warning pkjx-image" wx:if="{{sEncourage === 'well'}}" src="../../assets/warning.png"></image>
   <image class="pkjx-error pkjx-image" wx:if="{{sEncourage === 'fair'}}" src="../../assets/error.png"></image>

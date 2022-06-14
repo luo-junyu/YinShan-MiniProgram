@@ -9,7 +9,7 @@ class WebsocketHeartbeat {
       pongTimeout = 1000,
       reconnectTimeout = 1000,
       pingMsg = 'heartbeat',
-      repeatLimit = null
+      repeatLimit = 50
     },
     {
       resolve,

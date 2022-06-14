@@ -38,7 +38,7 @@ Page({
     nAction: 0, // 当前动作,
     showCircle: true, // 展示两个圈
     needBlur: false, // 需要高斯模糊背景
-    fullBodyCheck: true,
+    fullBodyCheck: false,
     countDown: null
   },
   bFinished: true, // 一组动作是否结束
@@ -72,6 +72,7 @@ Page({
   finishClassEncourageAudio: 'https://kangfu-action-video-1258481652.cos.ap-beijing.myqcloud.com/audio-tts/action/aikejili/jili-15.mp3',
   unfinishClassEncourageAudio: 'https://kangfu-action-video-1258481652.cos.ap-beijing.myqcloud.com/audio-tts/action/aikejili/jili-14.mp3',
   finishActionEncourageAudio: 'https://kangfu-action-video-1258481652.cos.ap-beijing.myqcloud.com/audio-tts/action/aikejili/jili-11.mp3',
+  fullBodyCheckAudio: 'https://kangfu-action-video-1258481652.cos.ap-beijing.myqcloud.com/audio-tts/action/aikeqianduanyinpin/front-2.mp3',
   sStatus: 'init', // 当前状态，对比用
   bodyCheckFailedTimestamp: null,
   bodyCheckSuccessTimestamp: null,
@@ -85,20 +86,28 @@ Page({
     wx.setKeepScreenOn({
       keepScreenOn: true
     })
-    this.setPusherAttributesHandler({ orientation: 'horizontal' })
-    this.setPusherAttributesHandler({ orientation: 'vertical' })
+    // this.setPusherAttributesHandler({ orientation: 'horizontal' })
+    // this.setPusherAttributesHandler({ videoOrientation: 'horizontal' })
+    // this.setPusherAttributesHandler({ orientation: 'vertical' })
+    // this.setPusherAttributesHandler({ videoOrientation: 'vertical' })
+    // this.TRTC.getPusherInstance().resume()
     // socket连接存在并调用Pause控件的恢复方法
-    app.globalData.oWs && this.data.oPause.resumeAction()
+    // app.globalData.oWs && 
+    // this.data.oPause.resumeAction()
+    // console.log('app.globalData.oWs: ', app.globalData.oWs)
+    // console.log('app.globalData.oWs.repeat: ', app.globalData.oWs.repeat)
     if (app.globalData.oWs.repeat >= app.globalData.oWs.opts.repeatLimit) {
       this.endClass()
     }
   },
   onHide () {
     console.log('hide')
+    this.pauseAction()
     // 恢复屏幕非常亮
     wx.setKeepScreenOn({
       keepScreenOn: false
     })
+    // this.TRTC.getPusherInstance().pause()
     // 结束课程资源回收
     // this.endClass()
     // FIXME: 该变量未使用
@@ -349,17 +358,12 @@ Page({
         if (!this.bodyCheckSuccessTimestamp) this.bodyCheckSuccessTimestamp = Date.now()
         // TEST: set full body check to true for Test step switch
         // data.full_body_check = true
+        this.setData({
+          fullBodyCheck: data.full_body_check
+        })
+
         if (!data.full_body_check) {
           this.bodyCheckFailedTimestamp = Date.now()
-          // 检测false时，如果当前时间离上次最后true时间的间隔大于3s，则显示全屏提示
-          // const isFailedCheckTimeout = Date.now() - this.bodyCheckSuccessTimestamp > 3000
-          // if (this.data.sStep === 'ing') {
-          //   this.setData({
-          //     fullBodyCheck: !isFailedCheckTimeout,
-          //     needBlur: isFailedCheckTimeout,
-          //     showCircle: !isFailedCheckTimeout
-          //   })
-          // }
           if (this.data.sStep === 'test') {
             this.setData({
               countDown: null
@@ -381,20 +385,24 @@ Page({
         }
         this.drawDebug(data.cur_pose)
         // this.sStatus = 'init';
-        if (!this.bPlayingCountTime) {
-          if (data.cur_duration_ratio > 0 && data.cur_duration_ratio < 100) {
-            this.bPlayingCountTime = true
-            this.oCountAudio.play()
+        if (this.bPlayingCountTime) {
+          if (data.status !== 'good' && data.status !== 'warning') {
+            this.bPlayingCountTime = false
+            this.oCountAudio.stop()
+          }
+          if (data.cur_duration_ratio >= 100 || data.cur_duration_ratio === 0) {
+            this.bPlayingCountTime = false
+            this.oCountAudio.stop()
           }
         } else {
-          if (data.cur_duration_ratio === 0) {
-            this.bPlayingCountTime = false
-            this.oCountAudio.stop()
-          } else if (data.cur_duration_ratio >= 100) {
-            this.bPlayingCountTime = false
-            this.oCountAudio.stop()
+          if (data.status === 'good' || data.status === 'warning') {
+            if (data.cur_duration_ratio < 100 && data.cur_duration_ratio > 0) {
+              this.bPlayingCountTime = true
+              this.oCountAudio.play()
+            }
           }
         }
+
         this.setData({
           oExeing: data
           // sEncourage:'init'
@@ -584,14 +592,14 @@ Page({
         type: 'finish_class'
       })
     })
-    if (app.globalData.oWs.status === 'loss') {
-      app.globalData.oWs.forbidConnect()
-      app.globalData.oWs.close()
-      this.exitRoom()
-      wx.redirectTo({
-        url: '/pages/end/end'
-      })
-    }
+    // if (app.globalData.oWs.status === 'loss') {
+    app.globalData.oWs.forbidConnect()
+    app.globalData.oWs.close()
+    this.exitRoom()
+    wx.redirectTo({
+      url: '/pages/end/end'
+    })
+    // }
   }, // trtc事件监听
   bindTRTCRoomEvent () {
     const TRTC_EVENT = this.TRTC.EVENT
@@ -793,6 +801,8 @@ Page({
         })
       })
     })
+    app.globalData.oAudio.src = this.fullBodyCheckAudio
+    app.globalData.oAudio.play()
   }, // 离开训练准备中的检测阶段
   handleLeaveTest () {
     console.log('离开test')

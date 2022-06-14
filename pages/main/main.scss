@@ -225,13 +225,13 @@
   .process-area {
     #countnum {
       position: absolute;
-      right: tovmin(300);
+      right: tovmin(30);
       bottom: tovmin(30);
     }
 
     #counttime {
       position: absolute;
-      right: tovmin(30);
+      right: tovmin(300);
       bottom: tovmin(30)
     }
   }
@@ -245,6 +245,14 @@
     left: 0;
     right: 0;
     margin: auto;
+  }
+
+  .pkjx-plus {
+    width: tovmin(112);
+    height: tovmin(97);
+    position: absolute;
+    right: tovmin(145);
+    bottom: tovmin(280)
   }
 }
 
