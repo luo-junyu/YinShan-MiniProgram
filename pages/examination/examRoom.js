@@ -55,6 +55,10 @@ Page({
     wx.setKeepScreenOn({
       keepScreenOn: false
     })
+    if (this.oVideo) {
+      this.oVideo.stop()
+    }
+    this.classEnd()
   },
   onLoad: function (options) {
     const height = wx.getSystemInfoSync().windowHeight
@@ -111,11 +115,15 @@ Page({
     if (this.oVideo) {
       this.oVideo.stop()
     }
-    // app.globalData.oWs.send({
-    //   data: JSON.stringify({
-    //     type: 'finish_class'
-    //   })
-    // })
+    this.classEnd()
+  },
+  classEnd() {
+    app.globalData.oAudio.stop()
+    app.globalData.oWs.send({
+      data: JSON.stringify({
+        type: 'finish_class'
+      })
+    })
     if (app.globalData.oWs.status === 'loss') {
       app.globalData.oWs.forbidConnect()
       app.globalData.oWs.close()
@@ -157,6 +165,7 @@ Page({
     if (this.data.currentAction.ruleIndex && this.oVideo) {
       this.oVideo.pause()
     }
+    app.globalData.oAudio.pause()
     app.globalData.oWs.send({
       data: JSON.stringify({
         type: 'pause_class'
@@ -234,6 +243,9 @@ Page({
       this.oVideo.stop()
     }
     const currentVideoUrl = this.data.currentAction.videoUrl
+    // 休息10s
+    this.pauseAction()
+    this.beginBreak()
     this.setData({
       currentStep: 2,
       needBlur: true,
@@ -252,6 +264,7 @@ Page({
     })
   },
   beginExamining () {
+    this.resumeAction()
     this.setData({
       startLoading: false,
       needBlur: false,
@@ -276,16 +289,17 @@ Page({
   beginBreak () {
     this.setData({
       needBlur: true,
-      currentStep: 4
+      currentStep: 4,
+      breakCountDown: 10
     })
     // TODO: 确认是否需要暂停当前检测
-    // this.pauseAction()
+    // 需要暂停检测，不过可以在调用者处暂停和恢复
     this.breakCountDownTimer = setInterval(() => {
       const newNum = this.data.breakCountDown - 1
       if (newNum < 1) {
         clearInterval(this.breakCountDownTimer)
         // TODO: 根据业务逻辑跳转不同情况
-        // this.resumeAction()
+        return // beginBreak() 在状态内部调用，直接返回即可
       } else {
         this.setData({
           breakCountDown: newNum
@@ -531,6 +545,7 @@ Page({
           success: () => {
             console.log('[WebSocket] reg ai service ok!')
             // 向Socket Server注册后发送当前手机屏幕分辨率
+            this.sendResolution()
             this.nextAction()
           }
         })
@@ -631,6 +646,13 @@ Page({
         wx.navigateBack({
           delta: 2
         })
+      } else if (data.type === 'audio_encourage') {
+        console.log('收到激励语音', data)
+        if (data.path !== undefined) {
+          console.log('[debug] 播放', data.path)
+          app.globalData.oAudio.src = data.path
+          app.globalData.oAudio.play()
+        }
       }
     }
   },
