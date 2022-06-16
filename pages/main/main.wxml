@@ -34,12 +34,14 @@
   </view>
   <!-- 左上角课程简略信息 采用start接口返回的信息-->
   <view class="class-info {{needBlur ? 'need-blur': ''}}">
-    <view class="class-title">{{aAction[nAction].actionName}}</view>
-    <view class="class-detail">{{(nAction + 1) + '/' + aAction.length}}</view>
+    <view class="class-title">{{(nAction + 1) + '/' + aAction.length}} {{aAction[nAction].actionName}}</view>
+    <!-- <view class="class-detail"></view> -->
   </view>
   <view class="btn-area">
     <button class="btn-explain {{needBlur ? 'need-blur': ''}}" bindtap="explainAction">动作讲解</button>
-    <button class="btn-pause {{needBlur ? 'need-blur': ''}}" bindtap="pauseAction">暂停</button>
+    <button class="btn-pause {{needBlur ? 'need-blur': ''}}" bindtap="pauseAction">
+      <image class="btn-pause-image" src="../../assets/pause-icon.png"></image>
+    </button>
   </view>
   <view class="process-area" style="display:{{showCircle ? 'block' : 'none'}}">
     <circle id="counttime" type="time" draw='counttime' r='115' cs='#F08742' ce='#F08742'

@@ -262,15 +262,6 @@ Page({
         this.handleReceiveMsg(res.data)
       }
       task.onReconnect = () => { // 钩子函数
-        // app.globalData.oWs.send({
-        //   data: JSON.stringify({
-        //     type: 'register_client',
-        //     url: this.aiServerUrl
-        //   }),
-        //   success: () => {
-        //     console.log('[websocket] reconnection, send register client')
-        //   }
-        // })
         console.log('onReconnect...')
       }
     })

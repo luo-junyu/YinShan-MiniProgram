@@ -13,7 +13,7 @@
     left: 0;
     right: 0;
     font-size: tovmin(48);
-    color: white;
+    color: #353535;
     display: block;
     text-align: center;
     z-index: 2;
@@ -22,8 +22,8 @@
     position: absolute;
     top: 50%;
     left: 50%;
-    color: #16B297;
-    font-size: tovmin(240);
+    color: #ffffff;
+    font-size: tovmin(300);
     z-index: 3;
     font-weight: bold;
     transform: translate(-50%, -50%);
@@ -134,9 +134,9 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    background: rgba(0, 0, 0, .7);
+    background: rgba(255, 255, 255, 0.7);
     text-align: center;
-    color: #fff;
+    color: #353535;
     line-height: 1;
 
     .loading-title {
@@ -209,16 +209,39 @@
   .btn-area {
     .btn-explain {
       position: absolute;
-      left: tovmin(30);
-      bottom: tovmin(29);
-      @include btn-common;
+      left: tovmin(80);
+      top: tovmin(120);
+      width: tovmin(150);
+      height: tovmin(150);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: rgba(255, 255, 255, 0.5);
+      line-height: tovmin(48);
+      font-size: tovmin(67);
+      color: #353535;
+      font-size: tovmin(38);
+      border-radius: 50%;
     }
 
     .btn-pause {
       position: absolute;
-      left: tovmin(280);
-      bottom: tovmin(29);
-      @include btn-common;
+      left: tovmin(80);
+      bottom: tovmin(40);
+      width: tovmin(190);
+      height: tovmin(190);
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 100;
+      background: rgba(255, 255, 255, 0.5);
+      border-radius: 50%;
+
+      &-image {
+        width: tovmin(50);
+        height: tovmin(60);
+      }
     }
   }
 
@@ -237,8 +260,8 @@
   }
 
   .pkjx-image {
-    width: tovmin(371);
-    height: tovmin(211);
+    width: tovmin(380);
+    height: tovmin(200);
     position: absolute;
     top: 0;
     bottom: 0;
@@ -251,8 +274,8 @@
     width: tovmin(112);
     height: tovmin(97);
     position: absolute;
-    right: tovmin(145);
-    bottom: tovmin(280)
+    right: tovmin(97);
+    bottom: tovmin(298)
   }
 }
 
