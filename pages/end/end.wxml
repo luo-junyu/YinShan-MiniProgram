@@ -6,7 +6,7 @@
     <image class="end-banner"
            src="{{bTotalEnded ? '../../assets/totalend-back.png' : '../../assets/halfend-back.png'}}"></image>
     <view class="diff-area common-area">
-      <view class="common-title diff-title">完成本次康复训练有难度吗？</view>
+      <view class="common-title diff-title"><text class="content-require">*</text>完成本次康复训练有难度吗？</view>
       <view class="diff-wrap common-wrap">
         <view class="common-list diff-list">
           <view class="common-li  {{checkedDiff === 'simple' ? 'checked' : ''}}" bindtap="handleTapDiff"
@@ -31,7 +31,7 @@
     </view>
 
     <view class="detail-area common-area" wx:if="{{checkedDiff === 'normal' || checkedDiff === 'hard'}}">
-      <view class="common-title detail-title">具体有哪些动作感觉有难度？请勾选：</view>
+      <view class="common-title detail-title"><text class="content-require">*</text>具体有哪些动作感觉有难度？请勾选：</view>
       <view class="common-wrap detail-wrap">
         <checkbox-group bindchange="checkboxChangeDifficulty">
           <label class="detail-outer" wx:for="{{aQuestions}}" wx:key="index">
@@ -45,7 +45,7 @@
     </view>
 
     <view class="comfortable-area common-area">
-      <view class="common-title diff-title">本次康复训练是否感觉不适？</view>
+      <view class="common-title diff-title"><text class="content-require">*</text>本次康复训练是否感觉不适？</view>
       <view class="diff-wrap common-wrap">
         <view class="common-list">
           <view class="common-li {{checkedCom == 'comfortable' ? 'checked' : ''}}" bindtap="handleTapCom"
@@ -70,7 +70,7 @@
       </view>
     </view>
     <view class="detail-area common-area" wx:if="{{checkedCom === 'compromised' || checkedCom === 'uncomfortable'}}">
-      <view class="common-title detail-title">具体有哪些动作感觉不适？请勾选：</view>
+      <view class="common-title detail-title"><text class="content-require">*</text>具体有哪些动作感觉不适？请勾选：</view>
       <view class="common-wrap detail-wrap">
         <checkbox-group bindchange="checkboxChangeComfortable">
           <label class="detail-outer" wx:for="{{aQuestions}}" wx:key="index">
