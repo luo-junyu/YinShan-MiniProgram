@@ -8,13 +8,17 @@ Page({
     checkedCom: '',
     checkedDiff: '',
     aQuestions: [],
-    canSend: false
+    suggestion: ''
   },
-  aValues: [], // 用于判断是否选中了动作
+  aValuesDifficulty: [],
+  aValuesComfort: [],
   oAuth: null,
   oToast: null,
   onShow () {
     const that = this
+  },
+  onHide() {
+    app.globalData.oAudio.stop()
   },
   onLoad (options) {
     const that = this
@@ -29,35 +33,38 @@ Page({
       bTotalEnded: app.globalData.hasSkip === false,
       aQuestions: tempAction
     })
-    // this.setData({
-    //   aQuestions: [{
-    //     actionName: '腰方肌拉伸',
-    //     actionId: 1
-    //   }]
-    // })
+    this.setData({
+      aQuestions: [{
+        actionName: '腰方肌拉伸',
+        actionId: 1
+      }]
+    })
     this.oToast = this.selectComponent('#toast')
     this.oAuth = this.selectComponent('#auth')
 
     // this.oAuth.loginASession(this.getCourseInfo)
   },
-  checkboxChange (e) {
-    console.log('checkbox发生change事件，携带value值为：', e.detail.value)
+  checkboxChangeDifficulty (e) {
     const items = this.data.aQuestions
     const values = e.detail.value
-    this.aValues = values
-    if (values.length >= 0) {
-      // this.
+    this.aValuesDifficulty = values
+    for (let i = 0, lenI = items.length; i < lenI; ++i) {
+      items[i].actionDifficulty = 0
     }
+    for (let j = 0, lenJ = values.length; j < lenJ; ++j) {
+      items[values[j]].actionDifficulty = 1
+    }
+  },
+  checkboxChangeComfortable (e) {
+    const items = this.data.aQuestions
+    const values = e.detail.value
+    this.aValuesComfort = values
     for (let i = 0, lenI = items.length; i < lenI; ++i) {
       items[i].actionComfort = 0
-      for (let j = 0, lenJ = values.length; j < lenJ; ++j) {
-        if (items[i].actionId === values[j]) {
-          items[i].actionComfort = 1
-          break
-        }
-      }
     }
-    this.setData({ canSend: this.checkCanSend() })
+    for (let j = 0, lenJ = values.length; j < lenJ; ++j) {
+      items[values[j]].actionComfort = 1
+    }
   },
   sendFeedback () {
     debugger
@@ -75,11 +82,16 @@ Page({
       if (item.actionComfort !== 1) {
         item.actionComfort = 0
       }
+      if (item.actionDifficulty !== 1) {
+        item.actionDifficulty = 0
+      }
       return {
         actionId: item.actionId,
-        actionComfort: item.actionComfort
+        actionComfort: item.actionComfort,
+        actionDifficulty: item.actionDifficulty
       }
     })
+    postData.suggestion = this.data.suggestion
     console.log('反馈', postData)
     app.api.post({
       url: uPostFeedback,
@@ -92,33 +104,35 @@ Page({
     })
   },
   checkCanSend () {
+    let canSendFlag = true
     if (!this.data.checkedCom || !this.data.checkedDiff) {
-      // 未选
-      return false
-    } else if (this.data.checkedCom === 'compromised' || this.data.checkedCom === 'uncomfortable') {
-      // 未选具体动作
-      if (this.aValues.length === 0) {
-        return false
-      } else {
-        return true
-      }
-    } else {
-      return true
+      canSendFlag = false
     }
+    if (this.data.checkedCom === 'compromised' || this.data.checkedCom === 'uncomfortable') {
+      if (this.aValuesComfort.length === 0) {
+        canSendFlag = false
+      }
+    }
+    if (this.data.checkedDiff === 'normal' || this.data.checkedDiff === 'hard') {
+      if (this.aValuesDifficulty.length === 0) {
+        canSendFlag = false
+      }
+    }
+    return canSendFlag
   },
   handleTapCom (e) {
     console.log('选中的id', e)
     this.setData({
       checkedCom: e.currentTarget.dataset.id,
-      canSend: this.checkCanSend()
     })
   },
   handleTapDiff (e) {
     console.log('选中的id', e)
     this.setData({
       checkedDiff: e.currentTarget.dataset.id,
-      canSend: this.checkCanSend()
     })
-  }
-
+  },
+  bindUserInput (e) {
+    this.data.suggestion = e.detail.value
+  },
 })

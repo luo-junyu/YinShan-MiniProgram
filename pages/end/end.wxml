@@ -29,6 +29,21 @@
         </view>
       </view>
     </view>
+
+    <view class="detail-area common-area" wx:if="{{checkedDiff === 'normal' || checkedDiff === 'hard'}}">
+      <view class="common-title detail-title">具体有哪些动作感觉有难度？请勾选：</view>
+      <view class="common-wrap detail-wrap">
+        <checkbox-group bindchange="checkboxChangeDifficulty">
+          <label class="detail-outer" wx:for="{{aQuestions}}" wx:key="index">
+            <view class="detail-label text-overflow">{{item.actionName}}</view>
+            <view class="detail-check">
+              <checkbox value="{{index}}" color="#53b098" checked="{{item.actionDifficulty === 1}}"/>
+            </view>
+          </label>
+        </checkbox-group>
+      </view>
+    </view>
+
     <view class="comfortable-area common-area">
       <view class="common-title diff-title">本次康复训练是否感觉不适？</view>
       <view class="diff-wrap common-wrap">
@@ -57,16 +72,29 @@
     <view class="detail-area common-area" wx:if="{{checkedCom === 'compromised' || checkedCom === 'uncomfortable'}}">
       <view class="common-title detail-title">具体有哪些动作感觉不适？请勾选：</view>
       <view class="common-wrap detail-wrap">
-        <checkbox-group bindchange="checkboxChange">
-          <label class="detail-outer" wx:for="{{aQuestions}}" wx:key="{{actionId}}">
+        <checkbox-group bindchange="checkboxChangeComfortable">
+          <label class="detail-outer" wx:for="{{aQuestions}}" wx:key="index">
             <view class="detail-label text-overflow">{{item.actionName}}</view>
             <view class="detail-check">
-              <checkbox value="{{item.actionId}}" color="#53b098" checked="{{item.actionComfort === 1}}"/>
+              <checkbox value="{{index}}" color="#53b098" checked="{{item.actionComfort === 1}}"/>
             </view>
           </label>
         </checkbox-group>
       </view>
     </view>
+
+  <view class="suggestion-area common-area">
+    <view class="common-title suggestion-title">您有任何意见或建议，请告诉我们，我们会在后续疗程里做优化、调整。</view>
+      <view class="suggestion-wrap">
+        <textarea
+          class="suggestion-textarea"
+          placeholder="期待得到您的反馈"
+          bindinput="bindUserInput"
+          value="{{suggestion}}"
+        ></textarea>
+    </view>
+  </view>
+
   </view>
   <view class="btn-area container-bottom">
     <button class="btn-share {{canSend}}" bindtap="sendFeedback">提交反馈</button>

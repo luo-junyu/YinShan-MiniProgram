@@ -377,7 +377,7 @@ Page({
         this.drawDebug(data.cur_pose)
         // this.sStatus = 'init';
         if (this.bPlayingCountTime) {
-          if (data.status !== 'good' && data.status !== 'warning') {
+          if (data.type === 'audio_encourage' && data.autio_type === 'error') {
             this.bPlayingCountTime = false
             this.oCountAudio.stop()
           }
