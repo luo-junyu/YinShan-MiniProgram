@@ -75,6 +75,13 @@
           "query": "",
           "launchMode": "default",
           "scene": null
+        },
+        {
+          "name": "",
+          "pathName": "pages/assessment/uploadFile",
+          "query": "",
+          "launchMode": "default",
+          "scene": null
         }
       ]
     }

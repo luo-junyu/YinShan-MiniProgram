@@ -1,0 +1,34 @@
+<view class="container">
+  <header class="container-nav" backgroundColor="#FFFFFF" title="资料上传" returnable="{{true}}"
+          titleColor="#2B2B2B"></header>
+  <view class="container-content">
+    <view class="upload-file-title">
+      <view class="upload-file-title-text">
+        病例资料
+      </view>
+      <view class="upload-file-title-hint">
+        如何拍出合格的病例资料 ➔
+      </view>
+    </view>
+    <view class="upload-file-content">
+      <view class="upload-file-content-img"></view>
+      <view class="upload-file-content-btn" bindtap="addCaseClicked">
+        <view class="upload-file-content-btn-icon">+</view>
+      </view>
+    </view>
+    <view class="upload-file-title">
+      <view class="upload-file-title-text">
+        影像学资料
+      </view>
+      <view class="upload-file-title-hint" bindtap="addRadiologyClicked">
+        如何拍出合格的影像学图片 ➔
+      </view>
+    </view>
+    <view class="upload-file-content">
+      <view class="upload-file-content-img"></view>
+      <view class="upload-file-content-btn">
+        <view class="upload-file-content-btn-icon">+</view>
+      </view>
+    </view>
+  </view>
+</view>

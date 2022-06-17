@@ -23,7 +23,8 @@
     "pages/assessment/assessReport",
     "pages/agreement/agreement",
     "pages/agreement/privacy",
-    "pages/agreement/category"
+    "pages/agreement/category",
+    "pages/assessment/uploadFile"
   ],
   "window":{
     "backgroundTextStyle":"light",

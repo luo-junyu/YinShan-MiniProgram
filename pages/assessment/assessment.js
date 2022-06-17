@@ -26,7 +26,8 @@ Page({
         desc: '上传病例资料、影像学图片，带给您更优服务',
         useNoIcon: true,
         skipable: true,
-        finished: false
+        finished: false,
+        route: '/pages/assessment/uploadFile'
       },
       {
         title: '评估报告',
