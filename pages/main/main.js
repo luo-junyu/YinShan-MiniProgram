@@ -39,7 +39,11 @@ Page({
     showCircle: true, // 展示两个圈
     needBlur: false, // 需要高斯模糊背景
     fullBodyCheck: false,
-    countDown: null
+    countDown: null,
+    breakCountDown: 10,
+    bBearking: false,
+    bFirstAction: true,
+    bShowTrainingDescription: false
   },
   bFinished: true, // 一组动作是否结束
   bPlayingCountTime: false, // 正在播放计时器音效
@@ -160,6 +164,7 @@ Page({
       this.initDrawDebug()
       // 媒体播放相关初始化
       this.initMedia()
+      // this.switchStep('ing-loading','ing') // for debug
     })
   },
 
@@ -377,10 +382,6 @@ Page({
         this.drawDebug(data.cur_pose)
         // this.sStatus = 'init';
         if (this.bPlayingCountTime) {
-          if (data.type === 'audio_encourage' && data.autio_type === 'error') {
-            this.bPlayingCountTime = false
-            this.oCountAudio.stop()
-          }
           if (data.cur_duration_ratio >= 100 || data.cur_duration_ratio === 0) {
             this.bPlayingCountTime = false
             this.oCountAudio.stop()
@@ -432,7 +433,7 @@ Page({
         })
       } else if (data.type === 'audio_encourage') {
         console.log('收到激励语音', data)
-        if (data.autio_type === 'encourage') {
+        if (data.autio_type === 'finish_once') {
           this.sStatus = data.name
           this.oShortAudio.src = this.oShortAudioUrl[this.sStatus]
           this.oShortAudio.play()
@@ -443,6 +444,12 @@ Page({
             }, 2000)
           })
         // } else {
+        }
+        if (this.bPlayingCountTime) {
+          if (data.autio_type === 'error_correction') {
+            this.bPlayingCountTime = false
+            this.oCountAudio.stop()
+          }
         }
         if (data.path) {
           this.inputAudio(data)
@@ -456,6 +463,20 @@ Page({
         wx.redirectTo({
           url: '/pages/end/end'
         })
+      } else if (data.type === 'action_description') {
+        if (data.value === 'begin') {
+          this.setData({ 
+            bShowTrainingDescription: true,
+            bShowLivePusher: false,
+            bShowDebug: false,
+          })
+        } else if (data.value === 'end') {
+          this.setData({ 
+            bShowTrainingDescription: false,
+            bShowLivePusher: true,
+            bShowDebug: true,
+          })
+        }
       }
     }
   }, // 存入音频进列表
@@ -805,6 +826,36 @@ Page({
     }
     // 清空待播放列表
     this.data.aAudioUrl = []
+    if (this.data.bFirstAction) {
+      this.setData({bFirstAction: false})
+      this.wakeupLoadingBar()
+      return 
+    }
+    // 休息10秒
+    this.setData({breakCountDown: 10})
+    this.setData({
+      bBearking:true,
+      needBlur: true,
+      sStep: 'ing-loading',
+      showCircle: false,
+      bShowVideo: true,
+      bShowLivePusher: true,
+      bSmallPusher: true,
+      bShowDebug: true,
+    }, () => {
+      this.breakCountDownTimer = setInterval(() => {
+        if (this.data.breakCountDown < 1) {
+          this.wakeupLoadingBar()
+          clearInterval(this.breakCountDownTimer)
+        } else {
+          this.setData({
+            breakCountDown: this.data.breakCountDown - 1
+          })
+        }
+      }, 1000)
+    })
+  }, 
+  wakeupLoadingBar () {
     this.setData({
       needBlur: true,
       showCircle: false,
@@ -813,20 +864,19 @@ Page({
       bShowLivePusher: true,
       bSmallPusher: true,
       bShowDebug: true,
-      sVideoUrl: this.data.aAction[this.data.nAction].actionAnimeUrl
+      sVideoUrl: this.data.aAction[this.data.nAction].actionAnimeUrl,
+      bBearking: false,
     }, () => {
-      this.setData({ startLoading: true }, () => {
-        this.data.aAudioUrl = []
-        app.globalData.oAudio.src = this.idxAudioUrl[this.data.nAction]
+      this.setData({ startLoading: true })
+      this.data.aAudioUrl = []
+      app.globalData.oAudio.src = this.idxAudioUrl[this.data.nAction]
+      app.globalData.oAudio.play()
+      const tempAction = this.data.aAction[this.data.nAction] || {}
+      console.log('准备开始', tempAction)
+      this.ing_loading_timeout = setTimeout(() => {
+        app.globalData.oAudio.src = tempAction.actionAudioUrl
         app.globalData.oAudio.play()
-        const tempAction = this.data.aAction[this.data.nAction] || {}
-        console.log('准备开始', tempAction)
-        setTimeout(() => {
-          app.globalData.oAudio.src = tempAction.actionAudioUrl
-          app.globalData.oAudio.play()
-        }, 2000)
-      })
-      // 播放加载倒计时
+      }, 2000)
     })
   }, // 离开训练中加载阶段：隐藏浮层，倒计时音频停止
   handleLeaveIngLoading () {
