@@ -54,7 +54,7 @@
         </view>
       </view>
     </view>
-    <view class="detail-area common-area" wx:if="{{checkedCom === 'compromised' || checkedCom === 'uncomfortable'}}">
+    <view class="common-area" wx:if="{{checkedCom === 'compromised' || checkedCom === 'uncomfortable'}}">
       <view class="common-title detail-title">具体有哪些动作感觉不适？请勾选：</view>
       <view class="common-wrap detail-wrap">
         <checkbox-group bindchange="checkboxChange">
@@ -65,6 +65,14 @@
             </view>
           </label>
         </checkbox-group>
+      </view>
+    </view>
+    <view class="detail-area common-area">
+      <view class="common-title detail-title">
+        您有任何意见或建议，请告诉我们，我们会 在后续疗程里做优化、调整。
+      </view>
+      <view class="common-wrap detail-suggestion">
+        <textarea class="detail-textarea" value="{{suggestion}}" placeholder="期待得到您的反馈"></textarea>
       </view>
     </view>
   </view>
