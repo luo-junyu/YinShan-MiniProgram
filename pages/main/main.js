@@ -40,7 +40,7 @@ Page({
     needBlur: false, // 需要高斯模糊背景
     fullBodyCheck: false,
     countDown: null,
-    breakCountDown: 10,
+    breakCountDown: 5,
     bBearking: false,
     bFirstAction: true,
     bShowTrainingDescription: false
@@ -77,6 +77,7 @@ Page({
   unfinishClassEncourageAudio: 'https://kangfu-action-video-1258481652.cos.ap-beijing.myqcloud.com/audio-tts/action/aikejili/jili-14.mp3',
   finishActionEncourageAudio: 'https://kangfu-action-video-1258481652.cos.ap-beijing.myqcloud.com/audio-tts/action/aikejili/jili-11.mp3',
   fullBodyCheckAudio: 'https://kangfu-action-video-1258481652.cos.ap-beijing.myqcloud.com/audio-tts/action/aikeqianduanyinpin/front-2.mp3',
+  sBreakGuideAudio: 'https://kangfu-action-video-1258481652.cos.ap-beijing.myqcloud.com/audio-tts/action/aikeqianduanyinpin/front-5.mp3',
   sStatus: 'init', // 当前状态，对比用
   bodyCheckFailedTimestamp: null,
   bodyCheckSuccessTimestamp: null,
@@ -590,12 +591,13 @@ Page({
     this.oShortAudio.destroy()
     this.oCountAudio.destroy()
     this.oBackgroundAudio.pause()
-    app.globalData.oAudio.pause()
+    app.globalData.oAudio.stop()
     console.log('结束课程')
     if (!app.globalData.hasSkip && (this.data.nAction + 1) === this.data.aAction.length) {
       app.globalData.oAudio.src = this.finishClassEncourageAudio
       app.globalData.oAudio.play()
     } else {
+      app.globalData.hasSkip = false
       app.globalData.oAudio.src = this.unfinishClassEncourageAudio
       app.globalData.oAudio.play()
     }
@@ -831,8 +833,8 @@ Page({
       this.wakeupLoadingBar()
       return 
     }
-    // 休息10秒
-    this.setData({breakCountDown: 10})
+    // 休息5秒
+    this.setData({breakCountDown: 5})
     this.setData({
       bBearking:true,
       needBlur: true,
@@ -843,6 +845,9 @@ Page({
       bSmallPusher: true,
       bShowDebug: true,
     }, () => {
+      // 播放引导语音：“请稍作休息”
+      app.globalData.oAudio.src = this.sBreakGuideAudio
+      app.globalData.oAudio.play()
       this.breakCountDownTimer = setInterval(() => {
         if (this.data.breakCountDown < 1) {
           this.wakeupLoadingBar()

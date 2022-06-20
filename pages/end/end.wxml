@@ -19,7 +19,7 @@
                 data-id="normal">
             <image class="common-li-image"
                    src="{{checkedDiff === 'normal' ? '../../assets/halfend-diff-2.png' : '../../assets/totalend-diff-2.png'}}"></image>
-            <view class="common-li-label common-li-label-2">刚刚好</view>
+            <view class="common-li-label common-li-label-2">难度适中</view>
           </view>
           <view class="common-li  {{checkedDiff === 'hard' ? 'checked' : ''}}" bindtap="handleTapDiff" data-id="hard">
             <image class="common-li-image"
@@ -30,7 +30,7 @@
       </view>
     </view>
 
-    <view class="detail-area common-area" wx:if="{{checkedDiff === 'normal' || checkedDiff === 'hard'}}">
+    <view class="detail-area common-area" wx:if="{{checkedDiff === 'hard'}}">
       <view class="common-title detail-title"><text class="content-require">*</text>具体有哪些动作感觉有难度？请勾选：</view>
       <view class="common-wrap detail-wrap">
         <checkbox-group bindchange="checkboxChangeDifficulty">
@@ -90,13 +90,20 @@
           class="suggestion-textarea"
           placeholder="期待得到您的反馈"
           bindinput="bindUserInput"
+          show-confirm-bar=""
+          cursor-spacing="150"
+          adjust-position="true"
+          confirm-type="done"
+          bindfocus="bindFocus"
+          bindblur="bindUnFocus"
+          bindconfirm="bindUnFocus"
           value="{{suggestion}}"
         ></textarea>
     </view>
   </view>
 
   </view>
-  <view class="btn-area container-bottom">
+  <view class="btn-area container-bottom" wx:if="{{ showBottomBar }}">
     <button class="btn-share {{canSend}}" bindtap="sendFeedback">提交反馈</button>
   </view>
   <auth id='auth'></auth>

@@ -8,7 +8,8 @@ Page({
     checkedCom: '',
     checkedDiff: '',
     aQuestions: [],
-    suggestion: ''
+    suggestion: '',
+    showBottomBar: true
   },
   aValuesDifficulty: [],
   aValuesComfort: [],
@@ -19,6 +20,11 @@ Page({
   },
   onHide() {
     app.globalData.oAudio.stop()
+    app.globalData.oAudio.src = ''
+  },
+  onUnload () {
+    app.globalData.oAudio.stop()
+    app.globalData.oAudio.src = ''
   },
   onLoad (options) {
     const that = this
@@ -98,6 +104,8 @@ Page({
       data: postData
     }).then(res => {
       this.oToast.showToast('反馈成功')
+      app.globalData.oAudio.stop()
+      app.globalData.oAudio.src = ''
       wx.redirectTo({
         url: '/pages/dataReport/dataReport'
       })
@@ -113,7 +121,7 @@ Page({
         canSendFlag = false
       }
     }
-    if (this.data.checkedDiff === 'normal' || this.data.checkedDiff === 'hard') {
+    if (this.data.checkedDiff === 'hard') {
       if (this.aValuesDifficulty.length === 0) {
         canSendFlag = false
       }
@@ -134,5 +142,15 @@ Page({
   },
   bindUserInput (e) {
     this.data.suggestion = e.detail.value
+  },
+  bindFocus (e) {
+    this.setData({
+      showBottomBar: false
+    })
+  },
+  bindUnFocus (e){
+    this.setData({
+      showBottomBar: true
+    })
   },
 })
