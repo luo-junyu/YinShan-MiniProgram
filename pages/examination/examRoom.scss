@@ -216,7 +216,7 @@
   &-topic {
     height: 100%;
     width: 100%;
-    background: rgba(0,0,0,0.65);
+    background: rgba(255, 255, 255, 0.7);
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -224,13 +224,13 @@
     z-index: 200;
     &-title {
       font-size: vmin(88);
-      color: white;
+      color: #353535;
       line-height: 1;
       margin-bottom: vmin(49);
       z-index: 200;
     }
     &-text {
-      color: white;
+      color: #353535;
       font-size: vmin(48);
       line-height: 1;
       margin-bottom: vmin(40);
@@ -371,7 +371,7 @@
   &-topic {
     height: 100%;
     width: 100%;
-    background: rgba(0,0,0,0.65);
+    background: rgba(255, 255, 255, 0.7);
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -379,13 +379,13 @@
     z-index: 200;
     &-title {
       font-size: 60rpx;
-      color: white;
+      color: #353535;
       line-height: 1;
       margin-bottom: 51rpx;
       z-index: 200;
     }
     &-text {
-      color: white;
+      color: #353535;
       font-size: 40rpx;
       line-height: 1.5;
       margin-bottom: 39rpx;
