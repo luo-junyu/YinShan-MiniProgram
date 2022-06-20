@@ -24,7 +24,8 @@
     "pages/agreement/agreement",
     "pages/agreement/privacy",
     "pages/agreement/category",
-    "pages/assessment/uploadFile"
+    "pages/assessment/uploadFile",
+    "pages/background/background"
   ],
   "window":{
     "backgroundTextStyle":"light",

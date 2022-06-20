@@ -82,6 +82,13 @@
           "query": "",
           "launchMode": "default",
           "scene": null
+        },
+        {
+          "name": "",
+          "pathName": "pages/background/background",
+          "query": "",
+          "launchMode": "default",
+          "scene": null
         }
       ]
     }
