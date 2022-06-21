@@ -9,7 +9,8 @@ Page({
     checkedDiff: '',
     aQuestions: [],
     suggestion: '',
-    showBottomBar: true
+    showBottomBar: true,
+    canSend: false
   },
   aValuesDifficulty: [],
   aValuesComfort: [],
@@ -60,6 +61,9 @@ Page({
     for (let j = 0, lenJ = values.length; j < lenJ; ++j) {
       items[values[j]].actionDifficulty = 1
     }
+    this.setData({
+      canSend: this.checkCanSend(),
+    })
   },
   checkboxChangeComfortable (e) {
     const items = this.data.aQuestions
@@ -71,6 +75,9 @@ Page({
     for (let j = 0, lenJ = values.length; j < lenJ; ++j) {
       items[values[j]].actionComfort = 1
     }
+    this.setData({
+      canSend: this.checkCanSend(),
+    })
   },
   sendFeedback () {
     debugger
@@ -116,28 +123,42 @@ Page({
     if (!this.data.checkedCom || !this.data.checkedDiff) {
       canSendFlag = false
     }
-    if (this.data.checkedCom === 'compromised' || this.data.checkedCom === 'uncomfortable') {
+    if ((this.data.checkedCom === 'compromised' || this.data.checkedCom === 'uncomfortable') && this.data.aQuestions.length !== 0) {
       if (this.aValuesComfort.length === 0) {
         canSendFlag = false
       }
     }
-    if (this.data.checkedDiff === 'hard') {
+    if (this.data.checkedDiff === 'hard' && this.data.aQuestions.length !== 0) {
       if (this.aValuesDifficulty.length === 0) {
         canSendFlag = false
-      }
+      } 
     }
     return canSendFlag
   },
   handleTapCom (e) {
-    console.log('选中的id', e)
     this.setData({
       checkedCom: e.currentTarget.dataset.id,
     })
+    this.aValuesComfort = []
+    const items = this.data.aQuestions
+    for (let i = 0, lenI = items.length; i < lenI; ++i) {
+      items[i].actionComfort = 0
+    }
+    this.setData({
+      canSend: this.checkCanSend()
+    })
   },
   handleTapDiff (e) {
-    console.log('选中的id', e)
     this.setData({
       checkedDiff: e.currentTarget.dataset.id,
+    })
+    this.aValuesDifficulty = []
+    const items = this.data.aQuestions
+    for (let i = 0, lenI = items.length; i < lenI; ++i) {
+      items[i].actionDifficulty = 0
+    }
+    this.setData({
+      canSend: this.checkCanSend()
     })
   },
   bindUserInput (e) {

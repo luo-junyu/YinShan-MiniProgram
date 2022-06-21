@@ -104,7 +104,7 @@
 
   </view>
   <view class="btn-area container-bottom" wx:if="{{ showBottomBar }}">
-    <button class="btn-share {{canSend}}" bindtap="sendFeedback">提交反馈</button>
+    <button class="btn-share{{canSend? '-cansend': ''}}" bindtap="sendFeedback">提交反馈</button>
   </view>
   <auth id='auth'></auth>
   <toast id='toast'></toast>

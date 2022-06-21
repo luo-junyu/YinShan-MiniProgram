@@ -182,8 +182,18 @@
     font-weight: bold;
     font-size: 36rpx;
     color: #fff;
-    background: #16b297;
+    background: #848484;
     border-radius: 10rpx;
+
+    &-cansend {
+      width: 100%;
+      text-align: center;
+      font-weight: bold;
+      font-size: 36rpx;
+      color: #fff;
+      background: #16b297;
+      border-radius: 10rpx;
+    }
 
     &.disabled {
       background: #888;
