@@ -42,8 +42,8 @@ Page({
     countDown: null,
     breakCountDown: 5,
     bBearking: false,
-    bFirstAction: true,
-    bShowTrainingDescription: false
+    bShowTrainingDescription: false,
+    bSkipSleepPage: true,
   },
   bFinished: true, // 一组动作是否结束
   bPlayingCountTime: false, // 正在播放计时器音效
@@ -201,7 +201,7 @@ Page({
       console.log(event)
       log.info('短音频播放错误 ', event)
       audioSrc = this.oShortAudio.src
-      this.oShortAudio = wx.createInnerAudioContext({ useWebAudioImplement: true })
+      // this.oShortAudio = wx.createInnerAudioContext({ useWebAudioImplement: true })
       this.oShortAudio.src = audioSrc
     })
   },
@@ -213,7 +213,7 @@ Page({
     this.oBackgroundAudio.onError((event) => {
       console.log('背景音乐播放出错');
       console.log(event);
-      this.oBackgroundAudio = wx.createInnerAudioContext({ useWebAudioImplement: true })
+      // this.oBackgroundAudio = wx.createInnerAudioContext({ useWebAudioImplement: true })
       this.oBackgroundAudio.src = this.backgroundAudioUrl
       this.oBackgroundAudio.play()
     })
@@ -229,7 +229,7 @@ Page({
     this.oCountAudio.onError((event) => {
       console.log('计时音频播放出错')
       console.log(event)
-      this.oCountAudio = wx.createInnerAudioContext({ useWebAudioImplement: true })
+      // this.oCountAudio = wx.createInnerAudioContext({ useWebAudioImplement: true })
       this.oCountAudio.src = this.countDownAudioUrl
       }
     )
@@ -420,6 +420,9 @@ Page({
               console.log('[debug] 目标达成 finishActionEncourageAudio')
               app.globalData.oAudio.play()
               // 自动切换动作（等待语音播放完成）
+              this.setData({
+                bSkipSleepPage: false, 
+              })
               setTimeout(() => {
                 this.nextAction()
               }, 2000)
@@ -588,9 +591,12 @@ Page({
   }, // 结束课程
   endClass () {
     this.oVideo.stop()
+    this.oShortAudio.stop()
+    this.oCountAudio.stop()
+    this.oBackgroundAudio.stop()
     this.oShortAudio.destroy()
     this.oCountAudio.destroy()
-    this.oBackgroundAudio.pause()
+    this.oBackgroundAudio.destroy()
     app.globalData.oAudio.stop()
     console.log('结束课程')
     if (!app.globalData.hasSkip && (this.data.nAction + 1) === this.data.aAction.length) {
@@ -828,8 +834,10 @@ Page({
     }
     // 清空待播放列表
     this.data.aAudioUrl = []
-    if (this.data.bFirstAction) {
-      this.setData({bFirstAction: false})
+    if (this.data.bSkipSleepPage) {
+      this.setData({
+        bSkipSleepPage: true,   // 默认是要skip的，只有自动结束的不skip
+      })
       this.wakeupLoadingBar()
       return 
     }

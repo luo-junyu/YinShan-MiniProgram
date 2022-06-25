@@ -145,7 +145,8 @@ Page({
       items[i].actionComfort = 0
     }
     this.setData({
-      canSend: this.checkCanSend()
+      canSend: this.checkCanSend(),
+      aQuestions: items,
     })
   },
   handleTapDiff (e) {
@@ -158,7 +159,8 @@ Page({
       items[i].actionDifficulty = 0
     }
     this.setData({
-      canSend: this.checkCanSend()
+      canSend: this.checkCanSend(),
+      aQuestions: items,
     })
   },
   bindUserInput (e) {
