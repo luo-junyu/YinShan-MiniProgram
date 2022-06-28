@@ -20,7 +20,7 @@
 }
 
 .common-title {
-  padding-left: 50rpx;
+  padding: 0 50rpx;
   font-size: 34rpx;
   font-weight: bold;
   color: #2b2b2b;
@@ -114,6 +114,16 @@
       }
     }
   }
+}
+
+.detail-suggestion {
+  padding: 30rpx 32rpx;
+}
+.detail-textarea {
+  background-color: #EFEFEF;
+  width: 100%;
+  padding: 32rpx;
+  box-sizing: border-box;
 }
 
 .detail-area {

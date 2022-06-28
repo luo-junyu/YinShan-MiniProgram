@@ -8,16 +8,13 @@ Page({
     checkedCom: '',
     checkedDiff: '',
     aQuestions: [],
-    canSend: false
+    canSend: false,
+    suggestion: ''
   },
   aValues: [], // 用于判断是否选中了动作
   oAuth: null,
   oToast: null,
-  onShow () {
-    const that = this
-  },
   onLoad (options) {
-    const that = this
     app.initShare()
     const tempAction = app.globalData.aAction.map((item) => {
       return {
@@ -60,7 +57,6 @@ Page({
     this.setData({ canSend: this.checkCanSend() })
   },
   sendFeedback () {
-    debugger
     if (!this.checkCanSend()) {
       this.oToast.showToast('反馈填写不完整哦')
       return
@@ -69,7 +65,8 @@ Page({
     postData = {
       cslId: app.globalData.cslId,
       difficulty: this.data.checkedDiff,
-      comfort: this.data.checkedCom
+      comfort: this.data.checkedCom,
+      suggestion: this.data.suggestion
     }
     postData.actionFeedback = this.data.aQuestions.map((item, index) => {
       if (item.actionComfort !== 1) {
@@ -97,11 +94,7 @@ Page({
       return false
     } else if (this.data.checkedCom === 'compromised' || this.data.checkedCom === 'uncomfortable') {
       // 未选具体动作
-      if (this.aValues.length === 0) {
-        return false
-      } else {
-        return true
-      }
+      return this.aValues.length !== 0
     } else {
       return true
     }

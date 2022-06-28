@@ -38,11 +38,48 @@
           <view
             class="action-li {{item.actionScore == highest ? 'highest' : ''}} {{(item.actionScore == lowest && item.actionScore != highest) ? 'lowest' : ''}}">
             <image src="../../assets/highest.png" class="highest-image" wx:if="{{item.actionScore == highest}}"></image>
-            <image src="../../assets/lowest.png" class="lowest-image" wx:if="{{item.actionScore == lowest && lowest != highest}}"></image>
+            <image src="../../assets/lowest.png" class="lowest-image"
+                   wx:if="{{item.actionScore == lowest && lowest != highest}}"></image>
             <view class="action-li-label ">{{item.actionName}}</view>
             <view class="action-li-point">{{item.actionScore ? item.actionScore : '跳过'}}</view>
           </view>
         </block>
+      </view>
+    </view>
+    <view class="common-wrap action-detail" wx:if="{{bestActionComment}}">
+      <view class="action-detail-title">
+        <image src="../../assets/highest.png" class="action-detail-title-icon highest"></image>
+        <view class="action-detail-title-text highest">
+          最佳动作：{{highestActionName}}
+        </view>
+      </view>
+      <view class="action-detail-image">
+        <image class="action-detail-image-img default-image" src="{{bestActionPicUrl}}"></image>
+      </view>
+      <view class="action-detail-comment">
+        <image class="action-detail-comment-avatar" src="{{coachDto.avatarPath}}"></image>
+        <view class="action-detail-comment-content">
+          <view class="action-detail-comment-content-name">{{coachDto.nickName}}</view>
+          <view class="action-detail-comment-content-text">{{bestActionComment}}</view>
+        </view>
+      </view>
+    </view>
+    <view class="common-wrap action-detail" wx:if="{{worstActionComment}}">
+      <view class="action-detail-title">
+        <image src="../../assets/lowest.png" class="action-detail-title-icon lowest"></image>
+        <view class="action-detail-title-text lowest">
+          有待加强：{{lowestActionName}}
+        </view>
+      </view>
+      <view class="action-detail-image">
+        <image class="action-detail-image-img default-image" src="{{worstActionPicUrl}}"></image>
+      </view>
+      <view class="action-detail-comment">
+        <image class="action-detail-comment-avatar" src="{{coachDto.avatarPath}}"></image>
+        <view class="action-detail-comment-content">
+          <view class="action-detail-comment-content-name">{{coachDto.nickName}}</view>
+          <view class="action-detail-comment-content-text">{{worstActionComment}}</view>
+        </view>
       </view>
     </view>
     <button class="btn-share" open-type="share">分享成就</button>
