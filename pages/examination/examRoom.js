@@ -34,6 +34,7 @@ Page({
     currentActionIndex: -1,
     countDown: null,
     currentAction: null,
+    uFullBodyCheckAudio: 'https://kangfu-action-video-1258481652.cos.ap-beijing.myqcloud.com/audio-tts/action/pingguqianduanyuyin/pinggu-front-2.mp3',
     breakCountDown: 10
   },
   breakCountDownTimer: null,
@@ -69,6 +70,7 @@ Page({
     app.api.post({
       url: uPhysicalExamStart
     }).then(res => {
+      console.log('uPhysicalExamStart返回：', res)
       // 从返回中获取streamId并入_rtcConfig
       Object.assign(this.data._rtcConfig, { streamId: res.streamId })
       // 从返回中获取动作列表并存储
@@ -236,6 +238,9 @@ Page({
           screen_toward: this.data.pageDirection
         })
       })
+      // 播放指导语音
+      app.globalData.oAudio.src = this.uFullBodyCheckAudio
+      app.globalData.oAudio.play()
     })
   },
   beginLoading () {
@@ -257,10 +262,33 @@ Page({
       this.setData({
         startLoading: true
       }, () => {
+        let beginTime = 0
+        if (this.data.currentActionIndex === 1 ) {
+          // 播放模块开始语音
+          beginTime = 3000
+          app.globalData.oAudio.src = 'https://kangfu-action-video-1258481652.cos.ap-beijing.myqcloud.com/audio-tts/action/pingguqianduanyuyin/pinggu-front-5.mp3'
+          app.globalData.oAudio.play()
+        } else if (this.data.currentActionIndex === 5) {
+          beginTime = 2500
+          app.globalData.oAudio.src = 'https://kangfu-action-video-1258481652.cos.ap-beijing.myqcloud.com/audio-tts/action/pingguqianduanyuyin/pinggu-front-14.mp3'
+          app.globalData.oAudio.play()
+        }
+        setTimeout(() => {
+          // 播报第几个动作
+          app.globalData.oAudio.src = this.data.currentAction.captionUrl
+          app.globalData.oAudio.play()
+        }, beginTime);
+        setTimeout(() => {
+          // 播报指导
+          app.globalData.oAudio.src = this.data.currentAction.introUrl
+          app.globalData.oAudio.play()
+        }, beginTime + 3000);
         setTimeout(() => {
           this.beginExamining()
-        }, 5000)
+        }, 10000)
       })
+
+
     })
   },
   beginExamining () {
