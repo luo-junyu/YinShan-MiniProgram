@@ -9,7 +9,7 @@ class WebsocketHeartbeat {
       pongTimeout = 1000,
       reconnectTimeout = 1000,
       pingMsg = 'heartbeat',
-      repeatLimit = null
+      repeatLimit = 50
     },
     {
       resolve,
@@ -171,7 +171,7 @@ class WebsocketHeartbeat {
       this.createWebSocket()
       // this.lockReconnect = false
       log.info('[websocket] 重连的新socket准备好了！')
-    }, this.opts.reconnectTimeout)
+    }, this.repeat * 1000)
   }
 
   send (msg) {
@@ -184,13 +184,12 @@ class WebsocketHeartbeat {
   }
 
   heartStart () {
-    console.log('[websocket] new heart start')
+    // console.log('[websocket] new heart start')
     if (this.forbidReconnect) return // 不再重连就不再执行心跳
     this.pingTimeoutId = setTimeout(() => {
       // 这里发送一个心跳，后端收到后，返回一个心跳消息，
       // onMessage拿到返回的心跳就说明连接正常
-      console.log('[WebSocket] Ping Time Out 发送心跳')
-      log.info('[websocket] Ping Time Out 发送心跳')
+      // console.log('[WebSocket] Ping Time Out 发送心跳')
       this.send({
         data: this.opts.pingMsg
       })
@@ -205,10 +204,11 @@ class WebsocketHeartbeat {
   }
 
   heartReset () {
-    console.log('[WebSocket] Heart Reset')
+    // console.log('[WebSocket] Heart Reset')
     clearTimeout(this.pingTimeoutId) // ping 清零
     clearTimeout(this.pongTimeoutId) // pong 清零
     clearTimeout(this.newSocketTimeoutId) // 如果重连上，就不需要设置新的socket连接了
+    this.repeat = 0
   }
 
   close (miniprogramParam) {

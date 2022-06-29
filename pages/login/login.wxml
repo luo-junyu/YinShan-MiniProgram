@@ -4,7 +4,7 @@
     <image class="logo-img" src="../../assets/logo.png"></image>
     <!-- <view class="logo-text">银杉健康</view> -->
   </view>
-  <view class="btn-area">
+  <view class="btn-area" wx:if="{{sLoged === 'unloged'}}">
     <button class="check-btn" bindtap="handleCoverTap" wx:if="{{!checked}}">
       {{sLoged === 'loged' ? '进入课程' : '微信登录'}}
     </button>

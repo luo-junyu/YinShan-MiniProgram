@@ -12,7 +12,7 @@
   align-items: center;
   justify-content: space-around;
   padding: 0 tovmin(320);
-  background: rgba(0, 0, 0, .7);
+  background: rgba(255, 255, 255, 0.7);
 
   &.show-pause {
     display: flex;
@@ -35,8 +35,9 @@
 
   .pause-title {
     font-size: tovmin(38);
-    color: #fff;
+    color: #353535;
     margin-top: tovmin(50);
+    font-weight: bold;
   }
 
   .btn-end {
@@ -86,11 +87,11 @@
     .image-area {
       width: tovmin(190);
       height: tovmin(190);
-      background: rgba(255, 255, 255, .5);
+      // background: rgba(255, 255, 255, .5);
 
       .btn-image {
-        width: tovmin(74);
-        height: tovmin(62);
+        width: tovmin(190);
+        height: tovmin(190);
       }
     }
 

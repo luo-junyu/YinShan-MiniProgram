@@ -40,20 +40,21 @@ Page({
     this.oToast = this.selectComponent('#toast')
     this.oAuth = this.selectComponent('#auth')
     app.initShare()
-    app.api.get({
-      url: uAssessStatus
-    })
-      .then(res => {
-        const stepVarNameArray = ['medicalHistoryAvailable', 'poseAssessAvailable', 'physicalExamAvailable', 'reportAvailable']
-        const currentStep = stepVarNameArray.findIndex((item) => res[item]) + 1 // 当前步骤
-        const reportDone = res.reportDone // 报告是否生成
-        const examDone = res.physicalExamDone // 资料是否上传
-        if (currentStep > -1) {
-          wx.navigateTo({
-            url: `/pages/assessment/assessment?currentStep=${currentStep}&reportDone=${reportDone}&examDone=${examDone}`
-          })
-        }
-      })
+    ////// Disable the pinggu part for temp
+    // app.api.get({
+    //   url: uAssessStatus
+    // })
+    //   .then(res => {
+    //     const stepVarNameArray = ['medicalHistoryAvailable', 'poseAssessAvailable', 'physicalExamAvailable', 'reportAvailable']
+    //     const currentStep = stepVarNameArray.findIndex((item) => res[item]) + 1 // 当前步骤
+    //     const reportDone = res.reportDone // 报告是否生成
+    //     const examDone = res.physicalExamDone // 资料是否上传
+    //     if (currentStep > -1) {
+    //       wx.navigateTo({
+    //         url: `/pages/assessment/assessment?currentStep=${currentStep}&reportDone=${reportDone}&examDone=${examDone}`
+    //       })
+    //     }
+    //   })
     // this.oAuth.loginASession(this.getCourseInfo)
   },
   handleCalendar () {
