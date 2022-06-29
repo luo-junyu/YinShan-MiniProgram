@@ -28,7 +28,6 @@ Page({
     app.globalData.oAudio.src = ''
   },
   onLoad (options) {
-    const that = this
     app.initShare()
     const tempAction = app.globalData.aAction.map((item) => {
       return {
@@ -80,7 +79,6 @@ Page({
     })
   },
   sendFeedback () {
-    debugger
     if (!this.checkCanSend()) {
       this.oToast.showToast('反馈填写不完整哦')
       return
@@ -89,7 +87,8 @@ Page({
     postData = {
       cslId: app.globalData.cslId,
       difficulty: this.data.checkedDiff,
-      comfort: this.data.checkedCom
+      comfort: this.data.checkedCom,
+      suggestion: this.data.suggestion
     }
     postData.actionFeedback = this.data.aQuestions.map((item, index) => {
       if (item.actionComfort !== 1) {

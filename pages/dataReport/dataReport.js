@@ -9,7 +9,17 @@ Page({
     highest: '',
     lowest: '',
     sessionName: '',
-    classIndex: 1
+    classIndex: 1,
+    coachDto: {
+      avatarPath: 'https://kangfu-user-1258481652.cos.ap-beijing.myqcloud.com/image/fuyingjie.jpeg',
+      nickName: '付英杰'
+    },
+    bestActionPicUrl: null,
+    worstActionPicUrl: null,
+    bestActionComment: '侧抬腿做得非常标准，骨盆始终垂直地面，躯干稳定，没有发生任何旋转或侧倾。侧抬腿可以有效地锻炼臀中肌，有助于行走或跑步时维持骨盆中立位。',
+    worstActionComment: '鸟犬式（标准）有点塌腰，抬起对侧上下肢时身体有晃动，核心控制需要进一步加强，在做的过程中需要集中注意力，保持收腹。',
+    highestActionName: '侧抬腿',
+    lowestActionName: '鸟犬式'
   },
   oAuth: null,
   oToast: null,
@@ -34,9 +44,11 @@ Page({
       res.actionList = res.actionList.map((item, index) => {
         if (Number(item.actionScore) > highest) {
           highest = Number(item.actionScore)
+          res.highestActionName = item.actionName
         }
         if (Number(item.actionScore) < lowest) {
           lowest = Number(item.actionScore)
+          res.lowestActionName = item.actionName
         }
         return item
       })

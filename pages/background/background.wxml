@@ -1,0 +1,59 @@
+<view class="container">
+  <header class="container-nav" backgroundColor="#F5F5F5" title="背景音乐" returnable="{{true}}"
+          titleColor="#2B2B2B"></header>
+  <view class="container-content">
+    <view class="background-card background-item">
+      <image src="/assets/back_music_icon.svg" class="background-card-icon"></image>
+      <view class="background-card-title">背景音乐</view>
+      <switch color="#16B297" checked="{{true}}"/>
+    </view>
+    <view class="background-card">
+      <view class="background-item">
+        <image src="/assets/back_volume_icon.svg" class="background-card-icon"></image>
+        <view class="background-card-title">音量调节</view>
+      </view>
+      <view class="background-card-slider-hint">
+        <view class="background-card-slider-hint-num" style="left: {{8 + currentVolume / 100 * 608}}rpx;">
+          {{currentVolume}}
+        </view>
+      </view>
+      <slider
+        class="background-card-slider"
+        min="{{0}}" max="{{100}}" step="{{1}}" backgroundColor="#d0f0ea" activeColor="#16B297"
+        block-size="36rpx" block-color="#FFFFFF" value="{{currentVolume}}" bindchange="sliderChange"
+      ></slider>
+      <view class="background-card-slider-indicator">
+        <image src="/assets/back_volume_min_icon.svg" class="background-card-slider-indicator-icon"
+               style="width: 17rpx"></image>
+        <image src="/assets/back_volume_max_icon.svg" class="background-card-slider-indicator-icon"
+               style="width: 39rpx"></image>
+      </view>
+    </view>
+    <view class="background-card">
+      <view class="background-table-item">
+        <view class="background-table-item-title">美好的一天</view>
+        <image wx:if="{{false}}" src="/assets/back_selected_icon.svg" class="background-table-item-icon"></image>
+      </view>
+      <view class="background-table-item">
+        <view class="background-table-item-title" style="color: #16B297">Gaze</view>
+        <image wx:if="{{true}}" src="/assets/back_selected_icon.svg" class="background-table-item-icon"></image>
+      </view>
+      <view class="background-table-item">
+        <view class="background-table-item-title">卡农</view>
+        <image wx:if="{{false}}" src="/assets/back_selected_icon.svg" class="background-table-item-icon"></image>
+      </view>
+      <view class="background-table-item">
+        <view class="background-table-item-title">月亮河</view>
+        <image wx:if="{{false}}" src="/assets/back_selected_icon.svg" class="background-table-item-icon"></image>
+      </view>
+      <view class="background-table-item">
+        <view class="background-table-item-title">夜空的寂静</view>
+        <image wx:if="{{false}}" src="/assets/back_selected_icon.svg" class="background-table-item-icon"></image>
+      </view>
+      <view class="background-table-item">
+        <view class="background-table-item-title">Kiss The Rain</view>
+        <image wx:if="{{false}}" src="/assets/back_selected_icon.svg" class="background-table-item-icon"></image>
+      </view>
+    </view>
+  </view>
+</view>

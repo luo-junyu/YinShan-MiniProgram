@@ -1,0 +1,18 @@
+<view class="container">
+  <header class="container-nav" backgroundColor="#F5F5F5" title="协议与条款" returnable="{{true}}"
+          titleColor="#2B2B2B"></header>
+  <view class="container-content">
+    <view class="agreement-category">
+      <view class="agreement-category-item" bindtap="goToPrivacy">
+        <image class="agreement-category-item-icon" mode="aspectFit" src="/assets/mine-report.png"></image>
+        <text class="agreement-category-item-title">隐私条款</text>
+        <image class="agreement-category-item-indicator" src="/assets/indicator.svg"></image>
+      </view>
+      <view class="agreement-category-item" bindtap="goToAgreement">
+        <image class="agreement-category-item-icon" mode="aspectFit" src="/assets/mine-contact.png"></image>
+        <text class="agreement-category-item-title">用户协议</text>
+        <image class="agreement-category-item-indicator" src="/assets/indicator.svg"></image>
+      </view>
+    </view>
+  </view>
+</view>

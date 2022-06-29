@@ -27,7 +27,7 @@
               {{fItem.script}}
             </view>
           </view>
-          <image class="container-card-vertical-item-image" src="{{fItem.picUrl}}"></image>
+          <image class="container-card-vertical-item-image" src="{{fItem.picUrl}}" mode="aspectFill"></image>
         </view>
       </view>
       <view class="container-card-title">肌肉力量测试</view>
@@ -41,12 +41,12 @@
               {{sItem.script}}
             </view>
           </view>
-          <image class="container-card-vertical-item-image" src="{{sItem.picUrl}}"></image>
+          <image class="container-card-vertical-item-image" src="{{sItem.picUrl}}" mode="aspectFill"></image>
         </view>
       </view>
     </view>
   </view>
   <view class="container-bottom">
-    <button class="container-bottom-action">立即检查</button>
+    <button class="container-bottom-action" bindtap="goToExamRoom">立即检查</button>
   </view>
 </view>

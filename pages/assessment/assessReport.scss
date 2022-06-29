@@ -1,0 +1,110 @@
+.container {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: #F5F5F5;
+
+  &-nav {
+    flex: 0 0 auto;
+  }
+
+  &-content {
+    flex: 1 1 auto;
+    overflow: auto;
+    padding: 22rpx;
+  }
+
+  &-bottom {
+    flex: 0 0 auto;
+    padding: 22rpx 22rpx calc(env(safe-area-inset-bottom) + 22rpx);
+    background: white;
+
+    &-action {
+      width: 100%;
+      height: 96rpx;
+      line-height: 96rpx;
+      background: #16B297;
+      color: white;
+      font-weight: bold;
+      font-size: 36rpx;
+    }
+  }
+}
+
+.assess-report {
+  &-card {
+    border-radius: 10rpx;
+    background: white;
+    margin-bottom: 31rpx;
+    padding: 30rpx 29rpx;
+  }
+  &-title {
+    color: #252829;
+    font-weight: bold;
+    font-size: 34rpx;
+    line-height: 2;
+    width: 100%;
+  }
+  &-text {
+    width: 100%;
+    color: #252829;
+    font-size: 32rpx;
+    line-height: 1.6;
+  }
+  &-section {
+    color: #2B2B2B;
+    font-size: 30rpx;
+    padding-left: 16rpx;
+    border-left: 6rpx solid #16b297;
+    margin-top: 30rpx;
+    margin-bottom: 30rpx;
+    font-weight: bold;
+  }
+  &-sign {
+    text-align: right;
+    width: 100%;
+    color: #252829;
+    font-weight: bold;
+    font-size: 32rpx;
+    line-height: 1.6;
+  }
+  &-image {
+    width: 100%;
+    display: flex;
+    flex-wrap: nowrap;
+    margin-bottom: 18rpx;
+    &-wrapper {
+      flex: 1 1 50%;
+      position: relative;
+      &:first-child {
+        margin-right: 18rpx;
+      }
+    }
+    &-img {
+      width: 314rpx;
+      border-radius: 10rpx;
+      &.vertical {
+        height: 424rpx;
+      }
+      &.horizontal {
+        height: 236rpx;
+      }
+    }
+    &-title {
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      right: 0;
+      background: rgba(0,0,0,0.3);
+      color: white;
+      font-size: 26rpx;
+      line-height: 50rpx;
+      text-align: center;
+      border-bottom-left-radius: 10rpx;
+      border-bottom-right-radius: 10rpx;
+      &.primary {
+        background: rgba(22, 178, 151, 0.5);
+      }
+    }
+  }
+}

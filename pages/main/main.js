@@ -165,7 +165,8 @@ Page({
       this.initDrawDebug()
       // 媒体播放相关初始化
       this.initMedia()
-      // this.switchStep('ing-loading','ing') // for debug
+    }).catch(_ => {
+      wx.navigateBack()
     })
   },
 
@@ -363,6 +364,7 @@ Page({
           this.bodyCheckFailedTimestamp = Date.now()
           if (this.data.sStep === 'test') {
             this.setData({
+              fullBodyCheck: false,
               countDown: null
             })
           }
@@ -375,6 +377,7 @@ Page({
               this.switchStep('ing-loading', 'test')
             } else {
               this.setData({
+                fullBodyCheck: true,
                 countDown: countDownNumber
               })
             }
@@ -565,14 +568,22 @@ Page({
     wx.setKeepScreenOn({
       keepScreenOn: false
     })
-    this.oVideo.stop()
-    this.oBackgroundAudio.stop()
-    this.oShortAudio.stop()
-    this.oCountAudio.stop()
+    if (this.oVideo) {
+      this.oVideo.stop()
+    }
+    if (this.oBackgroundAudio) {
+      this.oBackgroundAudio.stop()
+      this.oBackgroundAudio.destroy()
+    }
+    if (this.oShortAudio) {
+      this.oShortAudio.stop()
+      this.oShortAudio.destroy()
+    }
+    if (this.oCountAudio) {
+      this.oCountAudio.stop()
+      this.oCountAudio.destroy()
+    }
 
-    this.oShortAudio.destroy()
-    this.oCountAudio.destroy()
-    this.oBackgroundAudio.destroy()
     console.log('退出小程序')
     app.globalData.hasSkip = true
     app.globalData.oWs.send({
@@ -934,7 +945,13 @@ Page({
     // 圆圈隐藏
     this.setData({ showCircle: false })
   }, /* ready 函数start */
-
+  handleVideoError (error) {
+    // 尝试加入加载错误处理，并重新设置视频播放地址
+    console.log(error)
+    this.setData({
+      sVideoUrl: this.data.sVideoUrl
+    })
+  },
   handleVideoEnded () {
     console.log('视频播放停止')
     // this.oVideo.stop();
