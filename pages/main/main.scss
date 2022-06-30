@@ -5,7 +5,7 @@
   width: 100%;
   height: 100%;
   position: relative;
-  z-index: 500;
+  z-index: 200;
   opacity: 0.9;
   &-hint {
     position: absolute;
@@ -13,7 +13,7 @@
     left: 0;
     right: 0;
     font-size: tovmin(48);
-    color: white;
+    color: #ffffff;
     display: block;
     text-align: center;
     z-index: 2;
@@ -22,8 +22,8 @@
     position: absolute;
     top: 50%;
     left: 50%;
-    color: #16B297;
-    font-size: tovmin(240);
+    color: #ffffff;
+    font-size: tovmin(300);
     z-index: 3;
     font-weight: bold;
     transform: translate(-50%, -50%);
@@ -134,9 +134,9 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    background: rgba(0, 0, 0, .7);
+    background: rgba(255, 255, 255, 0.7);
     text-align: center;
-    color: #fff;
+    color: #353535;
     line-height: 1;
 
     .loading-title {
@@ -175,7 +175,7 @@
     view.loaded-bar {
       &:after {
         width: 100%;
-        transition: width linear 5000ms;
+        transition: width linear 8000ms;
       }
     }
 
@@ -209,42 +209,141 @@
   .btn-area {
     .btn-explain {
       position: absolute;
-      left: tovmin(30);
-      bottom: tovmin(29);
-      @include btn-common;
+      left: tovmin(80);
+      top: tovmin(120);
+      width: tovmin(150);
+      height: tovmin(150);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: rgba(255, 255, 255, 0.5);
+      line-height: tovmin(48);
+      font-size: tovmin(67);
+      color: #353535;
+      font-size: tovmin(38);
+      border-radius: 50%;
     }
 
     .btn-pause {
       position: absolute;
-      left: tovmin(280);
-      bottom: tovmin(29);
-      @include btn-common;
+      left: tovmin(80);
+      bottom: tovmin(40);
+      width: tovmin(190);
+      height: tovmin(190);
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 300;
+      background: rgba(255, 255, 255, 0.5);
+      border-radius: 50%;
+
+      &-image {
+        width: tovmin(50);
+        height: tovmin(60);
+      }
     }
   }
 
   .process-area {
     #countnum {
       position: absolute;
-      right: tovmin(300);
+      right: tovmin(30);
       bottom: tovmin(30);
     }
 
     #counttime {
       position: absolute;
-      right: tovmin(30);
+      right: tovmin(300);
       bottom: tovmin(30)
     }
   }
 
   .pkjx-image {
-    width: tovmin(371);
-    height: tovmin(211);
+    width: tovmin(380);
+    height: tovmin(200);
     position: absolute;
     top: 0;
     bottom: 0;
     left: 0;
     right: 0;
     margin: auto;
+  }
+
+  .pkjx-plus {
+    width: tovmin(112);
+    height: tovmin(97);
+    position: absolute;
+    right: tovmin(97);
+    bottom: tovmin(298)
+  }
+}
+
+.training-break{
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.7);
+  z-index: 200;
+  &-hint {
+    position: absolute;
+    top: tovmin(213);
+    bottom: tovmin(483);
+    left: 0;
+    right: 0;
+    color: #353535;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    flex-wrap: nowrap;
+    font-size: tovmin(56);
+    &-icon {
+      width: tovmin(66);
+      height: tovmin(68);
+      margin-right: tovmin(14);
+    }
+  }
+  &-count {
+    color: #353535;
+    position: absolute;
+    top: tovmin(300);
+    bottom: tovmin(205);
+    left: 0;
+    right: 0;
+    font-size: tovmin(260);
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+    flex-wrap: wrap;
+    font-weight: bold;
+    &-unit {
+      font-size: tovmin(140);
+    }
+  }
+}
+
+.training-description {
+  z-index: 200;
+  align-items: baseline;
+  &-icon {
+    position: absolute;
+    bottom: tovmin(680);
+    left: tovmin(1132);
+    right: 0;
+    width: tovmin(46);
+    height: tovmin(38);
+  }
+  &-title {
+    position: absolute;
+    bottom: tovmin(670);
+    left: tovmin(1197);
+    right: 0;
+    color: #353535;
+    font-weight: normal;
+    font-size: tovmin(38);
   }
 }
 

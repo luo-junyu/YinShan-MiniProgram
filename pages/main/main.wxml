@@ -17,13 +17,17 @@
   <image class="exam-mask-image" src="{{fullBodyCheck ? '/assets/exam_horizontal_mask_r.png': '/assets/exam_horizontal_mask.png'}}"
          mode="aspectFill"></image>
 </view>
-<view wx:if="{{sStep === 'ing' && !fullBodyCheck}}" class="exam-warn">
+<!-- <view wx:if="{{sStep === 'ing' && !fullBodyCheck}}" class="exam-warn">
   <image class="exam-warn-icon" src="/assets/lowest.png"></image>
   <view class="exam-warn-text">请回到正确位置，继续完成课程吧</view>
+</view> -->
+<view class="training-break" wx:if="{{ bBearking }}">
+  <view class="training-break-hint"><image class="training-break-hint-icon" src="/assets/clock.png"></image>请稍作休息</view>
+  <view class="training-break-count">{{breakCountDown}}<view class="training-break-count-unit">s</view></view>
 </view>
 <view class="ing-container" style="visibility :{{Utils.qIndexOf(sStep,'ing') !== -1 ?  'visible':'hidden'}}">
   <!--加载信息 采用start接口返回的信息 -->
-  <view class="ing-loading" style="visibility :{{sStep === 'ing-loading'? 'visible':'hidden'}}">
+  <view class="ing-loading" style="visibility :{{(sStep === 'ing-loading' && !bBearking)? 'visible':'hidden'}}">
     <view class="loading-back"></view>
     <view class="loading-content">
       <view class="loading-title">第{{nAction + 1}}个动作</view>
@@ -34,12 +38,18 @@
   </view>
   <!-- 左上角课程简略信息 采用start接口返回的信息-->
   <view class="class-info {{needBlur ? 'need-blur': ''}}">
-    <view class="class-title">{{aAction[nAction].actionName}}</view>
-    <view class="class-detail">{{(nAction + 1) + '/' + aAction.length}}</view>
+    <view class="class-title">{{(nAction + 1) + '/' + aAction.length}} {{aAction[nAction].actionName}}</view>
+    <!-- <view class="class-detail"></view> -->
   </view>
   <view class="btn-area">
     <button class="btn-explain {{needBlur ? 'need-blur': ''}}" bindtap="explainAction">动作讲解</button>
-    <button class="btn-pause {{needBlur ? 'need-blur': ''}}" bindtap="pauseAction">暂停</button>
+    <button class="btn-pause {{needBlur ? 'need-blur': ''}}" bindtap="pauseAction">
+      <image class="btn-pause-image" src="../../assets/pause-icon.png"></image>
+    </button>
+  </view>
+  <view class="training-description" wx:if="{{ bShowTrainingDescription }}">
+    <image class="training-description-icon" src="/assets/description-icon.png"></image>
+    <view class="training-description-title">动作讲解中</view>
   </view>
   <view class="process-area" style="display:{{showCircle ? 'block' : 'none'}}">
     <circle id="counttime" type="time" draw='counttime' r='115' cs='#F08742' ce='#F08742'
@@ -49,6 +59,7 @@
             current="{{oExeing.finish_count}}" total="{{oExeing.all_count}}"
             ratio="{{oExeing.cur_finish_ratio}}"></circle>
   </view>
+  <image class="pkjx-plus pkjx-plus" wx:if="{{sEncourage === 'excellent' || sEncourage === 'well' || sEncourage === 'fair'}}" src="../../assets/training_plus1.png"></image>
   <image class="pkjx-good pkjx-image" wx:if="{{sEncourage === 'excellent'}}" src="../../assets/good.png"></image>
   <image class="pkjx-warning pkjx-image" wx:if="{{sEncourage === 'well'}}" src="../../assets/warning.png"></image>
   <image class="pkjx-error pkjx-image" wx:if="{{sEncourage === 'fair'}}" src="../../assets/error.png"></image>
@@ -97,8 +108,7 @@
 <canvas id='debug-canvas' type="2d" class="debug-canvas small {{needBlur ? 'need-blur': ''}}"
         style="visibility:{{bShowDebug? 'visible':'hidden'}}"></canvas>
 <view class="main-video">
-  <video id="main-video" src="{{sVideoUrl}}" autoplay="{{false}}" style="display:{{bShowVideo?'block':'none'}}"
-         binderror="handleVideoError"
+  <video id="main-video" src="{{sVideoUrl}}" autoplay="{{false}}" style="display:{{bShowVideo?'block':'none'}}" binderror="handleVideoError"
          bindended="handleVideoEnded" loop="{{true}}" show-center-play-btn="{{false}}" object-fit="cover" muted="{{true}}"
          controls="{{bShowVideoControl}}" class="main-video-content {{needBlur ? 'need-blur': ''}}"></video>
   <view class="main-video-mask" wx:if="{{bShowVideo}}"></view>

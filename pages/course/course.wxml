@@ -43,7 +43,7 @@
               <view class="class-li-li {{citem.sessionAvailable ? 'class-active' : '' }}" data-week="{{citem.week}}"
                     data-no="{{key}}" data-sessionid="{{citem.sessionId}}" data-sessionname="{{citem.sessionName}}"
                     data-active="{{citem.sessionAvailable}}" wx:for="{{item}}" wx:for-index="key"
-                    wx:for-item="citem" wx:key="id" bindtap="handleTapClass">
+                    wx:for-item="citem" wx:key="id" catchtap="handleTapClass">
                 <image class="class-image default-image" src="{{citem.sessionAvatarUrl}}" mode="aspectFill"></image>
                 <view class="class-content">
                   <view class="class-name common-label">{{citem.sessionName}}</view>
@@ -53,7 +53,7 @@
                           wx:if="{{!citem.sessionAvailable && Utils.ifPassLine(citem.sessionStartTime)}}">{{Utils.transTime(citem.sessionStartTime)}} 解锁</text>
                     <text class="class-time"
                           wx:if="{{!citem.sessionAvailable && !Utils.ifPassLine(citem.sessionStartTime)}}">未解锁</text>
-                    <view class="goto-report" bindtap="gotoReport"
+                    <view class="goto-report" catchtap="gotoReport"
                           wx:if="{{citem.sessionAvailable && citem.cslId !== 0}}" data-cslid="{{citem.cslId}}"
                           data-week="{{key}}" data-no="{{key}}" data-sessionid="{{citem.sessionId}}"
                           data-sessionname="{{citem.sessionName}}">查看训练报告<image class="goto-report-indicator" src="/assets/arrow_right.png"></image></view>
