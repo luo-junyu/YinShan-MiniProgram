@@ -43,6 +43,10 @@ Page({
     wx.navigateTo({
       url: '/pages/main/main'
     })
-  }
-
+  },
+  showInstruction () {
+    wx.navigateTo({
+      url: '/pages/agreement/instruction'
+    })
+  },
 })

@@ -1,0 +1,38 @@
+<view class="container">
+  <header class="container-nav" backgroundColor="#F5F5F5" title="安全须知" returnable="{{true}}"
+          titleColor="#2B2B2B"></header>
+  <view class="container-content">
+    <view class="privacy-content">
+      <view class="privacy-content-title">
+        如您有以下任何情况，请不要运动：
+      </view>
+      <text class="privacy-content-list">
+        · 体温≥38℃ <br/>
+        · 血氧饱和度≤90% <br/>
+        · 呼吸频率＞35次/分 <br/>
+        · 收缩压＞180mmHg和/或舒张压≥110mmHg<br/>
+        · 心率＜60次/分或＞100次/分<br/>
+      </text>
+    </view>
+    <view class="privacy-content">
+      <view class="privacy-content-title">
+        如果您在产品使用过程中出现以下任何情况，不要勉强继续进行训练，请立即停止使用，并及时就医：
+      </view>
+      <view class="privacy-content-text">
+        剧烈疼痛，摔倒，肌肉乏力，恶心，呕吐，头晕，昏倒，心脏扑动或极快跳动，胸部、手臂、咽喉、下颌、背部疼痛或压迫感。
+      </view>
+      <view class="privacy-content-title">
+        如果您存在有任何影响您参加无监督运动的情况，请谨遵照医嘱执行，谨慎使用本产品。情况包括但不限于：
+      </view>
+      <view class="privacy-content-text">
+        心脏、神经、大脑、呼吸、肾脏或免疫的疾病。 (例如：心脏衰竭，哮喘，或其他医生嘱咐的运动禁忌)。
+      </view>
+      <view class="privacy-content-warning"> 
+        请您仔细阅读以上内容，并确认知晓。
+      </view>
+    </view>
+  </view>
+  <view class="btn-area container-bottom">
+    <button class="btn-share" bindtap="handleKnow">我知道了</button>
+  </view>
+</view>

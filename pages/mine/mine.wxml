@@ -25,6 +25,11 @@
         <text>康复训练数据</text>
         <image class="common-nav-indicator" src="/assets/indicator.svg"></image>
       </view>
+      <view class="common-nav" bindtap="showInstruction">
+        <image class="common-nav-image" mode="aspectFit" src="/assets/mine-contact.png"></image>
+        <text>训练说明</text>
+        <image class="common-nav-indicator" src="/assets/indicator.svg"></image>
+      </view>
     </view>
     <view class="middle-area common-wrap">
       <view class="common-nav">
@@ -39,6 +44,11 @@
       </view>
     </view>
     <view class="bottom-area common-wrap">
+      <view class="common-nav" bindtap="showUserSafety">
+        <image class="common-nav-image" mode="aspectFit" src="/assets/mine-contact.png"></image>
+        <text>安全须知</text>
+        <image class="common-nav-indicator" src="/assets/indicator.svg"></image>
+      </view>
       <view class="common-nav" bindtap="showUserContract">
         <image class="common-nav-image" mode="aspectFit" src="/assets/mine-contact.png"></image>
         <text>协议与条款</text>

@@ -1,0 +1,178 @@
+<view class="container">
+  <header class="container-nav" backgroundColor="#F5F5F5" title="训练说明" returnable="{{true}}"
+          titleColor="#2B2B2B"></header>
+
+  <view class="container-content">
+  <view class="header-text">
+    本说明会介绍在银杉健康小程序中训练的流程与注意事项
+  </view>
+    <view class="privacy-content">
+
+      <view class="privacy-content-title">
+        训练前设备摆放
+      </view>
+      <!-- ➊➋➌➍➎➏➐➑➒➓ -->
+      <view class="privacy-content-list">
+        <view class="privacy-content-list-number">➊</view>
+        <view class="privacy-content-list-text">需要一个2X2米的背景干净，没有遮挡的空间。</view>
+      </view>
+
+      <view class="privacy-content-list">
+        <view class="privacy-content-list-number">➋</view>
+        <view class="privacy-content-list-text"> 保证自己和手机保持1.5-2米的距离，并铺设瑜伽垫。</view>
+      </view>
+
+      <image class="privacy-content-image" src="https://kangfu-action-video-1258481652.cos.ap-beijing.myqcloud.com/picture/instruction/explain_img_1.png"></image>
+
+      <view class="privacy-content-list">
+        <view class="privacy-content-list-number">➌</view>
+        <view class="privacy-content-list-text">调整好后，手机中的画面示例：</view>
+      </view>
+
+      <image class="privacy-content-image" src="https://kangfu-action-video-1258481652.cos.ap-beijing.myqcloud.com/picture/instruction/explain_img_2.png"></image>
+
+      <view class="privacy-content-list">
+        <view class="privacy-content-list-number">➍</view>
+        <view class="privacy-content-list-text">如果空间较小，需安装鱼眼镜头（作用是让拍摄视角范围增大）</view>
+      </view>
+
+      <image class="privacy-content-image" src="https://kangfu-action-video-1258481652.cos.ap-beijing.myqcloud.com/picture/instruction/explain_img_3.png"></image>
+
+      <view class="privacy-content-list">
+        <view class="privacy-content-list-number">➎</view>
+        <view class="privacy-content-list-text"> 如果空间较小，需安装鱼眼镜头（作用是让拍摄视角范围增大）</view>
+      </view>
+
+      <image class="privacy-content-image" src="https://kangfu-action-video-1258481652.cos.ap-beijing.myqcloud.com/picture/instruction/explain_img_4.png"></image>
+        
+      <!-- </view> -->
+    </view>
+
+    <view class="privacy-content">
+
+      <view class="privacy-content-title">
+        训练过程中
+      </view>
+      <!-- ➊➋➌➍➎➏➐➑➒➓ -->
+      <view class="privacy-content-list">
+        <view class="privacy-content-list-number">➊</view>
+        <view class="privacy-content-list-text"> 
+          动作的训练需要计时和计数。
+          <view class="privacy-content-list-text-highlight">
+            计时的规则是：
+          </view>
+          当AI检测到标准动作时，开始计时，计时器的数字和圆圈会同步走动。达到标准时长则停止计时，请回到起始位置。
+        </view>
+      </view>
+
+      <image class="privacy-content-img" src="https://kangfu-action-video-1258481652.cos.ap-beijing.myqcloud.com/picture/instruction/explain_img_5.png"></image>
+
+      <view class="privacy-content-list">
+        <view class="privacy-content-list-number">➋</view>
+        <view class="privacy-content-list-text"> 
+          计数器左右两个两个数字分别是：有效次数/尝试次数。
+          <view class="privacy-content-list-text-highlight">
+            计数的规则是：
+          </view>
+          完成一次标准动作，回到起始位置后，计数器有效次数+1，圆圈跟着走动，达到要求次数，圆圈走满，则表示该训练动作完成。
+        </view>
+      </view>
+    
+      <image class="privacy-content-img" src="https://kangfu-action-video-1258481652.cos.ap-beijing.myqcloud.com/picture/instruction/explain_img_5(1).png"></image>
+
+      <view class="privacy-content-list">
+        <view class="privacy-content-list-number">➌</view>
+        <view class="privacy-content-list-text"> 
+          <view class="privacy-content-list-text-highlight">
+            训练过程的语音反馈：
+          </view>
+          <text style="color: black;">· 动作讲解：</text> 
+          在每个动作开始时，会播放语音讲解。 
+          <text style="color: black;">
+          · 动作开始：</text>
+          第一段语音讲解播放完毕，接着播放“训练开始321”，请开始训练，AI会实时检测，做到标准动作之后，计时器开始计时。
+          <text style="color: black;">
+          · 动作结束：</text>当计时器走满，停止计时，回到起始位置。
+          <text style="color: black;">
+          · 纠错语句：</text>当AI检测到动作错误，会播放对应的纠错语句，请根据提示纠正错误。
+        </view>
+      </view>
+  </view>
+
+    <view class="privacy-content">
+
+      <view class="privacy-content-title">
+        训练后
+      </view>
+      <!-- ➊➋➌➍➎➏➐➑➒➓ -->
+      <view class="privacy-content-list">
+        <view class="privacy-content-list-number">➊</view>
+        <view class="privacy-content-list-text"> 
+          <view class="privacy-content-list-text-highlight">
+            患者随访
+          </view>
+          每次训练完成后，都需要进行患者随访，请将您的训练感受告诉我们，我们会根据反馈调整您的运动处方。
+        </view>
+      </view>
+
+      <view class="privacy-content-list">
+        <view class="privacy-content-list-number">➋</view>
+        <view class="privacy-content-list-text"> 
+          <view class="privacy-content-list-text-highlight">
+            训练报告
+          </view>
+          提交患者随访后，进入训练报告页面，展示训练时长、动作质量得分、动作分析等信息。</view>
+      </view>
+    </view>
+
+    <view class="privacy-content">
+      <view class="privacy-content-title">
+        注意事项
+      </view>
+      <!-- ➊➋➌➍➎➏➐➑➒➓ -->
+      <view class="privacy-content-list">
+        <view class="privacy-content-list-number">➊</view>
+        <view class="privacy-content-list-text"> 
+          <view class="privacy-content-list-text-highlight">
+            如何开始训练？
+          </view>
+          登录程序后，点击已解锁的运动处方，点击开始训练按钮，即可进入训练。
+        </view>
+      </view>
+
+      <view class="privacy-content-list">
+        <view class="privacy-content-list-number">➋</view>
+        <view class="privacy-content-list-text">
+          <view class="privacy-content-list-text-highlight">
+            什么时候开始做动作？
+          </view> 
+          每个动作请先听语音讲解，当播放训练开始321后，即可开始做训练动作；每次动作达到标准时长后，都需回到起始位置。
+        </view>
+      </view>
+
+      <view class="privacy-content-list">
+        <view class="privacy-content-list-number">➌</view>
+        <view class="privacy-content-list-text"> 
+          <view class="privacy-content-list-text-highlight">
+            什么时候结束一次动作？
+          </view>
+          训练过程中，当一次动作达到标准时长，计时器走满一圈，不在播放计时的滴滴声，即可结束动作，回到起始位置。
+        </view>
+      </view>
+
+      <view class="privacy-content-list">
+        <view class="privacy-content-list-number">➍</view>
+        <view class="privacy-content-list-text"> 
+          <view class="privacy-content-list-text-highlight">
+            什么时候跳过动作？
+          </view>
+          当做一组动作时，感觉吃力或出现身体不适，请立即跳过这个动作，并及时反馈。
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <view class="btn-area container-bottom">
+    <button class="btn-share" bindtap="handleKnow">我知道了</button>
+  </view>
+</view>

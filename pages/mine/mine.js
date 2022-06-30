@@ -24,6 +24,16 @@ Page({
     this.oAuth = this.selectComponent('#auth')
     // this.oAuth.loginASession(this.getCourseInfo)
   },
+  showUserSafety () {
+    wx.navigateTo({
+      url: '/pages/agreement/safety'
+    })
+  },
+  showInstruction () {
+    wx.navigateTo({
+      url: '/pages/agreement/instruction'
+    })
+  },
   showUserContract () {
     wx.navigateTo({
       url: '/pages/agreement/category'
@@ -36,7 +46,9 @@ Page({
     this.oToast.showToast('我们正在加紧开发中哦~')
   },
   gotoCalendar () {
-    this.oToast.showToast('我们正在加紧开发中哦~')
+    wx.navigateTo({
+      url: '/pages/schedule/schedule'
+    })
   },
   gotoExeData () {
     wx.navigateTo({

@@ -24,6 +24,8 @@
     "pages/agreement/agreement",
     "pages/agreement/privacy",
     "pages/agreement/category",
+    "pages/agreement/safety",
+    "pages/agreement/instruction",
     "pages/assessment/uploadFile",
     "pages/background/background"
   ],

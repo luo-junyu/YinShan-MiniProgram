@@ -51,10 +51,31 @@
 
 .common-title {
   padding-left: 49rpx;
-  font-size: 34rpx;
-  font-weight: bold;
-  color: #2b2b2b;
-  line-height: 1;
+  margin-right: 22rpx;
+  display: flex;
+  align-items: flex-start;
+  .class-title-text {
+    flex: 1 1 auto;
+    font-size: 34rpx;
+    font-weight: bold;
+    color: #2b2b2b;
+    line-height: 1;
+  }
+  .class-title-description {
+    flex: 0 1 auto;
+    &-text {
+      position: relative;
+      bottom: 4rpx;
+      color: #16B297;
+      font-size: 26rpx;
+      font-weight: normal;
+      margin-right: 8rpx;
+    }
+    &-image {
+      width: 24rpx;
+      height: 24rpx;
+    }
+  }
 }
 
 .common-wrap {
