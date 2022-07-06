@@ -3,10 +3,12 @@
     <view class="exam-wrong-direction-hint">请将屏幕竖过来</view>
   </view>
   <view class="exam-wrong-direction" wx:if="{{currentAction.isHorizontal && pageDirection === 'vertical'}}">
-    <view class="exam-wrong-direction-hint">请将屏幕横过来</view>
+    <image class="exam-wrong-direction-icon" src="/assets/lowest.png"></image>
+    <view class="exam-wrong-direction-hint">请将手机横屏</view>
+    <view class="exam-wrong-direction-text">注意：需要打开手机下拉菜单中的【自动旋转】，画面才能横屏</view>
   </view>
   <view class="exam-vertical-ready" wx:if="{{currentStep === 1 && pageDirection === 'vertical'}}">
-    <text class="exam-vertical-ready-text">请参考人物框，身体左侧正对手机
+    <text class="exam-vertical-ready-text">请参考人物框，身体右侧正对手机
       屏幕，站立，让身体进入人物框，
       并保持3s</text>
     <image class="exam-vertical-ready-image"

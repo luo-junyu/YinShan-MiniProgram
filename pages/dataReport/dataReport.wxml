@@ -12,7 +12,7 @@
     </view>
     <view class="data-area common-wrap">
       <view class="data-date">{{qSessionTime}}</view>
-      <view class="data-title text-overflow">{{sessionName}}</view>
+      <view class="data-title text-overflow">{{name}}</view>
       <view class="data-list">
         <view class="data-li">
           <view class="data-li-value">{{sessionTime}}</view>

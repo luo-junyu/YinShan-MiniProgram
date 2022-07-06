@@ -1,5 +1,6 @@
 import Dialog from '../../miniprogram_npm/@vant/weapp/dialog/dialog'
 import { groupBy } from '../../utils/util'
+import { uGetCourse } from '../../utils/api/api.js'
 
 const dayjs = require('../../utils/dayjs/dayjs.min')
 const isBetween = require('../../utils/dayjs/plugin/isBetween')
@@ -23,6 +24,16 @@ Page({
   },
   onLoad: function (options) {
     this.data.sessionList = wx.getStorageSync('sessionList')
+    if (!this.data.sessionList) {
+      app.api.get({ url: uGetCourse }).then(res => {
+        this.data.sessionList = res.sessionList
+        this.makeData()
+      })
+    } else {
+      this.makeData()
+    }
+  },
+  makeData () {
     const groupByWeek = groupBy(this.data.sessionList, 'week')
     this.data.sessionList.forEach(item => {
       item.sessionMonth = dayjs(item.sessionStartTime).format('YYYY-MM')
@@ -43,8 +54,7 @@ Page({
       monthData: this.data.monthData,
       weekHighlight: this.data.weekHighlight
     })
-  },
-  // 生成日历月份天数数组
+  }, // 生成日历月份天数数组
   generateMonthData (monthDate) {
     const monthDay = []
     const month = dayjs(monthDate)
@@ -132,7 +142,7 @@ Page({
     app.globalData.sessionNo = session.sessionWeekdayNo
     console.log('开始上课', app.globalData.sessionname, app.globalData.sessionWeek, app.globalData.sessionNo)
     wx.navigateTo({
-      url: '/pages/main/main'
+      url: '/pages/session/session'
     })
   },
   lockHint () {

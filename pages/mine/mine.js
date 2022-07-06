@@ -43,7 +43,9 @@ Page({
     this.oToast.showToast('我们正在加紧开发中哦~')
   },
   handleMusic () {
-    this.oToast.showToast('我们正在加紧开发中哦~')
+    wx.navigateTo({
+      url: '/pages/background/background'
+    })
   },
   gotoCalendar () {
     wx.navigateTo({

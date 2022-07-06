@@ -1,0 +1,60 @@
+<!--index.wxml-->
+<view class="container">
+  <header class="container-nav" backgroundColor="#FFFFFF" title="告诉我们您的感受" returnable="{{false}}"
+          titleColor="#2B2B2B"></header>
+  <view class="container-content">
+    <view class="diff-area common-area">
+      <view class="common-title diff-title"><text class="content-require">*</text>刚才在做活动度测量和肌力测试时是否感到不适或疼痛？</view>
+      <view class="common-wrap">
+          <view class="detail-outer">
+            <view class="detail-outer-label">是</view>
+            <checkbox class="detail-outer-check" color="#53b098" checked="{{checkedCom === 'true'}}" bindtap="handleTapComTrue" />
+          </view>
+          <view class="detail-outer">
+            <view class="detail-outer-label">否</view>
+            <checkbox class="detail-outer-check" color="#53b098" checked="{{checkedCom === 'false'}}"  bindtap="handleTapComFalse" />
+          </view>
+      </view>
+    </view>
+
+    <view class="detail-area common-area" wx:if="{{checkedCom === 'true'}}">
+      <view class="common-title detail-title"><text class="content-require">*</text>具体是哪些动作感觉不适或疼痛？请勾选：</view>
+      <view class="common-wrap">
+        <checkbox-group bindchange="checkboxChangeComfortable">
+          <label class="detail-outer" wx:for="{{aQuestions}}" wx:key="index">
+            <view class="detail-outer-label">{{item.actionName}}</view>
+            <view class="detail-outer-check">
+              <checkbox value="{{index}}" color="#53b098" checked="{{item.actionDifficulty === 1}}"/>
+            </view>
+          </label>
+        </checkbox-group>
+      </view>
+    </view>
+
+    <view class="suggestion-area common-area" wx:if="{{checkedCom === 'true' && aValuesComfort.length > 0}}" wx:for="{{ aValuesComfort }}" wx:for-item="item" wx:for-index="index" wx:key="index">
+      <view class="common-title suggestion-title"><text class="content-require">*</text>请具体描述在做{{ aQuestions[item].actionName }}动作时不适或疼痛的感受：</view>
+        <view class="suggestion-wrap">
+          <textarea
+            class="suggestion-textarea"
+            id="{{item}}"
+            placeholder="请描述您的感受…"
+            bindinput="handleUserInput"
+            show-confirm-bar=""
+            cursor-spacing="150"
+            adjust-position="true"
+            confirm-type="done"
+            bindfocus="bindFocus"
+            bindblur="bindUnFocus"
+            bindconfirm="bindUnFocus"
+          ></textarea>
+        </view>
+    </view>
+
+  </view>
+
+  <view class="btn-area container-bottom" wx:if="{{ showBottomBar }}">
+    <button class="btn-share{{canSend? '-cansend': ''}}" bindtap="sendFeedback">提交反馈</button>
+  </view>
+  <auth id='auth'></auth>
+  <toast id='toast'></toast>
+</view>

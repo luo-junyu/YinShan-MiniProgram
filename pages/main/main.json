@@ -4,5 +4,6 @@
     "toast": "/components/toast/toast",
     "pause": "/components/pause/pause"
   },
-  "pageOrientation": "landscape"
+  "pageOrientation": "landscape",
+  "disableScroll": true
 }

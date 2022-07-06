@@ -9,7 +9,7 @@ Page({
   data: {
     navHeight: wx.getSystemInfoSync().statusBarHeight + 44,
     pageDirection: 'vertical',
-    currentStep: 4, // 1=TEST 2=LOADING 3=EXAMINING 4=BREAK
+    currentStep: 1, // 1=TEST 2=LOADING 3=EXAMINING 4=BREAK
     startLoading: false,
     physicalExamList: [],
     _rtcConfig: {
@@ -34,8 +34,8 @@ Page({
     currentActionIndex: -1,
     countDown: null,
     currentAction: null,
-    uFullBodyCheckAudio: 'https://kangfu-action-video-1258481652.cos.ap-beijing.myqcloud.com/audio-tts/action/pingguqianduanyuyin/pinggu-front-2.mp3',
-    breakCountDown: 10
+    breakCountDown: 10,
+    bNeedBreak: false,
   },
   breakCountDownTimer: null,
   TRTC: null,
@@ -44,9 +44,17 @@ Page({
   skeleton: [[22, 20], [20, 18], [18, 16], [21, 19], [19, 17], [17, 15], [15, 16], [15, 14], [16, 14], [14, 13], [13, 12], [12, 4], [12, 5], [4, 5], [11, 9], [9, 7], [7, 5], [10, 8], [8, 6], [6, 4], [4, 1], [1, 2], [1, 3], [2, 0], [3, 0], [4, 15], [5, 16]],
   oCanvas: null,
   oCtx: null,
+  countDownAudioUrl: 'https://kangfu-action-video-1258481652.cos.ap-beijing.myqcloud.com/audio/sound-effect/countdown.mp3',
   aBone: [], // 骨骼数组
   bodyCheckFailedTimestamp: null,
   bodyCheckSuccessTimestamp: null,
+  aCeqiaoVideoList: ['https://kangfu-action-video-1258481652.cos.ap-beijing.myqcloud.com/action/pinggushipin/hexincefangjirounailiceshizuoce/hexincefangjirounailiceshizuoce.mp4'],
+  aFuwobeiqiVideoList: ['https://kangfu-action-video-1258481652.cos.ap-beijing.myqcloud.com/action/pinggushipin/yaobushenjinailiceshi1/yaobushenjinailiceshi1.mp4'],
+  aNiaoquanshiVideoList: ['https://kangfu-action-video-1258481652.cos.ap-beijing.myqcloud.com/action/pinggushipin/beibuduoliejinailiceshi2/beibuduoliejinailiceshi2.mp4', 'https://kangfu-action-video-1258481652.cos.ap-beijing.myqcloud.com/action/pinggushipin/beibuduoliejinailiceshi1/beibuduoliejinailiceshi1.mp4'],
+  bFirstConnect: true,
+  oCountAudio: null,
+  oShortAudio: null,
+  actionList: null,
   onShow () {
     wx.setKeepScreenOn({
       keepScreenOn: true
@@ -56,10 +64,17 @@ Page({
     wx.setKeepScreenOn({
       keepScreenOn: false
     })
-    if (this.oVideo) {
-      this.oVideo.stop()
-    }
-    this.classEnd()
+    this.oShortAudio.pause()
+    this.oCountAudio.pause()
+    this.classEnd('break')
+    wx.showModal({
+      title: '提示',
+      content: '您在做体格检查时退出小程序，请重新开始体格检查。',
+      showCancel: false,
+      complete (res) {
+        wx.navigateBack({ delta: 1 })
+      }
+    })
   },
   onLoad: function (options) {
     const height = wx.getSystemInfoSync().windowHeight
@@ -75,6 +90,7 @@ Page({
       Object.assign(this.data._rtcConfig, { streamId: res.streamId })
       // 从返回中获取动作列表并存储
       // 增加是否横屏属性，并插入id为0的横屏检测动作方便判断
+      app.globalData.aAction = res.physicalExamList
       res.physicalExamList.forEach((item, index) => {
         item.isHorizontal = item.type === 'strength'
       })
@@ -107,6 +123,9 @@ Page({
       this.initMedia()
       // 初始化Socket连接
       this.initSocket()
+      // 初始化计时器语音
+      this.initCountAudio()
+      this.initShortAudio()
       // TEST: test break countdown timer
       // this.beginBreak()
     }).catch(_ => {
@@ -114,24 +133,44 @@ Page({
     })
   },
   onUnload () {
-    if (this.oVideo) {
-      this.oVideo.stop()
-    }
-    this.classEnd()
+    // this.classEnd('break')
   },
-  classEnd() {
-    app.globalData.oAudio.stop()
+  initCountAudio () {
+    this.oCountAudio = wx.createInnerAudioContext({ useWebAudioImplement: true })
+    this.oCountAudio.src = this.countDownAudioUrl
+    this.oCountAudio.loop = true
+    this.oCountAudio.onError((event) => {
+      console.log('计时音频播放出错：', event)
+      this.oCountAudio.src = this.countDownAudioUrl
+      }
+    )
+  },
+  initShortAudio () {
+    this.oShortAudio = wx.createInnerAudioContext({ useWebAudioImplement: true })
+    this.oShortAudio.onError((event) => {
+      console.log('短音频播放出错：', event)
+      }
+    )
+  },
+  classEnd(status) {
+    this.oVideo.stop()
+    this.oShortAudio.stop()
+    this.oShortAudio.src = ''
+    this.oCountAudio.stop()
     app.globalData.oWs.send({
       data: JSON.stringify({
         type: 'finish_class'
       })
     })
-    if (app.globalData.oWs.status === 'loss') {
-      app.globalData.oWs.forbidConnect()
-      app.globalData.oWs.close()
-      this.exitRoom()
-      wx.navigateBack({
-        delta: 2
+    app.globalData.oWs.forbidConnect()
+    app.globalData.oWs.close()
+    this.exitRoom()
+    if (status === 'auto') {
+      wx.redirectTo({
+        url: '/pages/examination/examQt',
+        complete (res) {
+          console.log(res)
+        }
       })
     }
   },
@@ -167,7 +206,8 @@ Page({
     if (this.data.currentAction.ruleIndex && this.oVideo) {
       this.oVideo.pause()
     }
-    app.globalData.oAudio.pause()
+    this.oCountAudio.pause()
+    this.oShortAudio.pause()
     app.globalData.oWs.send({
       data: JSON.stringify({
         type: 'pause_class'
@@ -195,6 +235,7 @@ Page({
     }
   },
   nextAction () {
+    console.log('Next Action')
     if ((this.data.currentActionIndex + 1) < this.data.physicalExamList.length) {
       const newIndex = this.data.currentActionIndex + 1
       this.setData({
@@ -205,6 +246,14 @@ Page({
           // 进入横屏检测, 先暂停
           if (this.data.currentAction.isHorizontal && this.data.pageDirection === 'vertical') {
             this.pauseAction()
+            // 播放语音：请将手机横屏
+            this.oShortAudio.src = 'https://kangfu-action-video-1258481652.cos.ap-beijing.myqcloud.com/audio-tts/action/pingguqianduanyuyin/pinggu-front-24.mp3'
+            this.oShortAudio.play()
+
+            this.replayChangePhoneDirectAudio = setInterval(() => {
+              this.oShortAudio.src = 'https://kangfu-action-video-1258481652.cos.ap-beijing.myqcloud.com/audio-tts/action/pingguqianduanyuyin/pinggu-front-24.mp3'
+              this.oShortAudio.play()
+            }, 7000);
           } else {
             this.beginTest()
           }
@@ -213,10 +262,11 @@ Page({
         }
       })
     } else {
-      this.endRoom()
+      this.classEnd('auto')
     }
   },
   beginTest () {
+    clearInterval(this.replayChangePhoneDirectAudio)
     this.bodyCheckFailedTimestamp = null
     this.bodyCheckSuccessTimestamp = null
     this.setData({
@@ -224,6 +274,8 @@ Page({
       fullBodyCheck: false,
       bShowLivePusher: true,
       bSmallPusher: false,
+      bNeedBreak: false,
+      bShowDebug: false,
       currentStep: 1
     }, () => {
       app.globalData.oWs.send({
@@ -239,8 +291,12 @@ Page({
         })
       })
       // 播放指导语音
-      app.globalData.oAudio.src = this.uFullBodyCheckAudio
-      app.globalData.oAudio.play()
+      if (this.data.pageDirection === 'vertical') {
+        this.oShortAudio.src = 'https://kangfu-action-video-1258481652.cos.ap-beijing.myqcloud.com/audio-tts/action/pingguqianduanyuyin/pinggu-front-2.mp3'
+      } else {
+        this.oShortAudio.src = 'https://kangfu-action-video-1258481652.cos.ap-beijing.myqcloud.com/audio-tts/action/pingguqianduanyuyin/pinggu-front-23.mp3'
+      }
+      this.oShortAudio.play()
     })
   },
   beginLoading () {
@@ -250,46 +306,59 @@ Page({
     const currentVideoUrl = this.data.currentAction.videoUrl
     // 休息10s
     this.pauseAction()
-    this.beginBreak()
-    this.setData({
-      currentStep: 2,
-      needBlur: true,
-      bShowVideo: true,
-      bShowLivePusher: true,
-      bSmallPusher: true,
-      sVideoUrl: currentVideoUrl
-    }, () => {
+    let breakTime = 0
+    if (this.data.bNeedBreak) {
+      this.beginBreak(5)
+      breakTime = 5000
+    }
+    setTimeout(() => {
       this.setData({
-        startLoading: true
+        currentStep: 2,
+        needBlur: true,
+        bShowVideo: true,
+        bShowLivePusher: true,
+        bSmallPusher: true,
+        bShowDebug: false,
+        sVideoUrl: currentVideoUrl
       }, () => {
         let beginTime = 0
+        if (this.data.currentAction.type === 'strength') {
+          // 只有激力检查需要休息
+          this.setData({ bNeedBreak: true, })
+        }
         if (this.data.currentActionIndex === 1 ) {
           // 播放模块开始语音
+          console.log('播放模块开始语音')
           beginTime = 3000
-          app.globalData.oAudio.src = 'https://kangfu-action-video-1258481652.cos.ap-beijing.myqcloud.com/audio-tts/action/pingguqianduanyuyin/pinggu-front-5.mp3'
-          app.globalData.oAudio.play()
+          this.oShortAudio.src = 'https://kangfu-action-video-1258481652.cos.ap-beijing.myqcloud.com/audio-tts/action/pingguqianduanyuyin/pinggu-front-5.mp3'
+          this.oShortAudio.play()
         } else if (this.data.currentActionIndex === 5) {
           beginTime = 2500
-          app.globalData.oAudio.src = 'https://kangfu-action-video-1258481652.cos.ap-beijing.myqcloud.com/audio-tts/action/pingguqianduanyuyin/pinggu-front-14.mp3'
-          app.globalData.oAudio.play()
+          this.oShortAudio.src = 'https://kangfu-action-video-1258481652.cos.ap-beijing.myqcloud.com/audio-tts/action/pingguqianduanyuyin/pinggu-front-14.mp3'
+          this.oShortAudio.play()
         }
         setTimeout(() => {
-          // 播报第几个动作
-          app.globalData.oAudio.src = this.data.currentAction.captionUrl
-          app.globalData.oAudio.play()
+          this.setData({
+            startLoading: true
+          }, () => {
+            console.log('播报第几个动作: ', this.data.currentAction.captionUrl)
+            // 播报第几个动作
+            this.oShortAudio.src = this.data.currentAction.captionUrl
+            this.oShortAudio.play()
+            setTimeout(() => {
+              // 播报指导
+              console.log('播报指导: ', this.data.currentAction.introUrl)
+              this.oShortAudio.src = this.data.currentAction.introUrl
+              this.oShortAudio.play()
+            }, 3000);
+            setTimeout(() => {
+              this.beginExamining()
+            }, 10000)
+          })
         }, beginTime);
-        setTimeout(() => {
-          // 播报指导
-          app.globalData.oAudio.src = this.data.currentAction.introUrl
-          app.globalData.oAudio.play()
-        }, beginTime + 3000);
-        setTimeout(() => {
-          this.beginExamining()
-        }, 10000)
       })
-
-
-    })
+    }, breakTime);
+    
   },
   beginExamining () {
     this.resumeAction()
@@ -314,42 +383,24 @@ Page({
     //   this.nextAction()
     // }, 5000)
   },
-  beginBreak () {
+  beginBreak (time) {
+    this.oShortAudio.src = 'https://kangfu-action-video-1258481652.cos.ap-beijing.myqcloud.com/audio-tts/action/aikeqianduanyinpin/front-5.mp3'
+    this.oShortAudio.play()
+
     this.setData({
       needBlur: true,
       currentStep: 4,
-      breakCountDown: 10
+      breakCountDown: time
     })
-    // TODO: 确认是否需要暂停当前检测
-    // 需要暂停检测，不过可以在调用者处暂停和恢复
     this.breakCountDownTimer = setInterval(() => {
-      const newNum = this.data.breakCountDown - 1
-      if (newNum < 1) {
+      if (this.data.breakCountDown < 1) {
         clearInterval(this.breakCountDownTimer)
-        // TODO: 根据业务逻辑跳转不同情况
-        return // beginBreak() 在状态内部调用，直接返回即可
       } else {
         this.setData({
-          breakCountDown: newNum
+          breakCountDown: this.data.breakCountDown - 1
         })
       }
     }, 1000)
-  },
-  endRoom () {
-    this.oVideo.stop()
-    app.globalData.oWs.send({
-      data: JSON.stringify({
-        type: 'finish_check'
-      })
-    })
-    // if (app.globalData.oWs.status === 'loss') {
-    // }
-    app.globalData.oWs.forbidConnect()
-    app.globalData.oWs.close()
-    this.exitRoom()
-    wx.navigateBack({
-      delta: 2
-    })
   },
   handleVideoError () {
     // 尝试加入加载错误处理，并重新设置视频播放地址
@@ -362,12 +413,14 @@ Page({
     this.TRTC = new TRTC(this)
     // pusher 初始化参数
     const pusherConfig = {
-      beautyLevel: 0,
+      beautyLevel: 3,
+      whitenessLevel: 3,
       localMirror: 'auto',
       enableRemoteMirror: true,
-      audioVolumeType: 'media',
-      videoWidth: 288,
-      videoHeight: 368
+      audioVolumeType: 'auto',
+      videoWidth: 368,
+      videoHeight: 368,
+      enableMic: false,
     }
     const pusher = this.TRTC.createPusher(pusherConfig)
     this.setData({
@@ -389,9 +442,6 @@ Page({
       console.log('* room LOCAL_JOIN', event)
       if (this.data.localVideo) {
         this.setPusherAttributesHandler({ enableCamera: true })
-      }
-      if (this.data.localAudio) {
-        this.setPusherAttributesHandler({ enableMic: true })
       }
     })
     this.TRTC.on(TRTC_EVENT.LOCAL_LEAVE, (event) => {
@@ -574,7 +624,10 @@ Page({
             console.log('[WebSocket] reg ai service ok!')
             // 向Socket Server注册后发送当前手机屏幕分辨率
             this.sendResolution()
-            this.nextAction()
+            if (this.bFirstConnect === true) {
+              this.nextAction()
+              this.bFirstConnect = false
+            }
           }
         })
       }
@@ -609,14 +662,6 @@ Page({
         // data.full_body_check = true
         if (!data.full_body_check) {
           this.bodyCheckFailedTimestamp = Date.now()
-          // 检测false时，如果当前时间离上次最后true时间的间隔大于3s，则显示全屏提示
-          const isFailedCheckTimeout = Date.now() - this.bodyCheckSuccessTimestamp > 3000
-          if (this.data.currentStep === 3) {
-            this.setData({
-              fullBodyCheck: !isFailedCheckTimeout,
-              needBlur: isFailedCheckTimeout
-            })
-          }
           if (this.data.currentStep === 1) {
             this.setData({
               fullBodyCheck: false,
@@ -659,12 +704,26 @@ Page({
           })
           setTimeout(() => {
             this.nextAction()
-          }, 1000)
+          }, 7000)
         }
         if (this.nNowActionId !== data.cur_action) {
           this.setData({
             nNowActionId: data.cur_action
           })
+        }
+        if (this.oCountAudio.paused) {
+          if (data.status === 'good' || data.status === 'warning') {
+            if (data.curSuccessRatio < 100) {
+              this.oCountAudio.play()
+            }
+          }
+        } else {
+          if (data.curSuccessRatio >= 100) {
+            this.oCountAudio.stop()
+          } 
+          if (data.status != 'good' && data.status != 'warning') {
+            this.oCountAudio.pause()
+          }
         }
       } else if (data.type === 'finish_class_confirm') {
         console.log('收到结束课程确认消息')
@@ -678,9 +737,41 @@ Page({
         console.log('收到激励语音', data)
         if (data.path !== undefined) {
           console.log('[debug] 播放', data.path)
-          app.globalData.oAudio.src = data.path
-          app.globalData.oAudio.play()
+          this.oShortAudio.src = data.path
+          this.oShortAudio.play()
         }
+      } else if (data.type === 'level_reduction' || data.type === 'estimation_change_side') {
+        // 动作降阶 || 换侧
+        // 行为：暂停、更换视频
+        this.pauseAction()
+        let breakTime = 5
+        this.beginBreak(breakTime)
+        this.oVideo.stop()
+        // 更换动作视频
+        console.log('更换动作视频: ', this.data.currentAction.name)
+        if (this.data.currentAction.name === '俯卧背起') {
+          this.setData({ sVideoUrl: this.aFuwobeiqiVideoList[0] })
+        } else if (this.data.currentAction.name === '侧桥') {
+          this.setData({ sVideoUrl: this.aCeqiaoVideoList[0] })
+        } else if (this.data.currentAction.name === '鸟犬式') {
+          let index = 0
+          if (this.oVideo.src === this.aNiaoquanshiVideoList[0]) {
+            index = 1
+          }
+          this.setData({ sVideoUrl: this.aNiaoquanshiVideoList[index] })
+        }
+        setTimeout(() => {
+          this.oVideo.play()
+          this.resumeAction() 
+          this.setData({
+            currentStep: 3,
+            needBlur: false,
+            bShowVideo: true,
+            bShowDebug: true,
+            bShowLivePusher: true,
+            bSmallPusher: true,
+          })
+        }, breakTime * 1000);
       }
     }
   },

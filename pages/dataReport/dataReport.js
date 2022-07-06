@@ -8,7 +8,7 @@ Page({
     qSessionTime: '',
     highest: '',
     lowest: '',
-    sessionName: '',
+    name: '',
     classIndex: 1,
     coachDto: {
       avatarPath: 'https://kangfu-user-1258481652.cos.ap-beijing.myqcloud.com/image/fuyingjie.jpeg',
@@ -16,10 +16,10 @@ Page({
     },
     bestActionPicUrl: null,
     worstActionPicUrl: null,
-    bestActionComment: '侧抬腿做得非常标准，骨盆始终垂直地面，躯干稳定，没有发生任何旋转或侧倾。侧抬腿可以有效地锻炼臀中肌，有助于行走或跑步时维持骨盆中立位。',
-    worstActionComment: '鸟犬式（标准）有点塌腰，抬起对侧上下肢时身体有晃动，核心控制需要进一步加强，在做的过程中需要集中注意力，保持收腹。',
-    highestActionName: '侧抬腿',
-    lowestActionName: '鸟犬式'
+    bestActionComment: '',
+    worstActionComment: '',
+    highestActionName: '',
+    lowestActionName: ''
   },
   oAuth: null,
   oToast: null,
@@ -31,7 +31,11 @@ Page({
     const tempDate = '第' + app.globalData.sessionWeek + '周 第' + (app.globalData.sessionNo + 1) + '课'
     this.oToast = this.selectComponent('#toast')
     this.oAuth = this.selectComponent('#auth')
-    this.setData({ user: wx.getStorageSync('user'), sessionName, qSessionTime: tempDate })
+    this.setData({ 
+      user: wx.getStorageSync('user'), 
+      name: sessionName, 
+      qSessionTime: tempDate 
+    })
     app.api.post({
       url: uGetStatistic, data: { cslId: app.globalData.cslId }
     }).then(res => {

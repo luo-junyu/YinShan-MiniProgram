@@ -4,72 +4,54 @@
   <view class="container-content">
     <view class="assess-report-card">
       <view class="assess-report-title">
-        尊敬的刘馨女士：
+        {{ report["hello-words"] }}
       </view>
       <view class="assess-report-text">
-        通过您的病史、及体格检查，我们对您的症状有了一定的了解，基于您的身体现状，现建议您参加腰部运动康复疗程。通过运动康复，可以改善腰椎灵活度，提升目标肌群的肌力和稳定性。希望通过我们共同努力与配合，能够帮助您减轻疼痛，恢复脊柱健康，提高生活质量。
+        {{report.introduction}}
       </view>
     </view>
     <view class="assess-report-card">
       <view class="assess-report-title">
         评估结果
       </view>
-      <text class="assess-report-text">1. 症状：负重时腰痛，不能久坐久站。
-        2. 既往史：体健。
-        3. 运动、生活史：工作方式较为单一，运动少。
-        4. 相关检查：不详。
-        5. 体格检查：前倾幅度小，没有提胸收臀，腰部力量不足。</text>
-      <view class="assess-report-section">
-        前屈活动度测量详解
-      </view>
-      <view class="assess-report-image">
-        <view class="assess-report-image-wrapper">
-          <image class="assess-report-image-img vertical" src="/assets/default_image.png" mode="aspectFill"></image>
-          <view class="assess-report-image-title primary">示意图</view>
+      <text class="assess-report-text">{{ report.content[0].content }}</text>
+      <view wx:for="{{report.content[0].explain}}">
+        <view class="assess-report-section">
+          {{ item.title }}
         </view>
-        <view class="assess-report-image-wrapper">
-          <image class="assess-report-image-img vertical" src="/assets/default_image.png" mode="aspectFill"></image>
-          <view class="assess-report-image-title">患者图</view>
-        </view>
-      </view>
-      <text class="assess-report-text">详细解释文案例如纠正力量失衡，牵拉放松屈髋肌和腰部伸肌缓解疼痛，强化腹肌和伸髋肌群力量改善骨盆前倾，学习正确动作模式减少工作时脊椎负荷，练习躯干核心肌群增长耐力以强化脊柱稳定性减少腰痛发生次数和发生时的严重程度。</text>
-      <view class="assess-report-section">
-        鸟犬肌力测试详解
-      </view>
-      <view class="assess-report-image">
-        <view class="assess-report-image-wrapper">
-          <image class="assess-report-image-img horizontal" src="/assets/default_image.png" mode="aspectFill"></image>
-          <view class="assess-report-image-title primary">示意图</view>
-        </view>
-        <view class="assess-report-image-wrapper">
-          <image class="assess-report-image-img horizontal" src="/assets/default_image.png" mode="aspectFill"></image>
-          <view class="assess-report-image-title">患者图</view>
+        <text class="assess-report-text">{{ item["explain-text"] }}</text>
+        <view class="assess-report-image" wx:if="{{item.imgs.length}}">
+          <view class="assess-report-image-wrapper">
+            <image class="assess-report-image-img vertical" src="/assets/default_image.png" mode="aspectFill"></image>
+            <view class="assess-report-image-title primary">示意图</view>
+          </view>
+          <view class="assess-report-image-wrapper">
+            <image class="assess-report-image-img vertical" src='{{item.imgs[0]["img-url"]}}' mode="aspectFill"></image>
+            <view class="assess-report-image-title">患者图</view>
+          </view>
         </view>
       </view>
-      <text class="assess-report-text">详细解释文案例如纠正力量失衡，牵拉放松屈髋肌和腰部伸肌缓解疼痛，强化腹肌和伸髋肌群力量改善骨盆前倾，学习正确动作模式减少工作时脊椎负荷，练习躯干核心肌群增长耐力以强化脊柱稳定性减少腰痛发生次数和发生时的严重程度。</text>
     </view>
     <view class="assess-report-card">
       <view class="assess-report-title">
         评估后建议
       </view>
-      <text class="assess-report-text">1.
-        纠正力量失衡，牵拉放松屈髋肌和腰部伸肌缓解疼痛，强化腹肌和伸髋肌群力量改善骨盆前倾，学习正确动作模式减少工作时脊椎负荷，练习躯干核心肌群增长耐力以强化脊柱稳定性减少腰痛发生次数和发生时的严重程度。
-        2. 训练中出现下肢发麻症状时，请及时停止训练，并适时调整动作，保证训练质量。
-        3. 训练前后实时关注血压与心率情况，如有心慌、头晕等身体不适，请停止功能训练并及时告知康复治疗师。</text>
+      <text class="assess-report-text">{{ report.content[1].content }}</text>
+    </view>
+    <view class="assess-report-card">
+      <view class="assess-report-title">
+        康复治疗方案
+      </view>
+      <text class="assess-report-text">{{ report.content[2].content }}</text>
     </view>
     <view class="assess-report-card">
       <view class="assess-report-title">
         训练注意事项
       </view>
-      <text class="assess-report-text">1. 肌力练习遵循循序渐进的原则，应在无痛范围内进行训练不可过度疲劳。练习时应集中练至肌肉有酸胀疲劳感，充分休息后再进行下一组。练习次数，时间，负荷视自身情况而定。肌力的提高是关节稳定的关健因素，必须认真练习。
-        2. 维持性训练：肌力增长需长时间康复锻练。保持已获得的功能不减退。
-        3. 注意地面凹凸不平及失滑处，防止摔跤。
-        4. 训练前请确保通讯工具可以连接腾讯视频并可以打开摄像头，如有疑问请及时联系客服进行调整。
-        5. 训练前请将手机位置调整到合适位置，便于治疗师观察您的动作完成质量，及时指导您调整动作。
-        6. 训练时期有疑问请联系康复小助手-玲丽，保证动作学习质量。</text>
-      <view class="assess-report-text" style="margin-top:38rpx">祝您早日康复！如有任何疑问，请联系康复您的康复助理。</view>
-      <view class="assess-report-sign" style="margin-top:58rpx">银杉康复医疗组全体敬上</view>
-      <view class="assess-report-sign">2022-06-01</view>
+      <text class="assess-report-text">{{ report.content[3].content }}</text>
+      <view class="assess-report-text" style="margin-top:38rpx">{{ report.conclusion }}</view>
+      <view class="assess-report-sign" style="margin-top:58rpx">{{ report.signature }}</view>
+      <view class="assess-report-sign">{{ report.date }}</view>
     </view>
   </view>
   <view class="container-bottom">

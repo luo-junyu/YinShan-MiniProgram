@@ -33,14 +33,14 @@
 
       <view class="privacy-content-list">
         <view class="privacy-content-list-number">➍</view>
-        <view class="privacy-content-list-text">如果空间较小，需安装鱼眼镜头（作用是让拍摄视角范围增大）</view>
+        <view class="privacy-content-list-text">如果空间较小，需安装鱼眼镜头（作用是让拍摄视角范围增大）。</view>
       </view>
 
       <image class="privacy-content-image" src="https://kangfu-action-video-1258481652.cos.ap-beijing.myqcloud.com/picture/instruction/explain_img_3.png"></image>
 
       <view class="privacy-content-list">
         <view class="privacy-content-list-number">➎</view>
-        <view class="privacy-content-list-text"> 如果空间较小，需安装鱼眼镜头（作用是让拍摄视角范围增大）</view>
+        <view class="privacy-content-list-text"> 如需安装鱼眼镜头，保证让鱼眼镜头中心的光圈对准手机前置摄像头，对准后的画面是清晰且没有黑边边框。</view>
       </view>
 
       <image class="privacy-content-image" src="https://kangfu-action-video-1258481652.cos.ap-beijing.myqcloud.com/picture/instruction/explain_img_4.png"></image>

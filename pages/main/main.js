@@ -101,8 +101,10 @@ Page({
     // this.data.oPause.resumeAction()
     // console.log('app.globalData.oWs: ', app.globalData.oWs)
     // console.log('app.globalData.oWs.repeat: ', app.globalData.oWs.repeat)
-    if (app.globalData.oWs.repeat >= app.globalData.oWs.opts.repeatLimit) {
-      this.endClass()
+    if (app.globalData.oWs) {
+      if (app.globalData.oWs.repeat >= app.globalData.oWs.opts.repeatLimit) {
+        this.endClass()
+      }
     }
   },
   onHide () {
@@ -198,12 +200,13 @@ Page({
       console.log('短音频结束')
     })
     this.oShortAudio.onError((event) => {
-      console.log('短音频播放出错')
-      console.log(event)
+      console.log('短音频播放出错', event)
+      console.log('this.oShortAudio.src: ', this.oShortAudio.src)
       log.info('短音频播放错误 ', event)
-      audioSrc = this.oShortAudio.src
-      // this.oShortAudio = wx.createInnerAudioContext({ useWebAudioImplement: true })
-      this.oShortAudio.src = audioSrc
+      if (this.oShortAudio.src) {
+        audioSrc = this.oShortAudio.src
+        this.oShortAudio.src = audioSrc
+      }
     })
   },
   initBackgroundAudio () {
@@ -214,7 +217,6 @@ Page({
     this.oBackgroundAudio.onError((event) => {
       console.log('背景音乐播放出错');
       console.log(event);
-      // this.oBackgroundAudio = wx.createInnerAudioContext({ useWebAudioImplement: true })
       this.oBackgroundAudio.src = this.backgroundAudioUrl
       this.oBackgroundAudio.play()
     })
@@ -230,7 +232,6 @@ Page({
     this.oCountAudio.onError((event) => {
       console.log('计时音频播放出错')
       console.log(event)
-      // this.oCountAudio = wx.createInnerAudioContext({ useWebAudioImplement: true })
       this.oCountAudio.src = this.countDownAudioUrl
       }
     )
@@ -524,7 +525,10 @@ Page({
     })
     this.oVideo.pause()
     app.globalData.oAudio.pause()
-    this.oShortAudio.pause()
+    if (this.oShortAudio.src) {
+      this.oShortAudio.pause()
+    }
+
     this.oCountAudio.pause()
     this.oBackgroundAudio.pause()
     this.setData({
@@ -888,19 +892,25 @@ Page({
       bShowLivePusher: true,
       bSmallPusher: true,
       bShowDebug: true,
-      sVideoUrl: this.data.aAction[this.data.nAction].actionAnimeUrl,
       bBearking: false,
     }, () => {
       this.setData({ startLoading: true })
       this.data.aAudioUrl = []
       app.globalData.oAudio.src = this.idxAudioUrl[this.data.nAction]
       app.globalData.oAudio.play()
+      this.setData({ sVideoUrl: this.data.aAction[this.data.nAction].actionAnimeUrl })
       const tempAction = this.data.aAction[this.data.nAction] || {}
       console.log('准备开始', tempAction)
-      this.ing_loading_timeout = setTimeout(() => {
+      setTimeout(() => {
         app.globalData.oAudio.src = tempAction.actionAudioUrl
         app.globalData.oAudio.play()
-      }, 2000)
+      }, 2500)
+      if (tempAction.actionAmountUrl) {
+        setTimeout(() => {
+          app.globalData.oAudio.src = tempAction.actionAmountUrl
+          app.globalData.oAudio.play()
+        }, 5500)
+      }
     })
   }, // 离开训练中加载阶段：隐藏浮层，倒计时音频停止
   handleLeaveIngLoading () {
